@@ -1,5 +1,33 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+After download, run `npm install` -- to install all the dependencies packages for this project.
+To start the project,  run `npm start`.
+
+## repo intro
+All source code is in src folder:
+
+assets folder stores all the imges or icons of this project.
+
+routes folder stores all the router information, all the url are defined in URLMap.
+
+utils folder is for authentication and api related files.
+
+UI folder is for reusable component.
+
+student folder stores all student related component (page).
+
+consultant folder stores all consultant related component (page).
+
+ 
+## lint
+1. Use double quotation mark in this project.
+
+2. All component folder name must start with lowercase.
+
+3. All component file name must start with a capital letter.
+
+
+  
 ## Available Scripts
 
 In the project directory, you can run:
@@ -43,26 +71,3 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
