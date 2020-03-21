@@ -1,9 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 After download, run `npm install` -- to install all the dependencies packages for this project.
-To start the project,  run `npm start`.
+To start the project, run `npm start`.
 
 ## repo intro
+
 All source code is in src folder:
 
 assets folder stores all the imges or icons of this project.
@@ -18,16 +19,18 @@ student folder stores all student related component (page).
 
 consultant folder stores all consultant related component (page).
 
- 
 ## lint
+
 1. Use double quotation mark in this project.
 
 2. All component folder name must start with lowercase.
 
-3. All component file name must start with a capital letter.
+3. All file's name must start with lowercase (except component file).
 
+4. All component file name must start with a capital letter (Home.js).
 
-  
+5. Use Camel-Case to name your file or folder ( such as: myBooking.scss )
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -70,4 +73,3 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-

@@ -8,11 +8,12 @@
     "at-rule-no-unknown": true,
     "block-no-empty": true,
     "comment-no-empty": true,
+    "custom-property-empty-line-before": "never",
     "declaration-block-no-duplicate-properties": [
-    true,
-    {
+      true,
+      {
         "ignore": ["consecutive-duplicates-with-different-values"]
-    }
+      }
     ],
     "declaration-block-no-shorthand-property-overrides": true,
     "font-family-no-duplicate-names": true,
