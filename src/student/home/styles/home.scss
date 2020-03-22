@@ -1,8 +1,6 @@
 .homepage {
-	background-color: #f4f4f4;
-	min-height: calc(100vh - 48px);
 	&__block {
-		padding-top: 128px;
+		padding-top: 100px;
 		padding-bottom: 64px;
 	}
 	&__title {
@@ -14,7 +12,7 @@
 		display: flex;
 		flex-direction: column;
 		margin: 32px auto;
-		width: 800px;
+		max-width: 600px;
 		border-radius: 4px;
 		padding: 16px 24px 0;
 		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -36,3 +34,4 @@
 		}
 	}
 }
+

@@ -6,3 +6,8 @@
 	color: white;
 	margin: auto 8px;
 }
+
+.dropdown-item.active {
+    color: #212529 !important;
+    background-color: transparent !important;
+}

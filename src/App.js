@@ -8,7 +8,9 @@ function App() {
   return (
     <React.Fragment>
       <Header />
+      <div className="body">
       <Routers />
+      </div>
     </React.Fragment>
   );
 }

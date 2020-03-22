@@ -7,7 +7,7 @@ function Home() {
     <div className="homepage">
       <div className="homepage__block">
         <h1 className="homepage__title">
-          Welcome Dom, You have 2 up comming booking!
+          Welcome Dom, You have 2 up coming booking!
         </h1>
       </div>
         <BookiingDetail />

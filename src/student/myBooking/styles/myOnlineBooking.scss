@@ -1,0 +1,29 @@
+.mybooking__search {
+	width: 100%;
+}
+
+.mybooking__input {
+	height: 32px;
+	border-radius: 25px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.mybooking__title {
+	text-align: center;
+	margin: 50px auto 35px;
+}
+
+.mybooking {
+	display: flex;
+
+	&__left {
+		flex: 0 0 33.3%;
+		border-right: 1px solid #e3e9f1;
+		min-height: calc(100vh - 48px);
+	}
+	&__right {
+		flex: 0 0 66.6%;
+		margin-top: 94px;
+	}
+}
