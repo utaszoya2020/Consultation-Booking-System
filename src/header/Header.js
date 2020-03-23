@@ -5,6 +5,7 @@ import AIBTLogo from "../assets/logo__aibt.png";
 import {
   STUDENT_HOME_BASE_URL,
   MY_ONLINE_BOOKING_URL,
+  MY_FACETOFACE_BOOKING_URL,
   FACE_TO_FACE_BOOKING_URL,
   ONLINE_BOOKING_URL
 } from "../routes/URLMap.js";
@@ -30,11 +31,13 @@ function Header() {
           </NavLink>
           <NavDropdown title="My Booking" id="collasible-nav-dropdown">
             <NavLink className="nav-left_brand" to={MY_ONLINE_BOOKING_URL}>
-              <NavDropdown.Item href={MY_ONLINE_BOOKING_URL}>Online</NavDropdown.Item>
+              <NavDropdown.Item href={MY_ONLINE_BOOKING_URL}>
+                Online
+              </NavDropdown.Item>
             </NavLink>
             <NavDropdown.Divider />
-            <NavLink className="nav-left_brand" to={MY_ONLINE_BOOKING_URL}>
-              <NavDropdown.Item href={MY_ONLINE_BOOKING_URL}>
+            <NavLink className="nav-left_brand" to={MY_FACETOFACE_BOOKING_URL}>
+              <NavDropdown.Item href={MY_FACETOFACE_BOOKING_URL}>
                 Face-To-Face
               </NavDropdown.Item>
             </NavLink>

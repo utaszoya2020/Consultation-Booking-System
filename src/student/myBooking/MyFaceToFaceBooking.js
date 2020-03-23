@@ -2,8 +2,9 @@ import React from "react";
 import BookiingDetail from "../../UI/bookingDetail/BookingDetail";
 import { ListGroup, Tab, Row, Col } from "react-bootstrap";
 import BookingCard from "./components/BookingCard";
+import "./styles/myFaceToFaceBooking.scss";
 
-function MyOnlineBooking(props) {
+function MyFaceToFaceBooking(props) {
   const handleKeyPress = event => {
     if (event.key === "Enter") {
       props.handleSearch();
@@ -30,4 +31,4 @@ function MyOnlineBooking(props) {
   );
 }
 
-export default MyOnlineBooking;
+export default MyFaceToFaceBooking;

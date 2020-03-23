@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { SUCCESS_URL } from "../../routes/URLMap";
 
 function Confirm(props) {
   return (
@@ -21,7 +22,7 @@ function Confirm(props) {
         <Button variant="secondary" onClick={props.onHide}>
           Close
         </Button>
-        <Button variant="primary" onClick={props.onHide}>
+        <Button variant="primary" onClick={props.onHide} href={SUCCESS_URL}>
           Confirm
         </Button>
       </Modal.Footer>

@@ -15,7 +15,9 @@
 }
 
 .mybooking {
-	display: flex;
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
 
 	&__left {
 		flex: 0 0 33.3%;

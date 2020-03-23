@@ -8,6 +8,15 @@
 }
 
 .dropdown-item.active {
-    color: #212529 !important;
-    background-color: transparent !important;
+	color: #212529 !important;
+	background-color: transparent !important;
+}
+
+#responsive-navbar-nav > div > div {
+	margin: auto 8px;
+}
+
+.dropdown-menu .dropdown-item {
+	padding: 0 16px;
+	font-size: 14px;
 }

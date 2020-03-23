@@ -1,0 +1,26 @@
+.c-timepicker {
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+    align-self: center;
+
+    &__text {
+        font-size: 16px;
+        padding: 12px 0;
+        margin: 16px;
+    }
+
+    &__table {
+        border-collapse: collapse;
+        border: 1px solid lightgrey;
+        border-radius: 8px;
+        background-color: white;
+    }
+
+    td {
+        border: 1px solid lightgrey;
+        &:hover {
+            background-color: rgba(228, 227, 227, 0.835);
+        }
+    }
+}

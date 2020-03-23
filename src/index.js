@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App";
 import "normalize.css";
 import "antd/dist/antd.css";
+import "react-calendar/dist/Calendar.css";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(

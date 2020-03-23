@@ -1,19 +1,23 @@
 import React from "react";
 import { Result, Button } from "antd";
+import { STUDENT_HOME_BASE_URL } from "../../routes/URLMap";
+import "./successMessage.scss";
 
 function SuccessMessage() {
-    return (
-        <Result
-          status="success"
-          title="Successfully Purchased Cloud Server ECS!"
-          subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
-          extra={[
-            <Button type="primary" key="console">
-              Go Console
-            </Button>
-          ]}
-        />
-    );
+  return (
+    <div className="message__container">
+      <Result
+        status="success"
+        title="Successfully Submitted Your Booking Request!"
+        subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+        extra={[
+          <Button type="primary" key="console" href={STUDENT_HOME_BASE_URL}>
+            Back Home
+          </Button>
+        ]}
+      />
+    </div>
+  );
 }
 
 export default SuccessMessage;
