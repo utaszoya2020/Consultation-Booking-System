@@ -5,6 +5,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import Calendar from "react-calendar";
 import TimePicker from "./components/TimePicker";
 import Confirm from "../../UI/confirm/Confirm";
+import { FACE_TO_FACE_BOOKING_URL } from "../../routes/URLMap";
 import "./styles/faceToFaceBooking.scss";
 
 class FaceToFaceBooking extends Component {
@@ -15,7 +16,9 @@ class FaceToFaceBooking extends Component {
       modalShow: false,
       setModalShow: false,
       content: "",
-      setContent: ""
+      setContent: "",
+      clickFlag: false,
+      timeString: ""
     };
     this.ref = {
       editor: null
@@ -24,8 +27,57 @@ class FaceToFaceBooking extends Component {
 
   onChange = date => this.setState({ date });
 
+  tileDisabled = ({ date, view }) => date.getDay() === 6 || date.getDay() === 0;
+
+  handleTimeChange = event => {
+    const key = event.target.name;
+    const value = event.target.value;
+    const timeString = event.target.innerHTML;
+
+    this.setState({
+      [key]: value,
+      timeString
+    });
+  };
+
+  handleSubmit = () => {
+      this.setState({ modalShow: true });
+      console.log("ok");
+  }
+
+  hideModel = () => {
+      this.setState({ modalShow: false });
+  }
+
+  dateFormat = (fmt, date) => {
+    let ret;
+    const opt = {
+      "Y+": date.getFullYear().toString(),
+      "m+": (date.getMonth() + 1).toString(),
+      "d+": date.getDate().toString()
+    };
+    for (let k in opt) {
+      ret = new RegExp("(" + k + ")").exec(fmt);
+      if (ret) {
+        fmt = fmt.replace(
+          ret[1],
+          ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
+        );
+      }
+    }
+    return fmt.slice(0, 10);
+  };
+
   render() {
-    const { modalShow, setModalShow, content, setContent } = this.state;
+    const {
+      modalShow,
+      setModalShow,
+      content,
+      setContent,
+      timeString,
+      date
+    } = this.state;
+    const selectDate = this.dateFormat("YYYY-mm-dd HH:MM", date);
 
     const { editor } = this.ref;
     const config = {
@@ -51,7 +103,7 @@ class FaceToFaceBooking extends Component {
 
     return (
       <div className="online-booking">
-        <Confirm show={modalShow} onHide={() => setModalShow(false)} />
+        <Confirm show={modalShow} onHide={this.hideModel} />
         <div className="online-booking__title">
           <h3>Face To Face Consultation</h3>
         </div>
@@ -84,9 +136,16 @@ class FaceToFaceBooking extends Component {
               Date
             </Form.Label>
             <Col lg={10}>
+              {timeString === "" ? null : (
+                <h5 className="booking__block">{`${selectDate}  ${timeString}`}</h5>
+              )}
               <div className="booking__calander">
-                <Calendar onChange={this.onChange} value={this.state.date} />
-                <TimePicker />
+                <Calendar
+                  onChange={this.onChange}
+                  value={this.state.date}
+                  tileDisabled={this.tileDisabled}
+                />
+                <TimePicker handleTimeChange={this.handleTimeChange} />
               </div>
             </Col>
           </Form.Group>
@@ -113,14 +172,15 @@ class FaceToFaceBooking extends Component {
 
           <Form.Group as={Row}>
             <Col lg={{ span: 10, offset: 2 }}>
-              <Button variant="primary" onClick={() => setModalShow(true)}>
+              <Button variant="primary" onClick={this.handleSubmit}>
                 Submit
               </Button>
               <Button
                 variant="outline-secondary"
-                onClick={() => setModalShow(true)}
+                type="reset"
+                href={FACE_TO_FACE_BOOKING_URL}
               >
-                Cancel
+                Reset
               </Button>
             </Col>
           </Form.Group>

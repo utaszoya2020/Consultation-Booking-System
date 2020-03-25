@@ -1,10 +1,30 @@
 .booking__calander {
-    display: flex;
+	display: flex;
 }
 
+.booking__block {
+	padding: 0.375rem 0.75rem;
+	margin-top: -5px;
+	margin-bottom: 15px;
+	background-color: white;
+	font-size: 17px;
+	line-height: 1.5;
+	background-clip: padding-box;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 
 .booking__calander .react-calendar {
-    border-radius: 4px;
-    border: 0;
-    overflow: hidden;
+	border-radius: 4px;
+	border: 0;
+	overflow: hidden;
+}
+
+#root > div > div > form > div > div {
+	padding-top: 13px;
+}
+
+div.ant-upload.ant-upload-drag {
+	height: 152px;
 }

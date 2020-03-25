@@ -1,6 +1,7 @@
 import React from "react";
 import BookiingDetail from "../../UI/bookingDetail/BookingDetail";
 import { ListGroup, Tab, Row, Col } from "react-bootstrap";
+import { Input } from "antd";
 import BookingCard from "./components/BookingCard";
 
 function MyOnlineBooking(props) {
@@ -10,10 +11,18 @@ function MyOnlineBooking(props) {
     }
   };
 
+  const { Search } = Input;
+
   return (
     <main className="mybooking">
       <section className="mybooking__left">
         <h2 className="mybooking__title">Booking List</h2>
+        <Search
+          placeholder="input search text"
+          onSearch={value => console.log(value)}
+          enterButton="Search"
+          size="large"
+        />
         <div className="list-group">
           <BookingCard />
           <BookingCard />

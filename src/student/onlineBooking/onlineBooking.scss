@@ -1,7 +1,7 @@
 .online-booking {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 0 80px;
+	padding: 0 120px;
 	padding-top: 50px;
 
 	&__title {
@@ -18,11 +18,11 @@
 	padding-top: 7px;
 }
 
-#root > div > div > form > div:nth-child(2) > div > div > div.jodit_workplace > div.jodit_wysiwyg {
+div.jodit_workplace > div.jodit_wysiwyg {
 	min-height: 200px !important;
 }
 
-#root > div > div > form > div:nth-child(2) > div > div > div.jodit_statusbar {
+div.jodit_statusbar {
 	display: none;
 }
 
@@ -30,11 +30,11 @@
 	padding-top: 13px;
 }
 
-#root > div > div > form > div:nth-child(3) > div > span > div.ant-upload.ant-upload-drag {
+div.ant-upload.ant-upload-drag {
 	height: 152px;
 }
 
-#root > div > div > form > div:nth-child(4) > div > button.btn.btn-primary {
+button.btn.btn-primary {
 	background-color: #006fbf;
 	border-color: #cdd5dc;
 	color: #fff;
@@ -51,7 +51,7 @@
 	}
 }
 
-#root > div > div > form > div:nth-child(4) > div > button.btn.btn-outline-secondary {
+a.btn.btn-outline-secondary {
 	margin-left: 16px;
 	background-color: #f9fbff;
 	color: #494c4e;

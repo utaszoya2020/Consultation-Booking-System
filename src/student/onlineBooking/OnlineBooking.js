@@ -4,6 +4,7 @@ import JoditEditor from "jodit-react";
 import { Upload, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import Confirm from "../../UI/confirm/Confirm";
+import { ONLINE_BOOKING_URL } from "../../routes/URLMap";
 import "./onlineBooking.scss";
 
 const OnlineBooking = ({}) => {
@@ -43,7 +44,7 @@ const OnlineBooking = ({}) => {
             Topic
           </Form.Label>
           <Col lg={10}>
-            <Form.Control as="select" value="Choose...">
+            <Form.Control as="select">
               <option>Finance...</option>
               <option>Accommodation...</option>
               <option>Cource...</option>
@@ -95,9 +96,10 @@ const OnlineBooking = ({}) => {
             </Button>
             <Button
               variant="outline-secondary"
-              onClick={() => setModalShow(true)}
+              type="reset"
+              href={ONLINE_BOOKING_URL}
             >
-              Cancel
+              Reset
             </Button>
           </Col>
         </Form.Group>

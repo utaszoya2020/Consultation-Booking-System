@@ -11,21 +11,26 @@
 
 .mybooking__title {
 	text-align: center;
-	margin: 50px auto 35px;
+	margin: 36px auto;
 }
 
 .mybooking {
-    display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
+	display: flex;
+	max-width: 1200px;
+	margin: 0 auto;
 
 	&__left {
 		flex: 0 0 33.3%;
 		border-right: 1px solid #e3e9f1;
 		min-height: calc(100vh - 48px);
+		padding: 0 12px;
 	}
 	&__right {
 		flex: 0 0 66.6%;
-		margin-top: 94px;
+		margin-top: 120px;
 	}
+}
+
+#root > div > main > section.mybooking__left > span {
+	margin-bottom: 16px;
 }

@@ -1,7 +1,7 @@
 .booking-card {
 	position: relative;
-	border: 1px solid rgba(0,0,0,.1);
-	box-shadow: 0 0 30px 0 rgba(0,0,0,.1);
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
 	padding: 12px 8px 0 12px;
 	margin: 2px;
@@ -23,7 +23,7 @@
 	&__img {
 		position: absolute;
 		right: 8px;
-		top: 18px;
+		top: 12px;
 		width: 80px;
 	}
 }
