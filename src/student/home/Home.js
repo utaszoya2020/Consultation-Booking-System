@@ -34,7 +34,6 @@ class Home extends React.Component {
             const isExpired = now - time > 0;
             return !isExpired;
         });
-        console.log(upComingBookings);
         const bookingNumbers = upComingBookings.length;
         return (
             <div className='homepage'>
