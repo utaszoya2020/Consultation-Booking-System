@@ -1,0 +1,40 @@
+.l-login {
+	padding-top: 10rem;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+
+	&__title {
+		margin-bottom: 20px;
+	}
+	&__register {
+		float: left;
+	}
+}
+
+.login-form {
+	width: 400px;
+}
+
+.b-form-container {
+	display: flex;
+	justify-content: center;
+}
+
+.login-form-forgot {
+	float: right;
+}
+
+.ant-checkbox-wrapper {
+	float: left;
+}
+.ant-col-rtl .login-form-forgot {
+  float: left;
+}
+#normal_login button {
+  width: 100%;
+}
+
+.ant-input-affix-wrapper {
+	height: 38px;
+}

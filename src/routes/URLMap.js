@@ -1,3 +1,7 @@
+//public url
+export const LOGIN_URL = "/login";
+export const REGISTER_URL = "/register";
+
 // Student url
 export const STUDENT_HOME_BASE_URL = "/student/home";
 export const MY_ONLINE_BOOKING_URL = "/student/myonlinebooking";
