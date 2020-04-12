@@ -11,6 +11,8 @@
     "bootstrap": "^4.4.1",
     "jodit-react": "^1.0.42",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "normalize.css": "^8.0.1",
     "react": "^16.13.0",
