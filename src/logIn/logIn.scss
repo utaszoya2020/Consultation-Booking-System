@@ -2,18 +2,20 @@
 	padding-top: 10rem;
 	display: flex;
 	flex-direction: column;
-	text-align: center;
+	width: 368px;
+	margin: 0 auto;
 
 	&__title {
 		margin-bottom: 20px;
+		text-align: center;
 	}
 	&__register {
 		float: left;
 	}
-}
 
-.login-form {
-	width: 400px;
+	.login-form {
+		width: 100%;
+	}
 }
 
 .b-form-container {
@@ -36,5 +38,5 @@
 }
 
 .ant-input-affix-wrapper {
-	height: 38px;
+	height: 41.5px;
 }

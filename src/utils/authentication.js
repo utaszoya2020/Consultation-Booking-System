@@ -1,6 +1,6 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-const JWT_KEY = "jwt";
+const JWT_KEY = 'jwt';
 
 export const setToken = (token) => {
   localStorage.setItem(JWT_KEY, token);
@@ -16,7 +16,7 @@ export const deleteToken = () => {
 
 export const fetchUserId = () => {
   const token = getToken();
-  if (token === null) return "visitor";
+  if (token === null) return 'visitor';
   const decodedToken = jwt.decode(token);
   return decodedToken.id;
 };

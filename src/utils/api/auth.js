@@ -1,7 +1,7 @@
-import { post } from "./axios";
+import { post } from './axios';
 
 export const login = (email, password) => {
-    const url = "/auth";
+    const url = '/auth';
     const data = {
         email,
         password,
