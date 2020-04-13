@@ -1,12 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { Form, Col, Row, Button } from 'react-bootstrap';
+
 import JoditEditor from 'jodit-react';
-import { Upload, message } from 'antd';
+import { Upload, message, Form, Input, Button, Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { ONLINE_BOOKING_URL } from '../../routes/URLMap';
 import { fetchUserId } from '../../utils/authentication';
 import './onlineBooking.scss';
+
+const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+};
+const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+};
 
 const OnlineBooking = () => {
     const userId = fetchUserId();
@@ -22,12 +30,16 @@ const OnlineBooking = () => {
     };
 
     const subjectChangeHandler = (event) => {
+        console.log(event.target);
         setSubject(event.target.value);
     };
 
-    const topicChangeHandler = (event) => {
-        setTopic(event.target.value);
+    const topicChangeHandler = (value) => {
+        setTopic(value);
     };
+
+    const { Option } = Select;
+
     const { Dragger } = Upload;
     const props = {
         name: 'file',
@@ -48,6 +60,20 @@ const OnlineBooking = () => {
         },
     };
 
+    const [onlineBookingForm] = Form.useForm();
+
+  const onFinish = values => {
+    console.log('Success:', values);
+  };
+
+  const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+  };
+
+  const onReset = () => {
+      onlineBookingForm.resetFields();
+  };
+
     return (
         <div className='online-booking'>
             <Confirm
@@ -63,8 +89,8 @@ const OnlineBooking = () => {
             <div className='online-booking__title'>
                 <h3>Online Consultation</h3>
             </div>
-            <Form>
-                <Form.Group as={Row} controlId='formHorizontalTopic'>
+            {/* <Form>
+                <Form.Group as={Row} controlId='formOnlineBookingTopic'>
                     <Form.Label column='lg' lg={2}>
                         Topic
                     </Form.Label>
@@ -82,7 +108,7 @@ const OnlineBooking = () => {
                     </Col>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId='formHorizontalTopic'>
+                <Form.Group as={Row} controlId='formOnlineBookingSubject'>
                     <Form.Label column='lg' lg={2}>
                         Subject
                     </Form.Label>
@@ -92,11 +118,12 @@ const OnlineBooking = () => {
                             placeholder='Subject'
                             value={subject}
                             onChange={subjectChangeHandler}
+                            required
                         />
                     </Col>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId='formHorizontalContent'>
+                <Form.Group as={Row} controlId='formOnlineBookingContent'>
                     <Form.Label column='lg' lg={2}>
                         Content
                     </Form.Label>
@@ -112,7 +139,7 @@ const OnlineBooking = () => {
                     </Col>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId='formHorizontalAttachment'>
+                <Form.Group as={Row} controlId='formOnlineBookingAttachment'>
                     <Form.Label column='lg' lg={2}>
                         Attachment
                     </Form.Label>
@@ -150,6 +177,101 @@ const OnlineBooking = () => {
                         </Button>
                     </Col>
                 </Form.Group>
+            </Form> */}
+            <Form
+                {...layout}
+                name='onlineBookingForm'
+                form={onlineBookingForm}
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+            >
+                <Form.Item
+                    name='topic'
+                    label='Topic'
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please select your Topic!',
+                        },
+                    ]}
+                >
+                    <Select
+                        placeholder='Please select a topic'
+                        onChange={topicChangeHandler}
+                    >
+                        <Option value='finance'>Finance</Option>
+                        <Option value='accommodation'>Accommodation</Option>
+                        <Option value='course'>Course</Option>
+                        <Option value='others'>Others</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    label='Subject'
+                    name='subject'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your subject!',
+                        },
+                    ]}
+                >
+                    <Input
+                        placeholder='Type your subject'
+                        onChange={subjectChangeHandler}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    label='Content'
+                    name='content'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your content!',
+                        },
+                    ]}
+                >
+                    <JoditEditor
+                        ref={editor}
+                        value={content}
+                        config={config}
+                        tabIndex={1} // tabIndex of textarea
+                        onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                        onChange={(newContent) => {}}
+                    />
+                </Form.Item>
+
+                <Form.Item label='Attachment' name='attachment'>
+                    <Dragger {...props}>
+                        <p className='ant-upload-drag-icon'>
+                            <InboxOutlined />
+                        </p>
+                        <p className='ant-upload-text'>
+                            Click or drag file to this area to upload
+                        </p>
+                        <p className='ant-upload-hint'>
+                            Support for a single or bulk upload. Strictly
+                            prohibit from uploading company data
+                        </p>
+                    </Dragger>
+                </Form.Item>
+
+                <Form.Item {...tailLayout}>
+                    <Button
+                        type='primary'
+                        htmlType='submit'
+                        onClick={() => setModalShow(true)}
+                    >
+                        Submit
+                    </Button>
+                    <Button htmlType='button' onClick={onReset}>
+                        Reset
+                    </Button>
+                </Form.Item>
             </Form>
         </div>
     );
