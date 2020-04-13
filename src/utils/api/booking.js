@@ -11,16 +11,25 @@ export const fetchAllMyBookings = (userId) => {
     return get(url, data).then((response) => response.data);
 };
 
-export const addBooking = (type, campus, userId, topic, subject, content) => {
-    const url = API_BOOKING_URL;
-    const data = {
-        type,
-        campus,
-        userId,
-        topic,
-        subject,
-        content,
-    };
-    console.log(data);
-    return post(url, data).then((response) => response.data);
-};
+export const addBooking = (
+           type,
+           campus,
+           userId,
+           topic,
+           subject,
+           content,
+           bookingDate
+       ) => {
+           const url = API_BOOKING_URL;
+           const data = {
+               type,
+               campus,
+               userId,
+               topic,
+               subject,
+               content,
+               bookingDate
+           };
+           console.log(data);
+           return post(url, data).then((response) => response.data);
+       };

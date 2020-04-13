@@ -56,10 +56,11 @@ export const addBookingThunkAction = (
     userId,
     topic,
     subject,
-    content
+    content,
+    bookingDate
 ) => (dispatch) => {
     dispatch(addBookingAction());
-    addBooking(type, campus, userId, topic, subject, content)
+    addBooking(type, campus, userId, topic, subject, content, bookingDate)
         .then((data) => {
             console.log(data);
             dispatch(addBookingSuccess(data));

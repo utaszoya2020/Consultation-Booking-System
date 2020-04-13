@@ -13,6 +13,7 @@ function Confirm(props) {
         topic,
         subject,
         content,
+        bookingDate,
         isPosted,
         error,
     } = props;
@@ -57,7 +58,8 @@ function Confirm(props) {
                             userId,
                             topic,
                             subject,
-                            content
+                            content,
+                            bookingDate
                         );
                     }}
                 >
@@ -75,9 +77,25 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    handleAddBooking: (type, campus, userId, topic, subject, content) =>
+    handleAddBooking: (
+        type,
+        campus,
+        userId,
+        topic,
+        subject,
+        content,
+        bookingDate
+    ) =>
         dispatch(
-            addBookingThunkAction(type, campus, userId, topic, subject, content)
+            addBookingThunkAction(
+                type,
+                campus,
+                userId,
+                topic,
+                subject,
+                content,
+                bookingDate
+            )
         ),
 });
 

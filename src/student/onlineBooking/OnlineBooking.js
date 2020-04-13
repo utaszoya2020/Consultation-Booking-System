@@ -21,6 +21,7 @@ const OnlineBooking = () => {
     const [content, setContent] = useState('');
     const [type, setType] = useState('Online');
     const [campus, setCampus] = useState('Hobart');
+    const [bookingDate, setBookingDate] = useState(new Date());
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
     const config = {
@@ -82,6 +83,7 @@ const OnlineBooking = () => {
                 topic={topic}
                 subject={subject}
                 content={content}
+                bookingDate={bookingDate}
                 onHide={() => setModalShow(false)}
             />
             <div className='online-booking__title'>
@@ -96,6 +98,7 @@ const OnlineBooking = () => {
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
+                size='large'
             >
                 <Form.Item
                     name='topic'
