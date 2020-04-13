@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import { addBookingThunkAction } from '../../redux/actions/bookingAction';
-
+import { SUCCESS_URL, ERROR_URL } from '../../routes/URLMap';
 
 function Confirm(props) {
     const {
@@ -12,8 +13,19 @@ function Confirm(props) {
         topic,
         subject,
         content,
-        isBookingSuccess,
+        isPosted,
+        error,
     } = props;
+
+    let successRedirector = null;
+    if (isPosted) {
+        successRedirector = <Redirect to={SUCCESS_URL} />;
+    }
+
+    let failureRedirector = null;
+    if (error) {
+        failureRedirector = <Redirect to={ERROR_URL} />;
+    }
 
     return (
         <Modal
@@ -22,6 +34,8 @@ function Confirm(props) {
             aria-labelledby='contained-modal-title-vcenter'
             centered
         >
+            {successRedirector}
+            {failureRedirector}
             <Modal.Header closeButton>
                 <Modal.Title id='contained-modal-title-vcenter'>
                     Confirmation
@@ -55,7 +69,9 @@ function Confirm(props) {
 }
 
 const mapStateToProps = (state) => ({
-    isBookingSuccess: state.booking.newBooking !== {},
+    isPosted: state.booking.isPosted,
+    error: state.booking.error,
+    isLoading: state.booking.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({

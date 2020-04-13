@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
-
 import JoditEditor from 'jodit-react';
 import { Upload, message, Form, Input, Button, Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
-import { ONLINE_BOOKING_URL } from '../../routes/URLMap';
 import { fetchUserId } from '../../utils/authentication';
 import './onlineBooking.scss';
 
@@ -30,7 +28,6 @@ const OnlineBooking = () => {
     };
 
     const subjectChangeHandler = (event) => {
-        console.log(event.target);
         setSubject(event.target.value);
     };
 
@@ -41,7 +38,7 @@ const OnlineBooking = () => {
     const { Option } = Select;
 
     const { Dragger } = Upload;
-    const props = {
+    const fileProps = {
         name: 'file',
         multiple: true,
         action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -62,17 +59,18 @@ const OnlineBooking = () => {
 
     const [onlineBookingForm] = Form.useForm();
 
-  const onFinish = values => {
-    console.log('Success:', values);
-  };
+    const onFinish = (values) => {
+        console.log('Success:', values);
+    };
 
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
 
-  const onReset = () => {
-      onlineBookingForm.resetFields();
-  };
+    const onReset = (history) => {
+        onlineBookingForm.resetFields();
+        console.log(history);
+    };
 
     return (
         <div className='online-booking'>
@@ -89,95 +87,6 @@ const OnlineBooking = () => {
             <div className='online-booking__title'>
                 <h3>Online Consultation</h3>
             </div>
-            {/* <Form>
-                <Form.Group as={Row} controlId='formOnlineBookingTopic'>
-                    <Form.Label column='lg' lg={2}>
-                        Topic
-                    </Form.Label>
-                    <Col lg={10}>
-                        <Form.Control
-                            as='select'
-                            id='topic'
-                            onChange={topicChangeHandler}
-                        >
-                            <option value='Finance'>Finance</option>
-                            <option value='Accommodation'>Accommodation</option>
-                            <option value='Course'>Course</option>
-                            <option value='Others'>Others</option>
-                        </Form.Control>
-                    </Col>
-                </Form.Group>
-
-                <Form.Group as={Row} controlId='formOnlineBookingSubject'>
-                    <Form.Label column='lg' lg={2}>
-                        Subject
-                    </Form.Label>
-                    <Col lg={10}>
-                        <Form.Control
-                            type='text'
-                            placeholder='Subject'
-                            value={subject}
-                            onChange={subjectChangeHandler}
-                            required
-                        />
-                    </Col>
-                </Form.Group>
-
-                <Form.Group as={Row} controlId='formOnlineBookingContent'>
-                    <Form.Label column='lg' lg={2}>
-                        Content
-                    </Form.Label>
-                    <Col lg={10}>
-                        <JoditEditor
-                            ref={editor}
-                            value={content}
-                            config={config}
-                            tabIndex={1} // tabIndex of textarea
-                            onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-                            onChange={(newContent) => {}}
-                        />
-                    </Col>
-                </Form.Group>
-
-                <Form.Group as={Row} controlId='formOnlineBookingAttachment'>
-                    <Form.Label column='lg' lg={2}>
-                        Attachment
-                    </Form.Label>
-                    <Col lg={10}>
-                        <Dragger {...props}>
-                            <p className='ant-upload-drag-icon'>
-                                <InboxOutlined />
-                            </p>
-                            <p className='ant-upload-text'>
-                                Click or drag file to this area to upload
-                            </p>
-                            <p className='ant-upload-hint'>
-                                Support for a single or bulk upload. Strictly
-                                prohibit from uploading company data or other
-                                band files
-                            </p>
-                        </Dragger>
-                    </Col>
-                </Form.Group>
-
-                <Form.Group as={Row}>
-                    <Col lg={{ span: 10, offset: 2 }}>
-                        <Button
-                            variant='primary'
-                            onClick={() => setModalShow(true)}
-                        >
-                            Submit
-                        </Button>
-                        <Button
-                            variant='outline-secondary'
-                            type='reset'
-                            href={ONLINE_BOOKING_URL}
-                        >
-                            Reset
-                        </Button>
-                    </Col>
-                </Form.Group>
-            </Form> */}
             <Form
                 {...layout}
                 name='onlineBookingForm'
@@ -241,12 +150,11 @@ const OnlineBooking = () => {
                         config={config}
                         tabIndex={1} // tabIndex of textarea
                         onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-                        onChange={(newContent) => {}}
                     />
                 </Form.Item>
 
                 <Form.Item label='Attachment' name='attachment'>
-                    <Dragger {...props}>
+                    <Dragger {...fileProps}>
                         <p className='ant-upload-drag-icon'>
                             <InboxOutlined />
                         </p>

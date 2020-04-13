@@ -64,8 +64,6 @@ export const addBookingThunkAction = (
             console.log(data);
             dispatch(addBookingSuccess(data));
         })
-        //路由跳转
-        .then
         .catch((error) => {
             dispatch(addBookingFailure(error));
         });

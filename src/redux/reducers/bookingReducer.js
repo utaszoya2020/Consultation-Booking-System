@@ -11,6 +11,7 @@ const initialState = {
     bookings: [],
     newBooking: {},
     isLoading: false,
+    isPosted: false,
     error: null,
 };
 
@@ -43,6 +44,7 @@ const bookingReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
+                isPosted: false,
             };
         }
 
@@ -51,6 +53,7 @@ const bookingReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 newBooking: action.newBooking,
+                isPosted: true,
             };
         }
 
@@ -59,6 +62,7 @@ const bookingReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: action.error,
+                isPosted: false,
             };
         }
 
