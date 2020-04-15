@@ -2,10 +2,10 @@
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 0 90px;
-    padding-top: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+	padding-top: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
 	&__title {
 		margin: 6px auto 20px;
@@ -13,77 +13,12 @@
 	}
 }
 
-/* #root div > form > div:nth-child(1) > div {
-	padding-top: 7px;
+svg {
+	vertical-align: baseline !important;
 }
 
-#root > div > div > form > div:nth-child(2) > div {
-	padding-top: 7px;
-}
-
-div.jodit_workplace > div.jodit_wysiwyg {
-	min-height: 200px !important;
-}
-
-div.jodit_statusbar {
-	display: none;
-}
-
-#root > div > div > form > div:nth-child(3) > div {
-	padding-top: 13px;
-}
-
-div.ant-upload.ant-upload-drag {
-	height: 152px;
-}
-
-button.btn.btn-primary {
-	background-color: #006fbf;
-	border-color: #cdd5dc;
-	color: #fff;
-	padding: 0.5rem 1.5rem;
-	border-radius: 0.3rem;
-	box-shadow: 0 0 0 4px transparent;
-	transition: box-shadow 0.2s;
-	font-weight: 600;
-
-
-	&:hover {
-		background-color: #005694;
-		border-color: #005694;
-	}
-}
-
-a.btn.btn-outline-secondary {
-	margin-left: 16px;
-	background-color: #f9fbff;
-	color: #494c4e;
-	border-color: #cdd5dc;
-	padding: 0.5rem 1.5rem;
-	border-radius: 0.3rem;
-	box-shadow: 0 0 0 4px transparent;
-	transition: box-shadow 0.2s;
-	font-weight: 600;
-
-	&:hover {
-		background-color: #cdd5dc;
-	}
-}
- */
-
- #onlineBookingForm {
-    max-width: 830px;
-    .ant-row, .ant-form-item {
-        margin-bottom: 6px;
-    }
-
-    .ant-btn {
-        margin-right: 8px;
-    }
- }
-
-div.ant-upload.ant-upload-drag {
-	height: 152px;
+#onlineBookingForm {
+	max-width: 830px;
 }
 
 div.jodit_workplace > div.jodit_wysiwyg {

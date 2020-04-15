@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import JoditEditor from 'jodit-react';
-import { Upload, message, Form, Input, Button, Select } from 'antd';
+import { Upload, message, Form, Input, Button, Select, Space } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
@@ -14,6 +14,7 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
+
 const OnlineBooking = () => {
     const userId = fetchUserId();
     const [modalShow, setModalShow] = React.useState(false);
@@ -24,6 +25,7 @@ const OnlineBooking = () => {
     const [bookingDate, setBookingDate] = useState(new Date());
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
+    const [fileList, setFilelist] = useState([]);
     const config = {
         readonly: false,
     };
@@ -39,12 +41,32 @@ const OnlineBooking = () => {
     const { Option } = Select;
 
     const { Dragger } = Upload;
+
+
+    const handleAttachmentbeforeUpload = file => {
+    const isLt10M = file.size / 1024 / 1024 < 10;
+    if (!isLt10M) {
+      message.error('文件大小不能超过10M');
+    }
+    return new Promise((resolve, reject) => {
+      if (!isLt10M) {
+        reject(file);
+      } else {
+        resolve(file);
+      }
+    });
+  };
+
     const fileProps = {
         name: 'file',
         multiple: true,
-        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+        /* accept: '.doc,.docx,.pdf',  // Limit file type */
+        action: 'http://localhost:4000/api/bookings/uploadfile/file-upload',
         onChange(info) {
+            console.log(info);
+            console.log(info.fileList);
             const { status } = info.file;
+            let fileList = info.fileList;
             if (status !== 'uploading') {
                 console.log(info.file, info.fileList);
             }
@@ -56,7 +78,10 @@ const OnlineBooking = () => {
                 message.error(`${info.file.name} file upload failed.`);
             }
         },
+        beforeUpload: (info) => handleAttachmentbeforeUpload(info),
     };
+
+    
 
     const [onlineBookingForm] = Form.useForm();
 
@@ -84,6 +109,7 @@ const OnlineBooking = () => {
                 subject={subject}
                 content={content}
                 bookingDate={bookingDate}
+                fileList={fileList}
                 onHide={() => setModalShow(false)}
             />
             <div className='online-booking__title'>
@@ -98,7 +124,6 @@ const OnlineBooking = () => {
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                size='large'
             >
                 <Form.Item
                     name='topic'
@@ -172,16 +197,18 @@ const OnlineBooking = () => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Button
-                        type='primary'
-                        htmlType='submit'
-                        onClick={() => setModalShow(true)}
-                    >
-                        Submit
-                    </Button>
-                    <Button htmlType='button' onClick={onReset}>
-                        Reset
-                    </Button>
+                    <Space size="middle">
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            onClick={() => setModalShow(true)}
+                        >
+                            Submit
+                        </Button>
+                        <Button htmlType='button' onClick={onReset}>
+                            Reset
+                        </Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </div>

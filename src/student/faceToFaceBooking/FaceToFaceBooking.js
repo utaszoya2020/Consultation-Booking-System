@@ -24,8 +24,9 @@ const FaceToFaceBooking = () => {
     const [campus, setCampus] = useState('Hobart');
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
-    const [content, setContent] = useState('');
-    const [bookingDate, setBookingDate] = useState(new Date());
+    const [content, setContent] = useState('no');
+    const [bookingDate, setBookingDate] = useState('');
+    const [fileList, setFilelist] = useState([]);
 
     const subjectChangeHandler = (event) => {
         setSubject(event.target.value);
@@ -80,15 +81,29 @@ const FaceToFaceBooking = () => {
     }
 
     function onDateChange(date, dateString) {
-        setBookingDate(date);
-        console.log(date, dateString);
+        const bookingDate = moment(date).toDate();
+        setBookingDate(bookingDate);
     }
+
+    const handleAttachmentbeforeUpload = (file) => {
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+            message.error('文件大小不能超过10M');
+        }
+        return new Promise((resolve, reject) => {
+            if (!isLt10M) {
+                reject(file);
+            } else {
+                resolve(file);
+            }
+        });
+    };
 
     const { Dragger } = Upload;
     const fileProps = {
         name: 'file',
         multiple: true,
-        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+        action: 'http://localhost:4000/api/bookings/uploadfile/file-upload',
         onChange(info) {
             const { status } = info.file;
             if (status !== 'uploading') {
@@ -102,6 +117,7 @@ const FaceToFaceBooking = () => {
                 message.error(`${info.file.name} file upload failed.`);
             }
         },
+        beforeUpload: (info) => handleAttachmentbeforeUpload(info),
     };
 
     const [faceToFaceBookingForm] = Form.useForm();
@@ -116,6 +132,10 @@ const FaceToFaceBooking = () => {
     const onReset = () => {
         faceToFaceBookingForm.resetFields();
     };
+
+    const handleFileChange = (event) => {
+        console.log(event.target);
+    }
 
     return (
         <div className='online-booking'>
@@ -143,7 +163,6 @@ const FaceToFaceBooking = () => {
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                size='large'
             >
                 <Form.Item
                     name='topic'
@@ -206,7 +225,12 @@ const FaceToFaceBooking = () => {
                     />
                 </Form.Item>
 
-                <Form.Item label='Attachment' name='attachment'>
+                <Form.Item
+                    label='Dragger'
+                    name='dragger'
+                    valuePropName='fileList'
+                    getValueFromEvent={handleFileChange}
+                >
                     <Dragger {...fileProps}>
                         <p className='ant-upload-drag-icon'>
                             <InboxOutlined />
@@ -215,10 +239,10 @@ const FaceToFaceBooking = () => {
                             Click or drag file to this area to upload
                         </p>
                         <p className='ant-upload-hint'>
-                            Support for a single or bulk upload. Strictly
-                            prohibit from uploading company data
+                            Support for a single or bulk upload. 
                         </p>
                     </Dragger>
+                    ,
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>

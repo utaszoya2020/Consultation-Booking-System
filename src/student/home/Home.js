@@ -32,7 +32,7 @@ class Home extends React.Component {
             const now = new Date().getTime();
             const time = new Date(booking.bookingDate).getTime();
             const isExpired = now - time > 0;
-            return isExpired;
+            return !isExpired;
         });
         const bookingNumbers = upComingBookings.length;
         return (
