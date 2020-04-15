@@ -14,7 +14,6 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-
 const OnlineBooking = () => {
     const userId = fetchUserId();
     const [modalShow, setModalShow] = React.useState(false);
@@ -25,17 +24,9 @@ const OnlineBooking = () => {
     const [bookingDate, setBookingDate] = useState(new Date());
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
-    const [fileList, setFilelist] = useState([]);
+    const [attachment, setAttachment] = useState([]);
     const config = {
         readonly: false,
-    };
-
-    const subjectChangeHandler = (event) => {
-        setSubject(event.target.value);
-    };
-
-    const topicChangeHandler = (value) => {
-        setTopic(value);
     };
 
     const { Option } = Select;
@@ -60,16 +51,10 @@ const OnlineBooking = () => {
     const fileProps = {
         name: 'file',
         multiple: true,
-        /* accept: '.doc,.docx,.pdf',  // Limit file type */
-        action: 'http://localhost:4000/api/bookings/uploadfile/file-upload',
+        /* accept: '.doc,.docx,.pdf',  // Limit file type  */
+        action: 'http://localhost:4000/api/bookings/upload/file-upload',
         onChange(info) {
-            console.log(info);
-            console.log(info.fileList);
             const { status } = info.file;
-            let fileList = info.fileList;
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
             if (status === 'done') {
                 message.success(
                     `${info.file.name} file uploaded successfully.`
@@ -86,16 +71,28 @@ const OnlineBooking = () => {
     const [onlineBookingForm] = Form.useForm();
 
     const onFinish = (values) => {
-        console.log('Success:', values);
+        setTopic(values.topic);
+        setSubject(values.subject);
+        if(values.attachment && !values.attachment.file.response.error) {
+            const files = [];
+            values.attachment.fileList.forEach(file => {
+                const res = file.response;
+                files.push({
+                    fileName: res.fileName,
+                    fileLocation: res.fileLocation
+                });
+            });
+            setAttachment(files);
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
+        setModalShow(false);
     };
 
-    const onReset = (history) => {
+    const onReset = () => {
         onlineBookingForm.resetFields();
-        console.log(history);
     };
 
     return (
@@ -109,7 +106,7 @@ const OnlineBooking = () => {
                 subject={subject}
                 content={content}
                 bookingDate={bookingDate}
-                fileList={fileList}
+                attachment={attachment}
                 onHide={() => setModalShow(false)}
             />
             <div className='online-booking__title'>
@@ -136,10 +133,7 @@ const OnlineBooking = () => {
                         },
                     ]}
                 >
-                    <Select
-                        placeholder='Please select a topic'
-                        onChange={topicChangeHandler}
-                    >
+                    <Select placeholder='Please select a topic'>
                         <Option value='finance'>Finance</Option>
                         <Option value='accommodation'>Accommodation</Option>
                         <Option value='course'>Course</Option>
@@ -156,10 +150,7 @@ const OnlineBooking = () => {
                         },
                     ]}
                 >
-                    <Input
-                        placeholder='Type your subject'
-                        onChange={subjectChangeHandler}
-                    />
+                    <Input placeholder='Type your subject' />
                 </Form.Item>
 
                 <Form.Item
@@ -197,7 +188,7 @@ const OnlineBooking = () => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Space size="middle">
+                    <Space size='middle'>
                         <Button
                             type='primary'
                             htmlType='submit'

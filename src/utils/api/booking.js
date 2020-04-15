@@ -18,7 +18,8 @@ export const addBooking = (
            topic,
            subject,
            content,
-           bookingDate
+           bookingDate,
+           attachment
        ) => {
            const url = API_BOOKING_URL;
            const data = {
@@ -28,7 +29,8 @@ export const addBooking = (
                topic,
                subject,
                content,
-               bookingDate
+               bookingDate,
+               attachment
            };
            console.log(data);
            return post(url, data).then((response) => response.data);

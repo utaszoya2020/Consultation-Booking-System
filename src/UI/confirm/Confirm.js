@@ -14,6 +14,7 @@ function Confirm(props) {
         subject,
         content,
         bookingDate,
+        attachment,
         isPosted,
         error,
     } = props;
@@ -59,7 +60,8 @@ function Confirm(props) {
                             topic,
                             subject,
                             content,
-                            bookingDate
+                            bookingDate,
+                            attachment
                         );
                     }}
                 >
@@ -84,7 +86,8 @@ const mapDispatchToProps = (dispatch) => ({
         topic,
         subject,
         content,
-        bookingDate
+        bookingDate,
+        attachment
     ) =>
         dispatch(
             addBookingThunkAction(
@@ -94,7 +97,8 @@ const mapDispatchToProps = (dispatch) => ({
                 topic,
                 subject,
                 content,
-                bookingDate
+                bookingDate,
+                attachment
             )
         ),
 });

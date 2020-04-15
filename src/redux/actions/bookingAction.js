@@ -51,21 +51,31 @@ export const addBookingFailure = (error) => ({
 });
 
 export const addBookingThunkAction = (
-    type,
-    campus,
-    userId,
-    topic,
-    subject,
-    content,
-    bookingDate
-) => (dispatch) => {
-    dispatch(addBookingAction());
-    addBooking(type, campus, userId, topic, subject, content, bookingDate)
-        .then((data) => {
-            console.log(data);
-            dispatch(addBookingSuccess(data));
-        })
-        .catch((error) => {
-            dispatch(addBookingFailure(error));
-        });
-};
+           type,
+           campus,
+           userId,
+           topic,
+           subject,
+           content,
+           bookingDate,
+           attachment
+       ) => (dispatch) => {
+           dispatch(addBookingAction());
+           addBooking(
+               type,
+               campus,
+               userId,
+               topic,
+               subject,
+               content,
+               bookingDate,
+               attachment
+           )
+               .then((data) => {
+                   console.log(data);
+                   dispatch(addBookingSuccess(data));
+               })
+               .catch((error) => {
+                   dispatch(addBookingFailure(error));
+               });
+       };

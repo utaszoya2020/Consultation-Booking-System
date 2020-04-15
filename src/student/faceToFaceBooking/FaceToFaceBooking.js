@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Upload, message, Form, Input, Button, Select, DatePicker } from 'antd';
+import {
+    Upload,
+    message,
+    Form,
+    Input,
+    Button,
+    Select,
+    DatePicker,
+    Space,
+} from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 
 import Confirm from '../../UI/confirm/Confirm';
@@ -26,15 +35,7 @@ const FaceToFaceBooking = () => {
     const [subject, setSubject] = useState('');
     const [content, setContent] = useState('no');
     const [bookingDate, setBookingDate] = useState('');
-    const [fileList, setFilelist] = useState([]);
-
-    const subjectChangeHandler = (event) => {
-        setSubject(event.target.value);
-    };
-
-    const topicChangeHandler = (value) => {
-        setTopic(value);
-    };
+    const [attachment, setAttachment] = useState([]);
 
     const { Option } = Select;
 
@@ -103,12 +104,9 @@ const FaceToFaceBooking = () => {
     const fileProps = {
         name: 'file',
         multiple: true,
-        action: 'http://localhost:4000/api/bookings/uploadfile/file-upload',
+        action: 'http://localhost:4000/api/bookings/upload/file-upload',
         onChange(info) {
             const { status } = info.file;
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
             if (status === 'done') {
                 message.success(
                     `${info.file.name} file uploaded successfully.`
@@ -122,20 +120,32 @@ const FaceToFaceBooking = () => {
 
     const [faceToFaceBookingForm] = Form.useForm();
     const onFinish = (values) => {
-        console.log('Success:', values);
+        setTopic(values.topic);
+        setSubject(values.subject);
+        if (values.attachment && !values.attachment.file.response.error) {
+            const files = [];
+            console.log('s');
+            values.attachment.fileList.forEach((file) => {
+                const res = file.response;
+                files.push({
+                    fileName: res.fileName,
+                    fileLocation: res.fileLocation,
+                });
+            });
+            setAttachment(files);
+            console.log(files);
+        }
+        console.log('files');
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
+        setModalShow(false);
     };
 
     const onReset = () => {
         faceToFaceBookingForm.resetFields();
     };
-
-    const handleFileChange = (event) => {
-        console.log(event.target);
-    }
 
     return (
         <div className='online-booking'>
@@ -148,6 +158,7 @@ const FaceToFaceBooking = () => {
                 subject={subject}
                 content={content}
                 bookingDate={bookingDate}
+                attachment={attachment}
                 onHide={() => setModalShow(false)}
             />
             <div className='online-booking__title'>
@@ -156,7 +167,7 @@ const FaceToFaceBooking = () => {
 
             <Form
                 {...layout}
-                name='onlineBookingForm'
+                name='faceToFaceBookingForm'
                 form={faceToFaceBookingForm}
                 initialValues={{
                     remember: true,
@@ -175,11 +186,7 @@ const FaceToFaceBooking = () => {
                         },
                     ]}
                 >
-                    <Select
-                        placeholder='Please select a topic'
-                        onChange={topicChangeHandler}
-                        size='large'
-                    >
+                    <Select placeholder='Please select a topic'>
                         <Option value='finance'>Finance</Option>
                         <Option value='accommodation'>Accommodation</Option>
                         <Option value='course'>Course</Option>
@@ -196,11 +203,7 @@ const FaceToFaceBooking = () => {
                         },
                     ]}
                 >
-                    <Input
-                        placeholder='Type your subject'
-                        onChange={subjectChangeHandler}
-                        size='large'
-                    />
+                    <Input placeholder='Type your subject' />
                 </Form.Item>
 
                 <Form.Item
@@ -220,17 +223,11 @@ const FaceToFaceBooking = () => {
                         showTime={{
                             defaultValue: moment('00:00:00', 'HH:mm:ss'),
                         }}
-                        size='large'
                         onChange={onDateChange}
                     />
                 </Form.Item>
 
-                <Form.Item
-                    label='Dragger'
-                    name='dragger'
-                    valuePropName='fileList'
-                    getValueFromEvent={handleFileChange}
-                >
+                <Form.Item label='Attachment' name='attachment'>
                     <Dragger {...fileProps}>
                         <p className='ant-upload-drag-icon'>
                             <InboxOutlined />
@@ -239,124 +236,29 @@ const FaceToFaceBooking = () => {
                             Click or drag file to this area to upload
                         </p>
                         <p className='ant-upload-hint'>
-                            Support for a single or bulk upload. 
+                            Support for a single or bulk upload.
                         </p>
                     </Dragger>
-                    ,
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Button
-                        type='primary'
-                        htmlType='submit'
-                        onClick={() => setModalShow(true)}
-                    >
-                        Submit
-                    </Button>
-                    <Button htmlType='button' onClick={onReset}>
-                        Reset
-                    </Button>
+                    <Space size='middle'>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            onClick={() => setModalShow(true)}
+                        >
+                            Submit
+                        </Button>
+                        <Button htmlType='button' onClick={onReset}>
+                            Reset
+                        </Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </div>
     );
 };
-
-{
-    /* const onChange = (date) => this.setState({ date });
-
-const tileDisabled = ({ date, view }) =>
-    date.getDay() === 6 || date.getDay() === 0;
-
-const handleTimeChange = (event) => {
-    const key = event.target.name;
-    const value = event.target.value;
-    const timeString = event.target.innerHTML;
-
-    this.setState({
-        [key]: value,
-        timeString,
-    });
-}; */
-    /* <Form>
-          <Form.Group as={Row} controlId='formHorizontalTopic'>
-            <Form.Label column='lg' lg={2}>
-              Topic
-            </Form.Label>
-            <Col lg={10}>
-              <Form.Control as='select' value='Choose...'>
-                <option>Finance...</option>
-                <option>Accommodation...</option>
-                <option>Cource...</option>
-                <option>Others...</option>
-              </Form.Control>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId='formPlaintextSubject'>
-            <Form.Label column='lg' lg={2}>
-              Subject
-            </Form.Label>
-            <Col lg='10'>
-              <Form.Control type='text' placeholder='Subject' />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId='formHorizontalContent'>
-            <Form.Label column='lg' lg={2}>
-              Date
-            </Form.Label>
-            <Col lg={10}>
-              {timeString === '' ? null : (
-                <h5 className='booking__block'>{`${selectDate}  ${timeString}`}</h5>
-              )}
-              <div className='booking__calander'>
-                <Calendar
-                  onChange={this.onChange}
-                  value={this.state.date}
-                  tileDisabled={this.tileDisabled}
-                />
-                <TimePicker handleTimeChange={this.handleTimeChange} />
-              </div>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId='formHorizontalAttachment'>
-            <Form.Label column='lg' lg={2}>
-              Attachment
-            </Form.Label>
-            <Col lg={10}>
-              <Dragger {...props}>
-                <p className='ant-upload-drag-icon'>
-                  <InboxOutlined />
-                </p>
-                <p className='ant-upload-text'>
-                  Click or drag file to this area to upload
-                </p>
-                <p className='ant-upload-hint'>
-                  Support for a single or bulk upload. Strictly prohibit from
-                  uploading company data or other band files
-                </p>
-              </Dragger>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Col lg={{ span: 10, offset: 2 }}>
-              <Button variant='primary' onClick={this.handleSubmit}>
-                Submit
-              </Button>
-              <Button
-                variant='outline-secondary'
-                type='reset'
-                href={FACE_TO_FACE_BOOKING_URL}
-              >
-                Reset
-              </Button>
-            </Col>
-          </Form.Group>
-        </Form> */
-}
 
 const mapStateToProps = (state) => ({
     disableDate: state.booking.disableDate,
