@@ -1,5 +1,6 @@
 import { login } from '../../utils/api/auth';
-import { setToken } from '../../utils/authentication';
+import { setToken, fetchUser } from '../../utils/authentication';
+import jwt from 'jsonwebtoken';
 
 import {
     CHANGE_EMAIL_INPUT,
@@ -23,8 +24,8 @@ export const logInAction = () => ({
     type: LOGIN_ACTION,
 });
 
-export const logInSuccess = (token) => ({
-    token,
+export const logInSuccess = (payload) => ({
+    payload,
     type: LOGIN_SUCCESS,
 });
 
@@ -40,7 +41,12 @@ export const LogInThunkAction = () => (dispatch, getState) => {
     const inputPassword = latestState.login.inputPassword;
     login(inputEmail, inputPassword)
         .then((token) => {
-            dispatch(logInSuccess(token));
+            const user = fetchUser(token);
+            const payload = {
+                user,
+                token
+            }
+            dispatch(logInSuccess(payload));
             setToken(token);
         })
         .catch((error) => {

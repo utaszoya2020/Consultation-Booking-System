@@ -12,9 +12,7 @@ import {
     Space,
 } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-
 import Confirm from '../../UI/confirm/Confirm';
-
 import { fetchUserId } from '../../utils/authentication';
 import './styles/faceToFaceBooking.scss';
 
@@ -26,16 +24,17 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-const FaceToFaceBooking = () => {
+const FaceToFaceBooking = props => {
     const userId = fetchUserId();
     const [modalShow, setModalShow] = React.useState(false);
-    const [type, setType] = useState('Online');
+    const [type, setType] = useState('Offline');
     const [campus, setCampus] = useState('Hobart');
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
-    const [content, setContent] = useState('no');
+    const [content, setContent] = useState('');
     const [bookingDate, setBookingDate] = useState('');
     const [attachment, setAttachment] = useState([]);
+    console.log(userId);
 
     const { Option } = Select;
 
@@ -86,6 +85,11 @@ const FaceToFaceBooking = () => {
         setBookingDate(bookingDate);
     }
 
+    const handleContentChange = event => {
+        const content = event.target.value;
+        setContent(content);
+    }
+
     const handleAttachmentbeforeUpload = (file) => {
         const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isLt10M) {
@@ -124,7 +128,6 @@ const FaceToFaceBooking = () => {
         setSubject(values.subject);
         if (values.attachment && !values.attachment.file.response.error) {
             const files = [];
-            console.log('s');
             values.attachment.fileList.forEach((file) => {
                 const res = file.response;
                 files.push({
@@ -133,9 +136,7 @@ const FaceToFaceBooking = () => {
                 });
             });
             setAttachment(files);
-            console.log(files);
         }
-        console.log('files');
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -227,6 +228,14 @@ const FaceToFaceBooking = () => {
                     />
                 </Form.Item>
 
+                <Form.Item label='Content' name='content'>
+                    <Input.TextArea
+                        rows={4}
+                        value={content}
+                        onChange={handleContentChange}
+                    />
+                </Form.Item>
+
                 <Form.Item label='Attachment' name='attachment'>
                     <Dragger {...fileProps}>
                         <p className='ant-upload-drag-icon'>
@@ -261,6 +270,7 @@ const FaceToFaceBooking = () => {
 };
 
 const mapStateToProps = (state) => ({
+    userId: state.login.userId,
     disableDate: state.booking.disableDate,
     error: state.booking.error,
     isLoading: state.booking.isLoading,

@@ -8,6 +8,7 @@ import {
 } from '../redux/actions/loginAction';
 import { Form, Input, Button, Checkbox, Spin, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { STUDENT_HOME_URL, ADMIN_HOME_URL } from '../routes/URLMap';
 import './logIn.scss';
 
 const LoginForm = (props) => {
@@ -19,15 +20,19 @@ const LoginForm = (props) => {
         handleLogIn,
         isLoading,
         isAuthenticated,
-        error
+        error,
+        userType
     } = props;
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
     };
 
     let authRedirect = null;
-    if (isAuthenticated) {
-        authRedirect = <Redirect to='/' />;
+    if (isAuthenticated && (userType === 'student')) {
+        authRedirect = <Redirect to={STUDENT_HOME_URL} />;
+    }
+    if (isAuthenticated && (userType === 'admin')) {
+        authRedirect = <Redirect to={ADMIN_HOME_URL} />;
     }
 
     let errorMessage = null;
@@ -135,6 +140,7 @@ const mapStateToProps = (state) => ({
     isLoading: state.login.isLoading,
     error: state.login.error,
     isAuthenticated: state.login.token !== null,
+    userType: state.login.userType,
 });
 
 const mapDispatchToProps = (dispatch) => ({

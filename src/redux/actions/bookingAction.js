@@ -8,7 +8,7 @@ import {
 } from './action.js';
 import { addBooking } from '../../utils/api/booking';
 
-import { fetchAllMyBookings } from '../../utils/api/booking';
+import { fetchAllMyBookings, fetchAllBookings } from '../../utils/api/booking';
 
 export const fetchBookingAction = () => ({
     type: FETCH_BOOKING_ACTION,
@@ -27,6 +27,17 @@ export const fetchBookingFailure = (error) => ({
 export const fetchBookingThunkAction = (userId) => (dispatch) => {
     dispatch(fetchBookingAction());
     fetchAllMyBookings(userId)
+        .then((data) => {
+            dispatch(fetchBookingSuccess(data));
+        })
+        .catch((error) => {
+            dispatch(fetchBookingFailure(error));
+        });
+};
+// Fetch All Booking -- Admin
+export const fetchAllBookingThunkAction = () => (dispatch) => {
+    dispatch(fetchBookingAction());
+    fetchAllBookings()
         .then((data) => {
             dispatch(fetchBookingSuccess(data));
         })

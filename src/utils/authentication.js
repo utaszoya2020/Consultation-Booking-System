@@ -14,11 +14,13 @@ export const deleteToken = () => {
   localStorage.removeItem(JWT_KEY);
 };
 
+export const fetchUser = token => jwt.decode(token);
+
 export const fetchUserId = () => {
-  const token = getToken();
-  if (token === null) return 'visitor';
-  const decodedToken = jwt.decode(token);
-  return decodedToken.id;
+    const token = getToken();
+    if (token === null) return 'visitor';
+    const decodedToken = jwt.decode(token);
+    return decodedToken.id;
 };
 
 export const isAuthenticated = () => {

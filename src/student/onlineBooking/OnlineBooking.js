@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { connect } from 'react-redux';
 import JoditEditor from 'jodit-react';
 import { Upload, message, Form, Input, Button, Select, Space } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
@@ -206,4 +207,11 @@ const OnlineBooking = () => {
     );
 };
 
-export default OnlineBooking;
+const mapStateToProps = (state) => ({
+    error: state.booking.error,
+    isLoading: state.booking.isLoading,
+});
+
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OnlineBooking);

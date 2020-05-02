@@ -11,6 +11,11 @@ export const fetchAllMyBookings = (userId) => {
     return get(url, data).then((response) => response.data);
 };
 
+export const fetchAllBookings = () => {
+    const url = `${API_BOOKING_URL}`;
+    return get(url).then((response) => response.data);
+};
+
 export const addBooking = (
            type,
            campus,

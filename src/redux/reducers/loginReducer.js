@@ -7,8 +7,11 @@ import {
 } from '../actions/action.js';
 
 const initialState = {
+    userId: '',
+    userName: '',
     inputEmail: '',
     inputPassword: '',
+    userType: '',
     isLoading: false,
     error: null,
     token: null,
@@ -40,10 +43,15 @@ const loginReducer = (state = initialState, action) => {
         }
 
         case LOGIN_SUCCESS: {
+            const { payload } = action;
+            console.log(payload);
             return {
                 ...state,
                 isLoading: false,
-                token: action.token,
+                token: payload.token,
+                userId: payload.user.id,
+                userName: payload.user.name,
+                userType: payload.user.userType
             };
         }
 

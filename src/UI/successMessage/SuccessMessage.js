@@ -1,6 +1,6 @@
 import React from 'react';
 import { Result, Button } from 'antd';
-import { STUDENT_HOME_BASE_URL } from '../../routes/URLMap';
+import { STUDENT_HOME_URL } from '../../routes/URLMap';
 import './successMessage.scss';
 
 function SuccessMessage() {
@@ -15,7 +15,7 @@ function SuccessMessage() {
                         <Button
                             type='primary'
                             key='console'
-                            href={STUDENT_HOME_BASE_URL}
+                            href={STUDENT_HOME_URL}
                         >
                             Back Home
                         </Button>

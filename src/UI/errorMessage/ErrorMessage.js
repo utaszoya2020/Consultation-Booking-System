@@ -1,6 +1,6 @@
 import React from "react";
 import { Result, Button } from "antd";
-import { STUDENT_HOME_BASE_URL } from "../../routes/URLMap";
+import { STUDENT_HOME_URL } from "../../routes/URLMap";
 
 function ErrorMessage() {
   return (
@@ -10,7 +10,7 @@ function ErrorMessage() {
         title="404"
         subTitle="Sorry, the page you visited does not exist."
         extra={
-          <Button type="primary" href={STUDENT_HOME_BASE_URL}>
+          <Button type="primary" href={STUDENT_HOME_URL}>
             Back Home
           </Button>
         }

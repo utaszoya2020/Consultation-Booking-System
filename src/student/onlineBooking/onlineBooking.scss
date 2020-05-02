@@ -10,12 +10,13 @@
 	&__title {
 		margin: 6px auto 20px;
 		text-align: center;
-	}
+    }
+
+    svg {
+	    vertical-align: baseline !important;
+    }
 }
 
-svg {
-	vertical-align: baseline !important;
-}
 
 #onlineBookingForm {
 	max-width: 830px;
