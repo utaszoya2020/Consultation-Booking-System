@@ -5,6 +5,7 @@ import {
     ADD_BOOKING_ACTION,
     ADD_BOOKING_SUCCESS,
     ADD_BOOKING_FAILURE,
+    FETCH_BOOKING_DETAIL_SUCCESS,
 } from '../actions/action.js';
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
     isLoading: false,
     isPosted: false,
     error: null,
+    bookingDetail: {}
 };
 
 const bookingReducer = (state = initialState, action) => {
@@ -37,6 +39,14 @@ const bookingReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: action.error,
+            };
+        }
+
+        case FETCH_BOOKING_DETAIL_SUCCESS: {
+            return {
+                ...state,
+                isLoading: false,
+                bookingDetail: action.bookingDetail,
             };
         }
 

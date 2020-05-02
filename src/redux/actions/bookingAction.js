@@ -5,10 +5,15 @@ import {
     ADD_BOOKING_ACTION,
     ADD_BOOKING_SUCCESS,
     ADD_BOOKING_FAILURE,
+    FETCH_BOOKING_DETAIL_SUCCESS,
 } from './action.js';
 import { addBooking } from '../../utils/api/booking';
 
-import { fetchAllMyBookings, fetchAllBookings } from '../../utils/api/booking';
+import {
+    fetchAllMyBookings,
+    fetchAllBookings,
+    fetchBookingDetail,
+} from '../../utils/api/booking';
 
 export const fetchBookingAction = () => ({
     type: FETCH_BOOKING_ACTION,
@@ -45,6 +50,24 @@ export const fetchAllBookingThunkAction = () => (dispatch) => {
             dispatch(fetchBookingFailure(error));
         });
 };
+
+export const fetchBookingDetailSuccess = (bookingDetail) => ({
+           bookingDetail,
+           type: FETCH_BOOKING_DETAIL_SUCCESS,
+       });
+
+// Fetch Booking Detail
+export const fetchBookingDetailThunkAction = (bookingId) => (dispatch) => {
+           dispatch(fetchBookingAction());
+           fetchBookingDetail(bookingId)
+               .then((data) => {
+                   console.log(data);
+                   dispatch(fetchBookingDetailSuccess(data));
+               })
+               .catch((error) => {
+                   dispatch(fetchBookingFailure(error));
+               });
+       };
 
 // Add Booking
 export const addBookingAction = () => ({

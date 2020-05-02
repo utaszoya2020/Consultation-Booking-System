@@ -3,12 +3,19 @@ import RightArrow from '../../../assets/icon/iconfinder_icon-ios7-arrow-right_21
 import '../styles/bookingCard.scss';
 
 function BookingCard(props) {
-    const { name, subject, status } = props;
+    const {
+        bookingId,
+        firstName,
+        lastName,
+        subject,
+        status,
+        handleClickBooking,
+    } = props;
     return (
-        <div className='booking-card'>
-            <a>
+        <a onClick={() => handleClickBooking(bookingId)} >
+            <div className='booking-card'>
                 <p className='booking-card__text'>
-                    <strong>{name}</strong> (412456)
+                    <strong>{`${firstName} ${lastName}`}</strong> (412456)
                 </p>
                 <p className='booking-card__text'>
                     <strong>Subject</strong>: {subject}
@@ -21,8 +28,8 @@ function BookingCard(props) {
                     src={RightArrow}
                     alt='right arrow'
                 />
-            </a>
-        </div>
+            </div>
+        </a>
     );
 }
 

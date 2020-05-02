@@ -49,8 +49,13 @@
 }
 
 .c-sidemenu {
-
 	&__search {
 		padding: 8px 16px;
 	}
+}
+
+.l-admin__content {
+	border: 1px solid lightgrey;
+	margin: 6px;
+	min-height: 95vh;
 }
