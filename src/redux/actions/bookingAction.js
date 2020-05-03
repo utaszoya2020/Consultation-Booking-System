@@ -105,7 +105,6 @@ export const addBookingThunkAction = (
                attachment
            )
                .then((data) => {
-                   console.log(data);
                    dispatch(addBookingSuccess(data));
                })
                .catch((error) => {

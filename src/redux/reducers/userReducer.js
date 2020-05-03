@@ -11,6 +11,7 @@ const initialState = {
     email: '',
     gender: '',
     phone: '',
+    userType: '',
     disableDate: '',
     isLoading: false,
     error: null,
@@ -26,7 +27,7 @@ const userReducer = (state = initialState, action) => {
         }
 
         case FETCH_USER_SUCCESS: {
-            const { firstName, lastName, email, campus, gender, phone, disableDate} = action.user;
+            const { firstName, lastName, email, campus, gender, phone, userType, disableDate} = action.user;
             return {
                 ...state,
                 isLoading: false,
@@ -36,6 +37,7 @@ const userReducer = (state = initialState, action) => {
                 campus,
                 gender,
                 phone,
+                userType,
                 disableDate,
             };
         }

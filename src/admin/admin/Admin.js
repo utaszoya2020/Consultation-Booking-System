@@ -47,7 +47,7 @@ class Admin extends React.Component {
     renderOnlineBookingCard = (onlineBooking) => {
         const { searchValue } = this.state;
         if (onlineBooking.length) {
-            // Search Filter
+            //TODO improve Search Filter 
             if (searchValue) {
                 const result = onlineBooking.filter((booking) => {
                     return (

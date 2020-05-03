@@ -34,7 +34,6 @@ const FaceToFaceBooking = props => {
     const [content, setContent] = useState('');
     const [bookingDate, setBookingDate] = useState('');
     const [attachment, setAttachment] = useState([]);
-    console.log(userId);
 
     const { Option } = Select;
 

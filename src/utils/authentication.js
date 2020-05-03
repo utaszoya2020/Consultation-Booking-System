@@ -32,6 +32,15 @@ export const fetchUserType = () => {
     return decodedToken.userType;
 };
 
+export const isAdmin = () => {
+    const token = getToken();
+    if (!token) return false;
+    const decodedToken = jwt.decode(token);
+    const { userType } = decodedToken;
+    const isAdmin = userType === 'admin' ? true : false;
+    return isAdmin;
+}
+
 export const isAuthenticated = () => {
   const token = getToken();
 

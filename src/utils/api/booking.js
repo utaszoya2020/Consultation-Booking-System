@@ -40,6 +40,5 @@ export const addBooking = (
                bookingDate,
                attachment
            };
-           console.log(data);
            return post(url, data).then((response) => response.data);
        };

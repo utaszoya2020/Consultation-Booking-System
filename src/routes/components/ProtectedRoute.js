@@ -1,8 +1,8 @@
-/* import React from 'react';
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
 import { isAuthenticated } from '../../utils/authentication';
-import { LOGIN_CLIENT_URL } from "../URLMap";
+import { LOGIN_URL } from '../URLMap';
 
 const ProtectedRoute = ({ component: ProtectedComponent, ...rest }) => {
     return (
@@ -10,21 +10,22 @@ const ProtectedRoute = ({ component: ProtectedComponent, ...rest }) => {
             {...rest}
             render={routeProps => {
                 if (!isAuthenticated()) return (
-                                          <Redirect
-                                            to={{
-                                              pathname: LOGIN_CLIENT_URL,
-                                              state: {
-                                                from:
-                                                  routeProps.location.pathname
-                                              }
-                                            }}
-                                          />
+                                            <Redirect
+                                                to={{
+                                                    pathname: LOGIN_URL,
+                                                    state: {
+                                                        from:
+                                                            routeProps.location
+                                                                .pathname,
+                                                    },
+                                                }}
+                                            />
                                         );
 
-                return <ProtectedComponent {...routeProps} />
+                return <ProtectedComponent {...routeProps} />;
             }}
         />
     );
 };
 
-export default ProtectedRoute; */
+export default ProtectedRoute;

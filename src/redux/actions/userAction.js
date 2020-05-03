@@ -23,7 +23,6 @@ export const fetchUserDetailThunkAction = (userId) => (dispatch) => {
            dispatch(fetchUserAction());
            fetchUserDetail(userId)
                .then((user) => {
-                   console.log(user);
                    dispatch(fetchUserSuccess(user));
                })
                .catch((error) => {
