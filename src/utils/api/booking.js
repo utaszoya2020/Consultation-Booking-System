@@ -6,10 +6,7 @@ const API_USER_URL = './users';
 // TODO Fix REST API
 export const fetchAllMyBookings = (userId) => {
     const url = `${API_USER_URL}/${userId}/bookings`;
-    const data = {
-        userId,
-    };
-    return get(url, data).then((response) => response.data);
+    return get(url).then((response) => response.data);
 };
 
 export const fetchAllBookings = () => {

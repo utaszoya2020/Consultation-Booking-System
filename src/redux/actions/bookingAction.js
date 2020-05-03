@@ -61,7 +61,6 @@ export const fetchBookingDetailThunkAction = (bookingId) => (dispatch) => {
            dispatch(fetchBookingAction());
            fetchBookingDetail(bookingId)
                .then((data) => {
-                   console.log(data);
                    dispatch(fetchBookingDetailSuccess(data));
                })
                .catch((error) => {

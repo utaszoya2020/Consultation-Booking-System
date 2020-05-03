@@ -1,8 +1,11 @@
 import axios from 'axios';
 
 import { getToken } from '../authentication';
-
-axios.defaults.baseURL = 'http://localhost:4000/api';
+// For Dev
+//axios.defaults.baseURL = 'http://localhost:4000/api';
+// For Production
+axios.defaults.baseURL =
+    'http://bookingappapi-env.eba-b77icp2s.ap-southeast-2.elasticbeanstalk.com/api/';
 
 const appendAuthToken = (config) => {
     const jwtToken = getToken();

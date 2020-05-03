@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Input } from 'antd';
-import  BookingCard from '../../student/myBooking/components/BookingCard';
+import moment from 'moment';
+import { Row, Col, Input, Descriptions } from 'antd';
+import BookingCard from '../../student/myBooking/components/BookingCard';
 import {
     fetchAllBookingThunkAction,
     fetchBookingDetailThunkAction,
@@ -18,9 +19,9 @@ class Admin extends React.Component {
             activeTab: 'offline',
             searchValue: '',
             currentBooking: '', // Delete later
-            activeBooking: false, // Delete later
+            activeBooking: false, 
         };
-    };
+    }
 
     componentDidMount() {
         this.props.getAllBookings();
@@ -39,10 +40,8 @@ class Admin extends React.Component {
 
     handleClickBooking = (bookingId) => {
         const { getBookingDetail } = this.props;
-        this.setState({ currentBooking: bookingId }); // Delete later
-        const value = getBookingDetail(bookingId);
-        console.log(value);
-
+        this.setState({ activeBooking: true }); 
+        getBookingDetail(bookingId);
     };
 
     renderOnlineBookingCard = (onlineBooking) => {
@@ -56,7 +55,7 @@ class Admin extends React.Component {
                         booking.userId.lastName === searchValue ||
                         booking.topic === searchValue ||
                         booking.subject === searchValue ||
-                        booking.content.includes(searchValue)
+                        booking.content === searchValue
                     );
                 });
                 return result.map((booking) => {
@@ -91,7 +90,33 @@ class Admin extends React.Component {
     };
 
     renderOfflineBookingCard = (offlineBooking) => {
+        const { searchValue } = this.state;
         if (offlineBooking.length) {
+            // Search Filter
+            if (searchValue) {
+                const result = offlineBooking.filter((booking) => {
+                    return (
+                        booking.userId.firstName === searchValue ||
+                        booking.userId.lastName === searchValue ||
+                        booking.topic === searchValue ||
+                        booking.subject === searchValue ||
+                        booking.content === searchValue
+                    );
+                });
+                return result.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            subject={booking.subject}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                        />
+                    );
+                });
+            } else {
             return offlineBooking.map((booking) => {
                 return (
                     <BookingCard
@@ -105,15 +130,95 @@ class Admin extends React.Component {
                     />
                 );
             });
+            }
         }
     };
 
-    renderOnlineBookingDetail = () => {
-        return <p>Online Details</p>;
+    renderOnlineBookingDetail = (bookingDetail) => {
+        const { _id, status, type, campus, userId, topic, subject, content, bookingDate, attachment, chat} = bookingDetail;
+        const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
+        return (
+            <div>
+                <Descriptions
+                    title={`Booking Detail - ${_id}`}
+                    bordered
+                    column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+                >
+                    <Descriptions.Item label='Name'>
+                        {userId ? `${userId.firstName} ${userId.lastName}` : ''}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Campus'>
+                        {campus}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Booking Date'>
+                        {date}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Topic'>{topic}</Descriptions.Item>
+                    <Descriptions.Item label='Subject'>
+                        {subject}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Status'>
+                        {status}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Content' span={3}>
+                        {content}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Attachment'>
+                        TODO
+                    </Descriptions.Item>
+                </Descriptions>
+            </div>
+        );
     };
 
-    renderOfflineBookingDetail = () => {
-        return <p>Offline Details</p>;
+    renderOfflineBookingDetail = (bookingDetail) => {
+        const {
+            _id,
+            status,
+            type,
+            campus,
+            userId,
+            topic,
+            subject,
+            content,
+            bookingDate,
+            attachment,
+            chat,
+        } = bookingDetail;
+        const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
+
+        return (
+            <div>
+                <Descriptions
+                    title={`Booking Detail - ${_id}`}
+                    bordered
+                    column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+                >
+                    <Descriptions.Item label='Name'>
+                        {userId ? `${userId.firstName} ${userId.lastName}` : ''}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Campus'>
+                        {campus}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Booking Date'>
+                        {date}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Topic'>{topic}</Descriptions.Item>
+                    <Descriptions.Item label='Subject'>
+                        {subject}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Status'>
+                        {status}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Content' span={3}>
+                        {content}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Attachment'>
+                        TODO
+                    </Descriptions.Item>
+                </Descriptions>
+            </div>
+        );
     };
 
     renderBookingCard = (onlineBooking, offlineBooking) => {
@@ -122,14 +227,15 @@ class Admin extends React.Component {
             : this.renderOfflineBookingCard(offlineBooking);
     };
 
-    renderBookingDetail = () => {
+    renderBookingDetail = (bookingDetail) => {
         return this.state.activeTab === 'online'
-            ? this.renderOnlineBookingDetail()
-            : this.renderOfflineBookingDetail();
+            ? this.renderOnlineBookingDetail(bookingDetail)
+            : this.renderOfflineBookingDetail(bookingDetail);
     };
 
     render() {
-        const { bookings } = this.props;
+        const { bookings, bookingDetail } = this.props;
+        const { activeBooking } =this.state;
         let onlineBooking = [];
         let offlineBooking = [];
         if (bookings) {
@@ -140,8 +246,6 @@ class Admin extends React.Component {
                 return booking.type === 'Offline';
             });
         }
-        console.log(onlineBooking);
-        console.log(offlineBooking);
         const { activeTab } = this.state;
         const offlineTabClass =
             activeTab === 'offline'
@@ -197,10 +301,9 @@ class Admin extends React.Component {
                         </Col>
                         <Col span={16}>
                             <div className='l-admin__content'>
-                                {this.renderBookingDetail(
-                                    onlineBooking,
-                                    offlineBooking
-                                )}
+                                {bookingDetail && activeBooking
+                                    ? this.renderBookingDetail(bookingDetail)
+                                    : null}
                             </div>
                         </Col>
                     </Row>
@@ -217,7 +320,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     getAllBookings: () => dispatch(fetchAllBookingThunkAction()),
-    getBookingDetail: bookingId =>
+    getBookingDetail: (bookingId) =>
         dispatch(fetchBookingDetailThunkAction(bookingId)),
 });
 

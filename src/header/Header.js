@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { fetchUserType } from '../utils/authentication';
 import AIBTLogo from '../assets/logo__aibt.png';
 import {
     STUDENT_HOME_URL,
@@ -14,8 +15,24 @@ import {
 
 import './Header.scss';
 
-function Header(props) {
-    const userType = props.userType;
+class Header extends React.Component {
+        constructor(props) {
+        super(props);
+
+        this.state = {
+            userType: ''
+        };
+    }
+
+    componentDidMount() {
+        const userType = fetchUserType();
+        // TODO Fix userType render
+        console.log(userType);
+        this.setState({ userType });
+    }
+
+    render() {
+        const { userType } = this.state;
     return (
         <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
             <Navbar.Brand href='#home'>
@@ -87,11 +104,11 @@ function Header(props) {
             </Navbar.Collapse>
         </Navbar>
     );
+    }
 }
 
 //export default withRouter(Header);
 const mapStateToProps = (state) => ({
-    userType: state.login.userType,
     error: state.booking.error,
     isLoading: state.booking.isLoading,
 });

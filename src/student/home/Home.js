@@ -3,32 +3,32 @@ import { connect } from 'react-redux';
 import BookiingDetail from '../../UI/bookingDetail/BookingDetail';
 import { fetchUserId } from '../../utils/authentication';
 import { fetchBookingThunkAction } from '../../redux/actions/bookingAction';
+import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import './styles/home.scss';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            userId: ''
-        };
+        this.state = {};
     }
 
     componentDidMount() {
-        this.getUserId();
+        this.getUser();
     }
 
-    getUserId = () => {
+    getUser = () => {
         const userId = fetchUserId();
-        this.setState({ userId }, ()=> {
-            this.props.fetchMyBooking(userId);
+        this.setState({ userId }, () => {
+            const { fetchMyBooking, fetchUserDetail } = this.props;
+            fetchMyBooking(userId);
+            fetchUserDetail(userId);
         });
     };
 
-
     render() {
-        const bookings = this.props.bookings;
-        const upComingBookings = bookings.filter(booking => {
+        const { bookings, firstName, lastName } = this.props;
+        const upComingBookings = bookings.filter((booking) => {
             const now = new Date().getTime();
             const time = new Date(booking.bookingDate).getTime();
             const isExpired = now - time > 0;
@@ -39,16 +39,13 @@ class Home extends React.Component {
             <div className='homepage'>
                 <div className='homepage__block'>
                     <h1 className='homepage__title'>
-                        Welcome Dom, You have {bookingNumbers} up coming
-                        booking!
+                        {`Welcome ${firstName}, You have ${bookingNumbers} up coming
+                        booking!`}
                     </h1>
                 </div>
                 {upComingBookings.map((booking) => {
                     return (
-                        <BookiingDetail
-                            key={booking._id}
-                            booking={booking}
-                        />
+                        <BookiingDetail key={booking._id} booking={booking} />
                     );
                 })}
             </div>
@@ -58,10 +55,13 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => ({
     bookings: state.booking.bookings,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     fetchMyBooking: (userId) => dispatch(fetchBookingThunkAction(userId)),
+    fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,6 +1,5 @@
 import { login } from '../../utils/api/auth';
 import { setToken, fetchUser } from '../../utils/authentication';
-import jwt from 'jsonwebtoken';
 
 import {
     CHANGE_EMAIL_INPUT,
@@ -41,15 +40,16 @@ export const LogInThunkAction = () => (dispatch, getState) => {
     const inputPassword = latestState.login.inputPassword;
     login(inputEmail, inputPassword)
         .then((token) => {
+            setToken(token);
             const user = fetchUser(token);
             const payload = {
                 user,
                 token
             }
             dispatch(logInSuccess(payload));
-            setToken(token);
         })
         .catch((error) => {
             dispatch(logInFailure(error));
         });
 };
+
