@@ -7,19 +7,29 @@
 	flex-direction: column;
 	justify-content: center;
 
+	@media only screen and (min-width: 320px) and (max-width: 768px) {
+		padding: 50px 20px;
+	}
+
 	&__title {
 		margin: 6px auto 20px;
 		text-align: center;
-    }
+	}
 
-    svg {
-	    vertical-align: baseline !important;
-    }
+	svg {
+		vertical-align: baseline !important;
+	}
 }
 
-
 #onlineBookingForm {
-	max-width: 830px;
+	margin: 0 auto;
+	width: 100%;
+
+	@media only screen and (min-width: 320px) and (max-width: 767px) {
+		& > div:nth-child(5) > div {
+			margin-left: 0;
+		}
+	}
 }
 
 div.jodit_workplace > div.jodit_wysiwyg {

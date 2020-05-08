@@ -8,11 +8,11 @@ import { fetchUserId } from '../../utils/authentication';
 import './onlineBooking.scss';
 
 const layout = {
-    labelCol: { span: 8 },
+    labelCol: { span: 4 },
     wrapperCol: { span: 16 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 4, span: 20 },
 };
 
 const OnlineBooking = () => {
