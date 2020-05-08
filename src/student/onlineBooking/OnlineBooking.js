@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import JoditEditor from 'jodit-react';
-import { Upload, message, Form, Input, Button, Select, Space } from 'antd';
+import { Upload, message, Form, Input, Button, Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
@@ -108,6 +108,7 @@ const OnlineBooking = () => {
                 content={content}
                 bookingDate={bookingDate}
                 attachment={attachment}
+                session={'0'}
                 onHide={() => setModalShow(false)}
             />
             <div className='online-booking__title'>
@@ -188,18 +189,16 @@ const OnlineBooking = () => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Space size='middle'>
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            onClick={() => setModalShow(true)}
-                        >
-                            Submit
-                        </Button>
-                        <Button htmlType='button' onClick={onReset}>
-                            Reset
-                        </Button>
-                    </Space>
+                    <Button
+                        type='primary'
+                        htmlType='submit'
+                        onClick={() => setModalShow(true)}
+                    >
+                        Submit
+                    </Button>
+                    <Button htmlType='button' onClick={onReset}>
+                        Reset
+                    </Button>
                 </Form.Item>
             </Form>
         </div>
