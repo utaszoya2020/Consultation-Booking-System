@@ -8,6 +8,7 @@ import MyOnlineBooking from '../student/myBooking/MyOnlineBooking';
 import MyFaceToFaceBooking from '../student/myBooking/MyFaceToFaceBooking';
 import ProtectedRoute from './components/ProtectedRoute';
 import SuccessMessage from '../UI/successMessage/SuccessMessage';
+import LogoutSuccess from '../UI/successMessage/LogoutSuccess';
 import ErrorMessage from '../UI/errorMessage/ErrorMessage';
 import Admin from '../admin/admin/Admin';
 
@@ -21,7 +22,8 @@ import {
   FACE_TO_FACE_BOOKING_URL,
   SUCCESS_URL,
   ERROR_URL,
-  ADMIN_HOME_URL
+  ADMIN_HOME_URL,
+  LOGOUT_SUCCESS_URL
 } from './URLMap';
 
 const Routes = () => {
@@ -53,6 +55,7 @@ const Routes = () => {
                   component={FaceToFaceBooking}
               />
               <Route exact path={SUCCESS_URL} component={SuccessMessage} />
+              <Route exact path={LOGOUT_SUCCESS_URL} component={LogoutSuccess} />
               <Route exact path={ERROR_URL} component={ErrorMessage} />
               <ProtectedRoute exact path={ADMIN_HOME_URL} component={Admin} />
 

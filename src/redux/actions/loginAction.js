@@ -33,12 +33,9 @@ export const logInFailure = (error) => ({
     type: LOGIN_FAILURE,
 });
 
-export const LogInThunkAction = () => (dispatch, getState) => {
+export const LogInThunkAction = (email, password) => (dispatch) => {
     dispatch(logInAction());
-    const latestState = getState();
-    const inputEmail = latestState.login.inputEmail;
-    const inputPassword = latestState.login.inputPassword;
-    login(inputEmail, inputPassword)
+    login(email, password)
         .then((token) => {
             setToken(token);
             const user = fetchUser(token);

@@ -10,7 +10,7 @@ import {
     FACE_TO_FACE_BOOKING_URL,
     ONLINE_BOOKING_URL,
     ADMIN_HOME_URL,
-    LOGIN_URL,
+    LOGOUT_SUCCESS_URL,
 } from '../routes/URLMap.js';
 
 import './Header.scss';
@@ -30,7 +30,7 @@ class Header extends React.Component {
 
     handleLogOut = (history) => {
         deleteToken();
-        history.push(LOGIN_URL);
+        history.push(LOGOUT_SUCCESS_URL);
     };
 
     renderAdminNavbar = (history) => {

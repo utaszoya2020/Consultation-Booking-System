@@ -11,132 +11,153 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { STUDENT_HOME_URL, ADMIN_HOME_URL } from '../routes/URLMap';
 import './logIn.scss';
 
-const LoginForm = (props) => {
-    const {
-        inputEmail,
-        inputPassword,
-        handleEmailInputChange,
-        handlePasswordInputChange,
-        handleLogIn,
-        isLoading,
-        isAuthenticated,
-        error,
-        userType
-    } = props;
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+class LoginForm extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email: '',
+            password: '',
+        };
+    }
+
+    handleChange = (event) => {
+        const key = event.target.name;
+        const value = event.target.value;
+        this.setState({ [key]: value });
     };
 
-    let authRedirect = null;
-    if (isAuthenticated && (userType === 'student')) {
-        authRedirect = <Redirect to={STUDENT_HOME_URL} />;
-    }
-    if (isAuthenticated && (userType === 'admin')) {
-        authRedirect = <Redirect to={ADMIN_HOME_URL} />;
+    loginUser = () => {
+        const {handleLogIn} = this.props;
+        const {email, password} = this.state;
+        handleLogIn(email, password);
     }
 
-    let errorMessage = null;
-    if (error) {
-        errorMessage = (
-            <Form.Item>
-                <Alert message='Invalid Email or Password' type='error' />
-            </Form.Item>
-        );
-    }
-    return (
-        <div className='l-login'>
-            {isLoading ? (
-                <Spin size='large' tip='Loading...' />
-            ) : (
-                <Fragment>
-                    {authRedirect}
-                    <h1 className='l-login__title'>AIBT Booking System</h1>
-                    <div className='b-form-container'>
-                        <Form
-                            name='normal_login'
-                            className='login-form'
-                            initialValues={{
-                                remember: true,
-                            }}
-                            onFinish={onFinish}
-                        >
-                            {errorMessage}
-                            <Form.Item
-                                name='email'
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Email!',
-                                    },
-                                ]}
+    render() {
+        const {
+            isLoading,
+            isAuthenticated,
+            error,
+            userType,
+        } = this.props;
+
+        const onFinish = (values) => {
+            console.log('Received values of form: ', values);
+        };
+
+        let authRedirect = null;
+        if (isAuthenticated && userType === 'student') {
+            authRedirect = <Redirect to={STUDENT_HOME_URL} />;
+        }
+        if (isAuthenticated && userType === 'admin') {
+            authRedirect = <Redirect to={ADMIN_HOME_URL} />;
+        }
+
+        let errorMessage = null;
+        if (error) {
+            errorMessage = (
+                <Form.Item>
+                    <Alert message='Invalid Email or Password' type='error' />
+                </Form.Item>
+            );
+        }
+
+        return (
+            <div className='l-login'>
+                {isLoading ? (
+                    <Spin size='large' tip='Loading...' />
+                ) : (
+                    <Fragment>
+                        {authRedirect}
+                        <h1 className='l-login__title'>AIBT Booking System</h1>
+                        <div className='b-form-container'>
+                            <Form
+                                name='normal_login'
+                                className='login-form'
+                                initialValues={{
+                                    remember: true,
+                                }}
+                                onFinish={onFinish}
                             >
-                                <Input
-                                    prefix={
-                                        <UserOutlined className='site-form-item-icon' />
-                                    }
-                                    placeholder='Email'
-                                    onChange={handleEmailInputChange}
-                                    value={inputEmail}
-                                />
-                            </Form.Item>
-                            <Form.Item
-                                name='password'
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Password!',
-                                    },
-                                ]}
-                            >
-                                <Input
-                                    prefix={
-                                        <LockOutlined className='site-form-item-icon' />
-                                    }
-                                    type='password'
-                                    placeholder='Password'
-                                    onChange={handlePasswordInputChange}
-                                    value={inputPassword}
-                                />
-                            </Form.Item>
-                            <Form.Item>
+                                {errorMessage}
                                 <Form.Item
-                                    name='remember'
-                                    valuePropName='checked'
-                                    noStyle
+                                    name='email'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input your Email!',
+                                        },
+                                    ]}
                                 >
-                                    <Checkbox>Remember me</Checkbox>
+                                    <Input
+                                        prefix={
+                                            <UserOutlined className='site-form-item-icon' />
+                                        }
+                                        placeholder='Email'
+                                        onChange={this.handleChange}
+                                        value={this.state.email}
+                                        name='email'
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name='password'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your Password!',
+                                        },
+                                    ]}
+                                >
+                                    <Input
+                                        prefix={
+                                            <LockOutlined className='site-form-item-icon' />
+                                        }
+                                        type='password'
+                                        placeholder='Password'
+                                        onChange={this.handleChange}
+                                        value={this.state.password}
+                                        name='password'
+                                    />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Form.Item
+                                        name='remember'
+                                        valuePropName='checked'
+                                        noStyle
+                                    >
+                                        <Checkbox>Remember me</Checkbox>
+                                    </Form.Item>
+
+                                    <a className='login-form-forgot' href=''>
+                                        Forgot password
+                                    </a>
                                 </Form.Item>
 
-                                <a className='login-form-forgot' href=''>
-                                    Forgot password
-                                </a>
-                            </Form.Item>
-
-                            <Form.Item>
-                                <Button
-                                    type='primary'
-                                    htmlType='submit'
-                                    className='login-form-button'
-                                    onClick={handleLogIn}
-                                >
-                                    Log in
-                                </Button>
-                                <p className='l-login__register'>
-                                    Or <a href=''>register now!</a>
-                                </p>
-                            </Form.Item>
-                        </Form>
-                    </div>
-                </Fragment>
-            )}
-            ;
-        </div>
-    );
-};
+                                <Form.Item>
+                                    <Button
+                                        type='primary'
+                                        htmlType='submit'
+                                        className='login-form-button'
+                                        onClick={this.loginUser}
+                                    >
+                                        Log in
+                                    </Button>
+                                    <p className='l-login__register'>
+                                        Or <a href=''>register now!</a>
+                                    </p>
+                                </Form.Item>
+                            </Form>
+                        </div>
+                    </Fragment>
+                )}
+                ;
+            </div>
+        );
+    }
+}
 
 const mapStateToProps = (state) => ({
-    inputEmail: state.login.inputEmail,
-    inputPassword: state.login.inputPassword,
     isLoading: state.login.isLoading,
     error: state.login.error,
     isAuthenticated: state.login.token !== null,
@@ -144,10 +165,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    handleEmailInputChange: (event) => dispatch(changeEmailInputAction(event)),
-    handlePasswordInputChange: (event) =>
-        dispatch(changePasswordInputAction(event)),
-    handleLogIn: () => dispatch(LogInThunkAction()),
+    handleLogIn: (email, password) =>
+        dispatch(LogInThunkAction(email, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

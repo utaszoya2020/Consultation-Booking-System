@@ -12,6 +12,7 @@ const initialState = {
     isLoading: false,
     error: null,
     token: null,
+    userType: ''
 };
 
 const loginReducer = (state = initialState, action) => {
@@ -26,9 +27,10 @@ const loginReducer = (state = initialState, action) => {
         }
 
         case CHANGE_PASSWORD_INPUT: {
+            const inputPassword = action.event.target.value;
             return {
                 ...state,
-                inputPassword: action.event.target.value,
+                inputPassword,
             };
         }
 
