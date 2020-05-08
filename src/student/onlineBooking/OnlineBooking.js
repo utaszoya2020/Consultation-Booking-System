@@ -20,9 +20,9 @@ const OnlineBooking = () => {
     const [modalShow, setModalShow] = React.useState(false);
     const editor = useRef(null);
     const [content, setContent] = useState('');
-    const [type, setType] = useState('Online');
-    const [campus, setCampus] = useState('Hobart');
-    const [bookingDate, setBookingDate] = useState(new Date());
+    const [type] = useState('Online');
+    const [campus] = useState('Hobart');
+    const [bookingDate] = useState(new Date());
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
     const [attachment, setAttachment] = useState([]);
@@ -38,7 +38,7 @@ const OnlineBooking = () => {
     const handleAttachmentbeforeUpload = file => {
     const isLt10M = file.size / 1024 / 1024 < 10;
     if (!isLt10M) {
-      message.error('文件大小不能超过10M');
+      message.error('File size should not exceed 5M');
     }
     return new Promise((resolve, reject) => {
       if (!isLt10M) {
@@ -52,8 +52,8 @@ const OnlineBooking = () => {
     const fileProps = {
         name: 'file',
         multiple: true,
-        /* accept: '.doc,.docx,.pdf',  // Limit file type  */
-        action: 'http://localhost:4000/api/bookings/upload/file-upload',
+        accept: '.doc,.docx,.pdf,.xlsx.jpg.jpeg.png',  // Limit file type 
+        action: 'http://localhost:4000/api/bookings/upload',
         onChange(info) {
             const { status } = info.file;
             if (status === 'done') {
@@ -182,8 +182,7 @@ const OnlineBooking = () => {
                             Click or drag file to this area to upload
                         </p>
                         <p className='ant-upload-hint'>
-                            Support for a single or bulk upload. Strictly
-                            prohibit from uploading company data
+                            You can upload files up to a maximum of 5 MB.
                         </p>
                     </Dragger>
                 </Form.Item>

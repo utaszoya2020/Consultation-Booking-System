@@ -116,7 +116,7 @@ class Header extends React.Component {
         const { history } = this.props;
         return (
             <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
-                <Navbar.Brand href='#home'>
+                <Navbar.Brand href={STUDENT_HOME_URL}>
                     <img
                         src={AIBTLogo}
                         width='237'
