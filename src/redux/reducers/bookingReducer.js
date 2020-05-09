@@ -14,7 +14,7 @@ const initialState = {
     isLoading: false,
     isPosted: false,
     error: null,
-    bookingDetail: {}
+    bookingDetail: {},
 };
 
 const bookingReducer = (state = initialState, action) => {

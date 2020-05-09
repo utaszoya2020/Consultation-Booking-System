@@ -7,12 +7,12 @@ import {
     ADD_BOOKING_FAILURE,
     FETCH_BOOKING_DETAIL_SUCCESS,
 } from './action.js';
-import { addBooking } from '../../utils/api/booking';
 
 import {
     fetchAllMyBookings,
     fetchAllBookings,
     fetchBookingDetail,
+    addBooking,
 } from '../../utils/api/booking';
 
 export const fetchBookingAction = () => ({
@@ -52,21 +52,22 @@ export const fetchAllBookingThunkAction = () => (dispatch) => {
 };
 
 export const fetchBookingDetailSuccess = (bookingDetail) => ({
-           bookingDetail,
-           type: FETCH_BOOKING_DETAIL_SUCCESS,
-       });
+    bookingDetail,
+    type: FETCH_BOOKING_DETAIL_SUCCESS,
+});
 
 // Fetch Booking Detail
 export const fetchBookingDetailThunkAction = (bookingId) => (dispatch) => {
-           dispatch(fetchBookingAction());
-           fetchBookingDetail(bookingId)
-               .then((data) => {
-                   dispatch(fetchBookingDetailSuccess(data));
-               })
-               .catch((error) => {
-                   dispatch(fetchBookingFailure(error));
-               });
-       };
+    dispatch(fetchBookingAction());
+    fetchBookingDetail(bookingId)
+        .then((data) => {
+            dispatch(fetchBookingDetailSuccess(data));
+        })
+        .catch((error) => {
+            console.log(error);
+            dispatch(fetchBookingFailure(error));
+        });
+};
 
 // Add Booking
 export const addBookingAction = () => ({
@@ -84,30 +85,30 @@ export const addBookingFailure = (error) => ({
 });
 
 export const addBookingThunkAction = (
-           type,
-           campus,
-           userId,
-           topic,
-           subject,
-           content,
-           bookingDate,
-           attachment
-       ) => (dispatch) => {
-           dispatch(addBookingAction());
-           addBooking(
-               type,
-               campus,
-               userId,
-               topic,
-               subject,
-               content,
-               bookingDate,
-               attachment
-           )
-               .then((data) => {
-                   dispatch(addBookingSuccess(data));
-               })
-               .catch((error) => {
-                   dispatch(addBookingFailure(error));
-               });
-       };
+    type,
+    campus,
+    userId,
+    topic,
+    subject,
+    content,
+    bookingDate,
+    attachment
+) => (dispatch) => {
+    dispatch(addBookingAction());
+    addBooking(
+        type,
+        campus,
+        userId,
+        topic,
+        subject,
+        content,
+        bookingDate,
+        attachment
+    )
+        .then((data) => {
+            dispatch(addBookingSuccess(data));
+        })
+        .catch((error) => {
+            dispatch(addBookingFailure(error));
+        });
+};

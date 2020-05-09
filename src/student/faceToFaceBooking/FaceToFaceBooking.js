@@ -9,7 +9,6 @@ import {
     Button,
     Select,
     DatePicker,
-    Space,
 } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
@@ -17,11 +16,11 @@ import { fetchUserId } from '../../utils/authentication';
 import './styles/faceToFaceBooking.scss';
 
 const layout = {
-    labelCol: { span: 8 },
+    labelCol: { span: 4 },
     wrapperCol: { span: 16 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 4, span: 16 },
 };
 
 const FaceToFaceBooking = props => {
@@ -250,7 +249,6 @@ const FaceToFaceBooking = props => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Space size='middle'>
                         <Button
                             type='primary'
                             htmlType='submit'
@@ -261,7 +259,6 @@ const FaceToFaceBooking = props => {
                         <Button htmlType='button' onClick={onReset}>
                             Reset
                         </Button>
-                    </Space>
                 </Form.Item>
             </Form>
         </div>
