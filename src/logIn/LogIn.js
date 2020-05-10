@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import {
-    changeEmailInputAction,
-    changePasswordInputAction,
     LogInThunkAction,
 } from '../redux/actions/loginAction';
 import { Form, Input, Button, Checkbox, Spin, Alert } from 'antd';

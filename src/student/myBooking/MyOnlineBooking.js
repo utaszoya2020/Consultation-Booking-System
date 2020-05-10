@@ -24,6 +24,7 @@ import {
 } from '../../utils/api/booking';
 import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import BookingCard from './components/BookingCard';
+import { DownloadOutlined } from '@ant-design/icons';
 import './styles/myOnlineBooking.scss';
 
 const { TextArea } = Input;
@@ -256,6 +257,7 @@ class MyOnlineBooking extends React.Component {
             bookingDate,
             attachment,
         } = bookingDetail;
+        console.log(attachment);
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
 
         return (
@@ -292,7 +294,26 @@ class MyOnlineBooking extends React.Component {
                         {content}
                     </Descriptions.Item>
                     <Descriptions.Item label='Attachment'>
-                        TODO
+                        {attachment ? attachment.map((item) => {
+                            console.log(item.fileLocation);
+                            const { _id, fileName, fileLocation } = item;
+                            const link = `http://${fileLocation}`;
+                            return (
+                                <div key={_id} className='l-download'>
+                                    <p>{fileName}</p>
+                                    <Button
+                                        type='primary'
+                                        icon={<DownloadOutlined />}
+                                        size='small'
+                                        target='_blank'
+                                        download
+                                        href={link}
+                                    >
+                                        Download
+                                    </Button>
+                                </div>
+                            );
+                        }) : null}
                     </Descriptions.Item>
                 </Descriptions>
                 <div>

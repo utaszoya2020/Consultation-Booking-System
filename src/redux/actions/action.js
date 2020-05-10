@@ -1,5 +1,3 @@
-export const CHANGE_EMAIL_INPUT = 'CHANGE_INPUT_ACTION';
-export const CHANGE_PASSWORD_INPUT = 'CHANGE_PASSWORD_INPUT';
 //Auth action
 export const LOGIN_ACTION = 'LOGIN_ACTION';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';

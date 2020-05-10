@@ -25,6 +25,23 @@
 	}
 }
 
+.l-download {
+	display: flex;
+	justify-content: space-between;
+	margin: 8px 0;
+
+	svg {
+		vertical-align: baseline;
+	}
+
+	p {
+		margin-bottom: 0;
+	}
+
+
+
+}
+
 #onlineBookingForm {
 	margin: 0 auto;
 	width: 100%;

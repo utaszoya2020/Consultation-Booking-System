@@ -2,22 +2,10 @@ import { login } from '../../utils/api/auth';
 import { setToken, fetchUser } from '../../utils/authentication';
 
 import {
-    CHANGE_EMAIL_INPUT,
-    CHANGE_PASSWORD_INPUT,
     LOGIN_ACTION,
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
 } from './action.js';
-
-export const changeEmailInputAction = (event) => ({
-    event,
-    type: CHANGE_EMAIL_INPUT,
-});
-
-export const changePasswordInputAction = (event) => ({
-    event,
-    type: CHANGE_PASSWORD_INPUT,
-});
 
 export const logInAction = () => ({
     type: LOGIN_ACTION,
