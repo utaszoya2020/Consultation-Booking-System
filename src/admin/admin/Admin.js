@@ -1,15 +1,61 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Row, Col, Input, Descriptions } from 'antd';
+import {
+    Row,
+    Col,
+    Input,
+    Descriptions,
+    Button,
+    Comment,
+    Avatar,
+    List,
+    Form,
+} from 'antd';
 import BookingCard from '../../student/myBooking/components/BookingCard';
+import { fetchUserId } from '../../utils/authentication';
 import {
     fetchAllBookingThunkAction,
     fetchBookingDetailThunkAction,
 } from '../../redux/actions/bookingAction';
+import {
+    addChat,
+    updateChat,
+    fetchAllChatByBookingId,
+} from '../../utils/api/booking';
+import { DownloadOutlined } from '@ant-design/icons';
 import './admin.scss';
 
-const { Search } = Input;
+const { Search, TextArea } = Input;
+
+const CommentList = ({ comments }) => (
+    <List
+        dataSource={comments}
+        header={`${comments.length} ${
+            comments.length > 1 ? 'replies' : 'reply'
+        }`}
+        itemLayout='horizontal'
+        renderItem={(props) => <Comment {...props} />}
+    />
+);
+
+const Editor = ({ onChange, onSubmit, submitting, value }) => (
+    <div>
+        <Form.Item>
+            <TextArea rows={4} onChange={onChange} value={value} />
+        </Form.Item>
+        <Form.Item>
+            <Button
+                htmlType='submit'
+                loading={submitting}
+                onClick={onSubmit}
+                type='primary'
+            >
+                Add Comment
+            </Button>
+        </Form.Item>
+    </div>
+);
 
 class Admin extends React.Component {
     constructor(props) {
@@ -18,13 +64,20 @@ class Admin extends React.Component {
         this.state = {
             activeTab: 'offline',
             searchValue: '',
-            currentBooking: '', // Delete later
-            activeBooking: false, 
+            currentBookingId: '', // Delete later
+            activeBooking: false,
+            submitting: false,
+            value: '',
+            chatId: '',
+            originalChat: [], //chatRecord in database
+            chatRecords: [], //chatRecord for frontend
         };
     }
 
     componentDidMount() {
         this.props.getAllBookings();
+        const userId = fetchUserId();
+        this.setState({ userId });
     }
 
     changeTabKey = (event) => {
@@ -40,14 +93,164 @@ class Admin extends React.Component {
 
     handleClickBooking = (bookingId) => {
         const { getBookingDetail } = this.props;
-        this.setState({ activeBooking: true }); 
-        getBookingDetail(bookingId);
+        console.log(bookingId);
+        const a = getBookingDetail(bookingId);
+        console.log(a);
+        fetchAllChatByBookingId(bookingId)
+            .then((chat) => {
+                const newChat = this.transChatRecords(chat);
+                const { chatId, originalChat, chatRecords } = newChat;
+                this.setState({ chatId, originalChat, chatRecords });
+            })
+            .catch((error) => {
+                this.setState({ error, isLoading: false });
+            });
+        this.setState({ activeBooking: true, currentBookingId: bookingId });
+    };
+
+    transChatRecords = (chat) => {
+        if (chat) {
+            const chatId = chat._id;
+            const originalChat = chat.chatRecords;
+            const chatRecords = [];
+            originalChat.forEach((record) => {
+                const { author, content, time } = record;
+                const authorName = `${author.firstName} ${author.lastName}`;
+
+                const newChat = {
+                    author: authorName,
+                    avatar:
+                        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content,
+                    datetime: moment(time).fromNow(),
+                };
+                chatRecords.push(newChat);
+            });
+            const newChat = { chatId, originalChat, chatRecords };
+            return newChat;
+        } else {
+            const chatId = '';
+            const originalChat = '';
+            const chatRecords = [];
+            const newChat = { chatId, originalChat, chatRecords };
+            return newChat;
+        }
+    };
+
+    handleSubmit = () => {
+        if (!this.state.value) {
+            return;
+        }
+        this.setState({ submitting: true });
+        setTimeout(() => {
+            const {
+                chatId,
+                originalChat,
+                userId,
+                currentBookingId,
+                value,
+            } = this.state;
+            const { firstName, lastName } = this.props;
+            const author = `${firstName} ${lastName}`;
+            this.setState(
+                {
+                    submitting: false,
+                    chatRecords: [
+                        {
+                            author,
+                            avatar:
+                                'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                            content: value,
+                            datetime: moment().fromNow(),
+                        },
+                        ...this.state.chatRecords,
+                    ],
+                },
+                () => {
+                    //const { currentBookingId, value } = this.state;
+                    const Msg = {
+                        author: userId,
+                        content: value,
+                        time: new Date(),
+                    };
+                    if (!chatId) {
+                        const newchatRecords = [Msg];
+                        const chat = {
+                            bookingId: currentBookingId,
+                            studentId: userId,
+                            chatRecords: newchatRecords,
+                        };
+                        addChat(chat)
+                            .then((data) => {
+                                if (data) {
+                                    const newChat = this.transChatRecords(data);
+                                    const {
+                                        chatId,
+                                        originalChat,
+                                        chatRecords,
+                                    } = newChat;
+                                    this.setState({
+                                        chatId,
+                                        originalChat,
+                                        chatRecords,
+                                    });
+                                }
+                            })
+                            .catch((error) =>
+                                this.setState({ error, isLoading: false })
+                            );
+                    } else {
+                        const records = [];
+                        originalChat.forEach((record) => {
+                            let { author, content, time } = record;
+
+                            time = new Date(time);
+                            const item = {
+                                author,
+                                content,
+                                time,
+                            };
+                            records.push(item);
+                        });
+                        records.push(Msg);
+                        updateChat(chatId, records)
+                            .then((data) => {
+                                if (data) {
+                                    const newChat = this.transChatRecords(data);
+                                    const {
+                                        chatId,
+                                        originalChat,
+                                        chatRecords,
+                                    } = newChat;
+                                    this.setState({
+                                        chatId,
+                                        originalChat,
+                                        chatRecords,
+                                    });
+                                }
+                            })
+                            .catch((error) =>
+                                this.setState({ error, isLoading: false })
+                            );
+                    }
+                }
+            );
+            this.setState({
+                value: '',
+            });
+        }, 1000);
+    };
+
+    handleChange = (e) => {
+        this.setState({
+            value: e.target.value,
+        });
     };
 
     renderOnlineBookingCard = (onlineBooking) => {
         const { searchValue } = this.state;
         if (onlineBooking.length) {
-            //TODO improve Search Filter 
+            //TODO improve Search Filter
             if (searchValue) {
                 const result = onlineBooking.filter((booking) => {
                     return (
@@ -117,25 +320,38 @@ class Admin extends React.Component {
                     );
                 });
             } else {
-            return offlineBooking.map((booking) => {
-                return (
-                    <BookingCard
-                        key={booking._id}
-                        bookingId={booking._id}
-                        firstName={booking.userId.firstName}
-                        lastName={booking.userId.lastName}
-                        subject={booking.subject}
-                        status={booking.status}
-                        handleClickBooking={this.handleClickBooking}
-                    />
-                );
-            });
+                return offlineBooking.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            subject={booking.subject}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                        />
+                    );
+                });
             }
         }
     };
 
     renderOnlineBookingDetail = (bookingDetail) => {
-        const { _id, status, type, campus, userId, topic, subject, content, bookingDate, attachment, chat} = bookingDetail;
+        const { chatRecords, submitting, value } = this.state;
+        const {
+            _id,
+            status,
+            type,
+            campus,
+            userId,
+            topic,
+            subject,
+            content,
+            bookingDate,
+            attachment,
+            chat,
+        } = bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
         return (
             <div>
@@ -164,14 +380,57 @@ class Admin extends React.Component {
                         {content}
                     </Descriptions.Item>
                     <Descriptions.Item label='Attachment'>
-                        TODO
+                        {attachment
+                            ? attachment.map((item) => {
+                                  console.log(item.fileLocation);
+                                  const { _id, fileName, fileLocation } = item;
+                                  const link = `http://${fileLocation}`;
+                                  return (
+                                      <div key={_id} className='l-download'>
+                                          <p>{fileName}</p>
+                                          <Button
+                                              type='primary'
+                                              icon={<DownloadOutlined />}
+                                              size='small'
+                                              target='_blank'
+                                              download
+                                              href={link}
+                                          >
+                                              Download
+                                          </Button>
+                                      </div>
+                                  );
+                              })
+                            : null}
                     </Descriptions.Item>
                 </Descriptions>
+                <div>
+                    {chatRecords.length > 0 && (
+                        <CommentList comments={chatRecords} />
+                    )}
+                    <Comment
+                        avatar={
+                            <Avatar
+                                src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                alt='Han Solo'
+                            />
+                        }
+                        content={
+                            <Editor
+                                onChange={this.handleChange}
+                                onSubmit={this.handleSubmit}
+                                submitting={submitting}
+                                value={value}
+                            />
+                        }
+                    />
+                </div>
             </div>
         );
     };
 
     renderOfflineBookingDetail = (bookingDetail) => {
+        const { chatRecords, submitting, value } = this.state;
         const {
             _id,
             status,
@@ -214,9 +473,51 @@ class Admin extends React.Component {
                         {content}
                     </Descriptions.Item>
                     <Descriptions.Item label='Attachment'>
-                        TODO
+                        {attachment
+                            ? attachment.map((item) => {
+                                  console.log(item.fileLocation);
+                                  const { _id, fileName, fileLocation } = item;
+                                  const link = `http://${fileLocation}`;
+                                  return (
+                                      <div key={_id} className='l-download'>
+                                          <p>{fileName}</p>
+                                          <Button
+                                              type='primary'
+                                              icon={<DownloadOutlined />}
+                                              size='small'
+                                              target='_blank'
+                                              download
+                                              href={link}
+                                          >
+                                              Download
+                                          </Button>
+                                      </div>
+                                  );
+                              })
+                            : null}
                     </Descriptions.Item>
                 </Descriptions>
+                <div>
+                    {chatRecords.length > 0 && (
+                        <CommentList comments={chatRecords} />
+                    )}
+                    <Comment
+                        avatar={
+                            <Avatar
+                                src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                alt='Han Solo'
+                            />
+                        }
+                        content={
+                            <Editor
+                                onChange={this.handleChange}
+                                onSubmit={this.handleSubmit}
+                                submitting={submitting}
+                                value={value}
+                            />
+                        }
+                    />
+                </div>
             </div>
         );
     };
@@ -235,7 +536,7 @@ class Admin extends React.Component {
 
     render() {
         const { bookings, bookingDetail } = this.props;
-        const { activeBooking } =this.state;
+        const { activeBooking } = this.state;
         let onlineBooking = [];
         let offlineBooking = [];
         if (bookings) {
