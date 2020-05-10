@@ -24,4 +24,11 @@
 	margin-right: 8px;
 	line-height: 1 !important;
 	padding-bottom: 12px !important;
+
+	@media only screen and (min-width: 320px) and (max-width: 767px) {
+		padding: 0 !important;
+		padding-bottom: 6px !important;
+		font-size: inherit !important;
+		margin-left: 7px;
+	}
 }

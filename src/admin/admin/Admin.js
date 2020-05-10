@@ -23,6 +23,7 @@ import {
     updateChat,
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
+import { downloadFile } from '../../utils/api/downloadFile';
 import { DownloadOutlined } from '@ant-design/icons';
 import './admin.scss';
 
@@ -382,9 +383,16 @@ class Admin extends React.Component {
                     <Descriptions.Item label='Attachment'>
                         {attachment
                             ? attachment.map((item) => {
-                                  console.log(item.fileLocation);
                                   const { _id, fileName, fileLocation } = item;
-                                  const link = `http://${fileLocation}`;
+                                  const onClick = (fileLocation, fileName) => {
+                                      return downloadFile(
+                                          fileLocation,
+                                          fileName
+                                      );
+                                  };
+                                  console.log(item);
+                                  console.log(fileName);
+                                  console.log(fileLocation);
                                   return (
                                       <div key={_id} className='l-download'>
                                           <p>{fileName}</p>
@@ -392,9 +400,7 @@ class Admin extends React.Component {
                                               type='primary'
                                               icon={<DownloadOutlined />}
                                               size='small'
-                                              target='_blank'
-                                              download
-                                              href={link}
+                                              onClick={onClick}
                                           >
                                               Download
                                           </Button>
@@ -475,9 +481,8 @@ class Admin extends React.Component {
                     <Descriptions.Item label='Attachment'>
                         {attachment
                             ? attachment.map((item) => {
-                                  console.log(item.fileLocation);
                                   const { _id, fileName, fileLocation } = item;
-                                  const link = `http://${fileLocation}`;
+
                                   return (
                                       <div key={_id} className='l-download'>
                                           <p>{fileName}</p>
@@ -485,9 +490,7 @@ class Admin extends React.Component {
                                               type='primary'
                                               icon={<DownloadOutlined />}
                                               size='small'
-                                              target='_blank'
-                                              download
-                                              href={link}
+                                              onClick={(fileLocation, fileName) => downloadFile(fileLocation, fileName)}
                                           >
                                               Download
                                           </Button>
