@@ -23,7 +23,7 @@ const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
 
-const FaceToFaceBooking = props => {
+const FaceToFaceBooking = () => {
     const userId = fetchUserId();
     const [modalShow, setModalShow] = React.useState(false);
     const [type, setType] = useState('Offline');

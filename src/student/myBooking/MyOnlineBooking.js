@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
     Input,
-    Row,
-    Col,
     Descriptions,
     Comment,
     Avatar,
@@ -244,11 +242,10 @@ class MyOnlineBooking extends React.Component {
     };
 
     renderBookingDetail = (bookingDetail) => {
-        const { chatRecords, submitting, value, activeCard } = this.state;
+        const { chatRecords, submitting, value } = this.state;
         const {
             _id,
             status,
-            type,
             campus,
             userId,
             topic,
@@ -295,9 +292,7 @@ class MyOnlineBooking extends React.Component {
                     </Descriptions.Item>
                     <Descriptions.Item label='Attachment'>
                         {attachment ? attachment.map((item) => {
-                            console.log(item.fileLocation);
                             const { _id, fileName, fileLocation } = item;
-                            const link = `http://${fileLocation}`;
                             return (
                                 <div key={_id} className='l-download'>
                                     <p>{fileName}</p>
@@ -307,7 +302,7 @@ class MyOnlineBooking extends React.Component {
                                         size='small'
                                         target='_blank'
                                         download
-                                        href={link}
+                                        href={fileLocation}
                                     >
                                         Download
                                     </Button>
@@ -343,7 +338,7 @@ class MyOnlineBooking extends React.Component {
 
     render() {
         const { bookings, bookingDetail } = this.props;
-        const { comments, submitting, value, activeCard } = this.state;
+        const { activeCard } = this.state;
 
         const { Search } = Input;
         const myOnlineBookings = bookings.filter((booking) => {

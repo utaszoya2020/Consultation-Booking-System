@@ -23,7 +23,6 @@ import {
     updateChat,
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
-import { downloadFile } from '../../utils/api/downloadFile';
 import { DownloadOutlined } from '@ant-design/icons';
 import './admin.scss';
 
@@ -384,15 +383,6 @@ class Admin extends React.Component {
                         {attachment
                             ? attachment.map((item) => {
                                   const { _id, fileName, fileLocation } = item;
-                                  const onClick = (fileLocation, fileName) => {
-                                      return downloadFile(
-                                          fileLocation,
-                                          fileName
-                                      );
-                                  };
-                                  console.log(item);
-                                  console.log(fileName);
-                                  console.log(fileLocation);
                                   return (
                                       <div key={_id} className='l-download'>
                                           <p>{fileName}</p>
@@ -400,7 +390,9 @@ class Admin extends React.Component {
                                               type='primary'
                                               icon={<DownloadOutlined />}
                                               size='small'
-                                              onClick={onClick}
+                                              target='_blank'
+                                              download
+                                              href={fileLocation}
                                           >
                                               Download
                                           </Button>
@@ -440,7 +432,6 @@ class Admin extends React.Component {
         const {
             _id,
             status,
-            type,
             campus,
             userId,
             topic,
@@ -448,7 +439,6 @@ class Admin extends React.Component {
             content,
             bookingDate,
             attachment,
-            chat,
         } = bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
 
@@ -482,7 +472,6 @@ class Admin extends React.Component {
                         {attachment
                             ? attachment.map((item) => {
                                   const { _id, fileName, fileLocation } = item;
-
                                   return (
                                       <div key={_id} className='l-download'>
                                           <p>{fileName}</p>
@@ -490,7 +479,9 @@ class Admin extends React.Component {
                                               type='primary'
                                               icon={<DownloadOutlined />}
                                               size='small'
-                                              onClick={(fileLocation, fileName) => downloadFile(fileLocation, fileName)}
+                                              target='_blank'
+                                              download
+                                              href={fileLocation}
                                           >
                                               Download
                                           </Button>
