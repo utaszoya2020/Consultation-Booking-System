@@ -138,12 +138,13 @@ class MyFaceToFaceBooking extends React.Component {
             } = this.state;
             const { firstName, lastName } = this.props;
             const author = `${firstName} ${lastName}`;
+            console.log(author);
             this.setState(
                 {
                     submitting: false,
                     chatRecords: [
                         {
-                            author,
+                            author: 'me',
                             avatar:
                                 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                             content: value,
@@ -308,6 +309,53 @@ class MyFaceToFaceBooking extends React.Component {
                     {chatRecords.length > 0 && (
                         <CommentList comments={chatRecords} />
                     )}
+                    <div>
+                        <div className='c-comment__header'>2 replies</div>
+                        <div className='c-comment__body'>
+                            <div className='c-comment__block'>
+                                <div className='c-comment__avatar'>
+                                    <img
+                                        src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                        alt='Han Solo'
+                                    />
+                                </div>
+                                <div className='c-comment__content'>
+                                    <div className='c-comment__author'>
+                                        <span className='c-comment__name'>
+                                            Eew Zod
+                                        </span>
+                                        <span className='c-comment__time'>
+                                            an hour ago
+                                        </span>
+                                    </div>
+                                    <div className='c-comment__detail'>
+                                        gregredfger个人个人
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='c-comment__block'>
+                                <div className='c-comment__avatar'>
+                                    <img
+                                        src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                        alt='Han Solo'
+                                    />
+                                </div>
+                                <div className='c-comment__content'>
+                                    <div className='c-comment__author'>
+                                        <span className='c-comment__name'>
+                                            Eew Zod
+                                        </span>
+                                        <span className='c-comment__time'>
+                                            an hour ago
+                                        </span>
+                                    </div>
+                                    <div className='c-comment__detail'>
+                                        gregredfger个人个人
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <Comment
                         avatar={
                             <Avatar
