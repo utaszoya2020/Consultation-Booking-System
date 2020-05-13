@@ -88,6 +88,7 @@ class Admin extends React.Component {
         const activeTab = event.target.id;
         this.setState({
             activeTab,
+            activeBooking: false
         });
     };
 
