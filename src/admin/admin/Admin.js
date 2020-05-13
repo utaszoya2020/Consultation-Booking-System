@@ -378,7 +378,11 @@ class Admin extends React.Component {
                         {status}
                     </Descriptions.Item>
                     <Descriptions.Item label='Content' span={3}>
-                        {content}
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: content,
+                            }}
+                        ></div>
                     </Descriptions.Item>
                     <Descriptions.Item label='Attachment'>
                         {attachment
