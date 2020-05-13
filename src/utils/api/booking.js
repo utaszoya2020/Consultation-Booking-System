@@ -59,6 +59,5 @@ export const fetchAllChatByBookingId = bookingId => {
 export const updateChat = (chatId, chatRecords) => {
     const url = `${API_CHAT_URL}/${chatId}`;
     const data = chatRecords;
-    console.log(data);
     return put(url, data).then((response) => response.data);
 };

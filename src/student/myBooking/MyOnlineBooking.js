@@ -1,15 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import {
-    Input,
-    Descriptions,
-    Comment,
-    Avatar,
-    Form,
-    Button,
-    List,
-} from 'antd';
+import { Input, Descriptions, Comment, Avatar, Form, Button, List } from 'antd';
 import {
     fetchBookingDetailThunkAction,
     fetchBookingThunkAction,
@@ -67,10 +59,9 @@ class MyOnlineBooking extends React.Component {
             currentBookingId: '',
             error: null,
             isLoading: false,
-            comments: {},
+            comments: [],
             chatId: '',
             originalChat: [], //chatRecord in database
-            chatRecords: [], //chatRecord for frontend
         };
     }
 
@@ -128,7 +119,11 @@ class MyOnlineBooking extends React.Component {
             .catch((error) => {
                 this.setState({ error, isLoading: false });
             });
-        this.setState({ activeCard: true, currentBookingId: bookingId });
+        this.setState({
+            activeCard: true,
+            currentBookingId: bookingId,
+            value: '',
+        });
     };
 
     handleSubmit = () => {
@@ -147,9 +142,10 @@ class MyOnlineBooking extends React.Component {
             const { firstName, lastName } = this.props;
             const author = `${firstName} ${lastName}`;
             this.setState(
-                {
+                () => ({
                     submitting: false,
-                    chatRecords: [
+                    value: '',
+                    comments: [
                         {
                             author,
                             avatar:
@@ -157,17 +153,17 @@ class MyOnlineBooking extends React.Component {
                             content: value,
                             datetime: moment().fromNow(),
                         },
-                        ...this.state.chatRecords,
+                        ...this.state.comments,
                     ],
-                },
+                }),
                 () => {
-                    //const { currentBookingId, value } = this.state;
                     const Msg = {
                         author: userId,
                         content: value,
                         time: new Date(),
                     };
                     if (!chatId) {
+                        // Create a new Chat
                         const newchatRecords = [Msg];
                         const chat = {
                             bookingId: currentBookingId,
@@ -180,20 +176,22 @@ class MyOnlineBooking extends React.Component {
                                     const newChat = this.transChatRecords(data);
                                     const {
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     });
                                 }
                             })
                             .catch((error) =>
-                                this.setState({ error, isLoading: false })
+                                this.setState({
+                                    error,
+                                    isLoading: false,
+                                })
                             );
                     } else {
+                        // update existing Chat
                         const records = [];
                         originalChat.forEach((record) => {
                             let { author, content, time } = record;
@@ -213,18 +211,19 @@ class MyOnlineBooking extends React.Component {
                                     const newChat = this.transChatRecords(data);
                                     const {
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     });
                                 }
                             })
                             .catch((error) =>
-                                this.setState({ error, isLoading: false })
+                                this.setState({
+                                    error,
+                                    isLoading: false,
+                                })
                             );
                     }
                 }
@@ -242,7 +241,7 @@ class MyOnlineBooking extends React.Component {
     };
 
     renderBookingDetail = (bookingDetail) => {
-        const { chatRecords, submitting, value } = this.state;
+        const { comments, submitting, value } = this.state;
         const {
             _id,
             status,
@@ -254,7 +253,6 @@ class MyOnlineBooking extends React.Component {
             bookingDate,
             attachment,
         } = bookingDetail;
-        console.log(attachment);
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
 
         return (
@@ -291,30 +289,30 @@ class MyOnlineBooking extends React.Component {
                         {content}
                     </Descriptions.Item>
                     <Descriptions.Item label='Attachment'>
-                        {attachment ? attachment.map((item) => {
-                            const { _id, fileName, fileLocation } = item;
-                            return (
-                                <div key={_id} className='l-download'>
-                                    <p>{fileName}</p>
-                                    <Button
-                                        type='primary'
-                                        icon={<DownloadOutlined />}
-                                        size='small'
-                                        target='_blank'
-                                        download
-                                        href={fileLocation}
-                                    >
-                                        Download
-                                    </Button>
-                                </div>
-                            );
-                        }) : null}
+                        {attachment
+                            ? attachment.map((item) => {
+                                  const { _id, fileName, fileLocation } = item;
+                                  return (
+                                      <div key={_id} className='l-download'>
+                                          <p>{fileName}</p>
+                                          <Button
+                                              type='primary'
+                                              icon={<DownloadOutlined />}
+                                              size='small'
+                                              target='_blank'
+                                              download
+                                              href={fileLocation}
+                                          >
+                                              Download
+                                          </Button>
+                                      </div>
+                                  );
+                              })
+                            : null}
                     </Descriptions.Item>
                 </Descriptions>
                 <div>
-                    {chatRecords.length > 0 && (
-                        <CommentList comments={chatRecords} />
-                    )}
+                    {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
                         avatar={
                             <Avatar

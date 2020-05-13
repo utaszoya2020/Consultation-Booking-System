@@ -18,6 +18,7 @@ import {
     fetchAllBookingThunkAction,
     fetchBookingDetailThunkAction,
 } from '../../redux/actions/bookingAction';
+import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import {
     addChat,
     updateChat,
@@ -70,14 +71,17 @@ class Admin extends React.Component {
             value: '',
             chatId: '',
             originalChat: [], //chatRecord in database
-            chatRecords: [], //chatRecord for frontend
+            comments: [],
         };
     }
 
     componentDidMount() {
+        const { fetchUserDetail } = this.props;
         this.props.getAllBookings();
         const userId = fetchUserId();
-        this.setState({ userId });
+        this.setState({ userId }, () => {
+            fetchUserDetail(userId);
+        });
     }
 
     changeTabKey = (event) => {
@@ -93,19 +97,21 @@ class Admin extends React.Component {
 
     handleClickBooking = (bookingId) => {
         const { getBookingDetail } = this.props;
-        console.log(bookingId);
-        const a = getBookingDetail(bookingId);
-        console.log(a);
+        getBookingDetail(bookingId);
         fetchAllChatByBookingId(bookingId)
             .then((chat) => {
                 const newChat = this.transChatRecords(chat);
                 const { chatId, originalChat, chatRecords } = newChat;
-                this.setState({ chatId, originalChat, chatRecords });
+                this.setState({ chatId, originalChat, comments: chatRecords });
             })
             .catch((error) => {
                 this.setState({ error, isLoading: false });
             });
-        this.setState({ activeBooking: true, currentBookingId: bookingId });
+        this.setState({
+            activeBooking: true,
+            currentBookingId: bookingId,
+            value: '',
+        });
     };
 
     transChatRecords = (chat) => {
@@ -153,9 +159,9 @@ class Admin extends React.Component {
             const { firstName, lastName } = this.props;
             const author = `${firstName} ${lastName}`;
             this.setState(
-                {
+                () => ({
                     submitting: false,
-                    chatRecords: [
+                    comments: [
                         {
                             author,
                             avatar:
@@ -163,9 +169,9 @@ class Admin extends React.Component {
                             content: value,
                             datetime: moment().fromNow(),
                         },
-                        ...this.state.chatRecords,
+                        ...this.state.comments,
                     ],
-                },
+                }),
                 () => {
                     //const { currentBookingId, value } = this.state;
                     const Msg = {
@@ -186,13 +192,11 @@ class Admin extends React.Component {
                                     const newChat = this.transChatRecords(data);
                                     const {
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     });
                                 }
                             })
@@ -219,13 +223,11 @@ class Admin extends React.Component {
                                     const newChat = this.transChatRecords(data);
                                     const {
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat,
-                                        chatRecords,
+                                        originalChat
                                     });
                                 }
                             })
@@ -338,7 +340,7 @@ class Admin extends React.Component {
     };
 
     renderOnlineBookingDetail = (bookingDetail) => {
-        const { chatRecords, submitting, value } = this.state;
+        const { submitting, value, comments } = this.state;
         const {
             _id,
             status,
@@ -349,8 +351,7 @@ class Admin extends React.Component {
             subject,
             content,
             bookingDate,
-            attachment,
-            chat,
+            attachment
         } = bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
         return (
@@ -403,9 +404,7 @@ class Admin extends React.Component {
                     </Descriptions.Item>
                 </Descriptions>
                 <div>
-                    {chatRecords.length > 0 && (
-                        <CommentList comments={chatRecords} />
-                    )}
+                    {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
                         avatar={
                             <Avatar
@@ -428,7 +427,7 @@ class Admin extends React.Component {
     };
 
     renderOfflineBookingDetail = (bookingDetail) => {
-        const { chatRecords, submitting, value } = this.state;
+        const { submitting, value, comments } = this.state;
         const {
             _id,
             status,
@@ -492,9 +491,7 @@ class Admin extends React.Component {
                     </Descriptions.Item>
                 </Descriptions>
                 <div>
-                    {chatRecords.length > 0 && (
-                        <CommentList comments={chatRecords} />
-                    )}
+                    {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
                         avatar={
                             <Avatar
@@ -611,12 +608,15 @@ class Admin extends React.Component {
 const mapStateToProps = (state) => ({
     bookings: state.booking.bookings,
     bookingDetail: state.booking.bookingDetail,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     getAllBookings: () => dispatch(fetchAllBookingThunkAction()),
     getBookingDetail: (bookingId) =>
         dispatch(fetchBookingDetailThunkAction(bookingId)),
+    fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Admin);

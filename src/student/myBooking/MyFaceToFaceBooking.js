@@ -59,10 +59,9 @@ class MyFaceToFaceBooking extends React.Component {
             currentBookingId: '',
             error: null,
             isLoading: false,
-            comments: {},
+            comments: [], //chatRecord for frontend
             chatId: '',
             originalChat: [], //chatRecord in database
-            chatRecords: [], //chatRecord for frontend
         };
     }
 
@@ -115,20 +114,29 @@ class MyFaceToFaceBooking extends React.Component {
             .then((chat) => {
                 const newChat = this.transChatRecords(chat);
                 const { chatId, originalChat, chatRecords } = newChat;
-                this.setState({ chatId, originalChat, chatRecords });
+                this.setState({ chatId, originalChat, comments: chatRecords });
             })
             .catch((error) => {
                 this.setState({ error, isLoading: false });
             });
-        this.setState({ activeCard: true, currentBookingId: bookingId });
+        this.setState({
+            activeCard: true,
+            currentBookingId: bookingId,
+            value: '',
+        });
     };
 
     handleSubmit = () => {
         if (!this.state.value) {
             return;
         }
-        this.setState({ submitting: true });
+
+        this.setState({
+            submitting: true,
+        });
+
         setTimeout(() => {
+            const { firstName, lastName } = this.props;
             const {
                 chatId,
                 originalChat,
@@ -136,31 +144,30 @@ class MyFaceToFaceBooking extends React.Component {
                 currentBookingId,
                 value,
             } = this.state;
-            const { firstName, lastName } = this.props;
             const author = `${firstName} ${lastName}`;
-            console.log(author);
             this.setState(
-                {
+                () => ({
                     submitting: false,
-                    chatRecords: [
+                    value: '',
+                    comments: [
                         {
-                            author: 'me',
+                            author,
                             avatar:
                                 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                             content: value,
                             datetime: moment().fromNow(),
                         },
-                        ...this.state.chatRecords,
+                        ...this.state.comments,
                     ],
-                },
+                }),
                 () => {
-                    //const { currentBookingId, value } = this.state;
                     const Msg = {
                         author: userId,
                         content: value,
                         time: new Date(),
                     };
                     if (!chatId) {
+                        // Create a new Chat
                         const newchatRecords = [Msg];
                         const chat = {
                             bookingId: currentBookingId,
@@ -174,12 +181,10 @@ class MyFaceToFaceBooking extends React.Component {
                                     const {
                                         chatId,
                                         originalChat,
-                                        chatRecords,
                                     } = newChat;
                                     this.setState({
                                         chatId,
                                         originalChat,
-                                        chatRecords,
                                     });
                                 }
                             })
@@ -187,6 +192,7 @@ class MyFaceToFaceBooking extends React.Component {
                                 this.setState({ error, isLoading: false })
                             );
                     } else {
+                        // update existing Chat
                         const records = [];
                         originalChat.forEach((record) => {
                             let { author, content, time } = record;
@@ -207,17 +213,18 @@ class MyFaceToFaceBooking extends React.Component {
                                     const {
                                         chatId,
                                         originalChat,
-                                        chatRecords,
                                     } = newChat;
                                     this.setState({
                                         chatId,
                                         originalChat,
-                                        chatRecords,
                                     });
                                 }
                             })
                             .catch((error) =>
-                                this.setState({ error, isLoading: false })
+                                this.setState({
+                                    error,
+                                    isLoading: false,
+                                })
                             );
                     }
                 }
@@ -235,7 +242,7 @@ class MyFaceToFaceBooking extends React.Component {
     };
 
     renderBookingDetail = (bookingDetail) => {
-        const { chatRecords, submitting, value } = this.state;
+        const { submitting, value, comments } = this.state;
         const {
             _id,
             status,
@@ -306,55 +313,8 @@ class MyFaceToFaceBooking extends React.Component {
                     </Descriptions.Item>
                 </Descriptions>
                 <div>
-                    {chatRecords.length > 0 && (
-                        <CommentList comments={chatRecords} />
-                    )}
+                    {comments.length > 0 && <CommentList comments={comments} />}
                     <div>
-                        <div className='c-comment__header'>2 replies</div>
-                        <div className='c-comment__body'>
-                            <div className='c-comment__block'>
-                                <div className='c-comment__avatar'>
-                                    <img
-                                        src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                                        alt='Han Solo'
-                                    />
-                                </div>
-                                <div className='c-comment__content'>
-                                    <div className='c-comment__author'>
-                                        <span className='c-comment__name'>
-                                            Eew Zod
-                                        </span>
-                                        <span className='c-comment__time'>
-                                            an hour ago
-                                        </span>
-                                    </div>
-                                    <div className='c-comment__detail'>
-                                        gregredfger个人个人
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='c-comment__block'>
-                                <div className='c-comment__avatar'>
-                                    <img
-                                        src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                                        alt='Han Solo'
-                                    />
-                                </div>
-                                <div className='c-comment__content'>
-                                    <div className='c-comment__author'>
-                                        <span className='c-comment__name'>
-                                            Eew Zod
-                                        </span>
-                                        <span className='c-comment__time'>
-                                            an hour ago
-                                        </span>
-                                    </div>
-                                    <div className='c-comment__detail'>
-                                        gregredfger个人个人
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <Comment
                         avatar={
