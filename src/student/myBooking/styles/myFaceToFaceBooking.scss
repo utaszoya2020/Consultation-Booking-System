@@ -1,108 +1,48 @@
 .mybooking__search {
 	width: 100%;
 }
-
 .mybooking__input {
 	height: 32px;
 	border-radius: 25px;
 	margin: 0 auto;
 	text-align: center;
 }
-
 .mybooking__title {
 	text-align: center;
 	margin: 36px auto;
-}
 
+	@media only screen and (min-width: 320px) and (max-width: 767px) {
+		font-size: 20px;
+		font-weight: bold;
+		margin: 16px auto;
+	}
+}
 .mybooking {
 	display: flex;
 	max-width: 1200px;
 	margin: 0 auto;
 	background-color: white;
-
 	&__left {
 		flex: 0 0 33.3%;
 		border-right: 1px solid #e3e9f1;
 		min-height: calc(100vh - 48px);
 		padding: 0 12px;
-	}
 
+		@media only screen and (min-width: 320px) and (max-width: 767px) {
+			padding: 0 !important;
+		}
+		> span {
+			margin-bottom: 16px;
+		}
+		> span > span > span > button {
+			@media only screen and (min-width: 320px) and (max-width: 767px) {
+				padding: 0;
+			}
+		}
+	}
 	&__right {
 		flex: 0 0 66.6%;
 		margin-top: 60px;
 		padding: 8px;
 	}
-}
-
-.c-comment {
-	&__header {
-		border-bottom: 1px solid #f0f0f0;
-		padding-top: 12px;
-		padding-bottom: 12px;
-		background: transparent;
-	}
-
-	&__body {
-		transition: opacity 0.3s;
-		padding: 0;
-		margin: 0;
-		line-height: 1.5715;
-		color: rgba(0, 0, 0, 0.65);
-	}
-
-	&__block {
-		display: flex;
-		padding: 16px 0;
-	}
-
-	&__avatar {
-		position: relative;
-		flex-shrink: 0;
-		margin-right: 12px;
-		cursor: pointer;
-
-		img {
-			width: 32px;
-			height: 32px;
-			border-radius: 50%;
-		}
-	}
-
-	&__content {
-		position: relative;
-		flex: 1 1 auto;
-		min-width: 1px;
-		font-size: 14px;
-		word-wrap: break-word;
-	}
-
-	&__author {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		margin-bottom: 4px;
-		font-size: 14px;
-
-		span {
-			padding-right: 8px;
-			font-size: 12px;
-			line-height: 18px;
-		}
-	}
-
-	&__name {
-		color: rgba(0, 0, 0, 0.45);
-		font-size: 14px;
-		transition: color 0.3s;
-	}
-
-	&__time {
-		color: #ccc;
-		white-space: nowrap;
-		cursor: auto;
-	}
-}
-
-#root > div > main > section.mybooking__left > span {
-	margin-bottom: 16px;
 }

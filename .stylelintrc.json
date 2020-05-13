@@ -35,6 +35,7 @@
     "selector-type-no-unknown": true,
     "string-no-newline": true,
     "unit-no-unknown": true,
-    "indentation": "tab"
+    "indentation": "tab",
+    "rule-empty-line-before":"never"
   }
 }
