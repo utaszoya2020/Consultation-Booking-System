@@ -108,7 +108,6 @@ const OnlineBooking = () => {
                 content={content}
                 bookingDate={bookingDate}
                 attachment={attachment}
-                session={'0'}
                 onHide={() => setModalShow(false)}
             />
             <div className='online-booking__title'>

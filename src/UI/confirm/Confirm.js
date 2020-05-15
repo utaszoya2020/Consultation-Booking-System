@@ -21,7 +21,9 @@ function Confirm(props) {
 
     let successRedirector = null;
     if (isPosted) {
-        successRedirector = <Redirect to={SUCCESS_URL} />;
+        successRedirector = (
+            <Redirect to={{ pathname: SUCCESS_URL, state: { type } }} />
+        );
     }
 
     let failureRedirector = null;

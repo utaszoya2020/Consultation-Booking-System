@@ -253,7 +253,7 @@ class MyOnlineBooking extends React.Component {
             bookingDate,
             attachment,
         } = bookingDetail;
-        const date = moment(bookingDate).format('MMMM Do YYYY, h:mm:ss');
+        const date = moment(bookingDate).format('MMMM Do YYYY, h:mm a');
 
         return (
             <div>

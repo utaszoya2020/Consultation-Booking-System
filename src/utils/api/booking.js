@@ -32,6 +32,7 @@ export const addBooking = (
     attachment
 ) => {
     const url = API_BOOKING_URL;
+    const status = type === 'Online' ? 'processing' : 'pending';
     const data = {
         type,
         campus,
@@ -41,7 +42,9 @@ export const addBooking = (
         content,
         bookingDate,
         attachment,
+        status,
     };
+    console.log(data);
     return post(url, data).then((response) => response.data);
 };
 
