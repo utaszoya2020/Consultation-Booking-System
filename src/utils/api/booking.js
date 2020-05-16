@@ -1,4 +1,4 @@
-import { get, post, put } from './axios';
+import { get, post, put, patch } from './axios';
 
 //TODO Move api url to urlmap.js
 const API_BOOKING_URL = './bookings';
@@ -44,17 +44,22 @@ export const addBooking = (
         attachment,
         status,
     };
-    console.log(data);
     return post(url, data).then((response) => response.data);
 };
 
-export const addChat = chat => {
+export const updateBookingStatus = (bookingId, status) => {
+    const url = `${API_BOOKING_URL}/${bookingId}`;
+    const data = {status};
+    return patch(url, data).then((response) => response.data);
+};
+
+export const addChat = (chat) => {
     const url = API_CHAT_URL;
     const data = chat;
     return post(url, data).then((response) => response.data);
 };
 
-export const fetchAllChatByBookingId = bookingId => {
+export const fetchAllChatByBookingId = (bookingId) => {
     const url = `${API_CHAT_URL}?bookingId=${bookingId}`;
     return get(url).then((response) => response.data);
 };

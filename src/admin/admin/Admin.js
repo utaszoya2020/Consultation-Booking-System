@@ -11,12 +11,14 @@ import {
     Avatar,
     List,
     Form,
+    Modal,
 } from 'antd';
 import BookingCard from '../../student/myBooking/components/BookingCard';
 import { fetchUserId } from '../../utils/authentication';
 import {
     fetchAllBookingThunkAction,
     fetchBookingDetailThunkAction,
+    updateStatusThunkAction,
 } from '../../redux/actions/bookingAction';
 import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import {
@@ -24,10 +26,11 @@ import {
     updateChat,
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './admin.scss';
 
 const { Search, TextArea } = Input;
+const { confirm } = Modal;
 
 const CommentList = ({ comments }) => (
     <List
@@ -65,13 +68,14 @@ class Admin extends React.Component {
         this.state = {
             activeTab: 'offline',
             searchValue: '',
-            currentBookingId: '', // Delete later
+            currentBookingId: '',
             activeBooking: false,
             submitting: false,
             value: '',
             chatId: '',
             originalChat: [], //chatRecord in database
             comments: [],
+            error: null,
         };
     }
 
@@ -88,7 +92,7 @@ class Admin extends React.Component {
         const activeTab = event.target.id;
         this.setState({
             activeTab,
-            activeBooking: false
+            activeBooking: false,
         });
     };
 
@@ -112,6 +116,78 @@ class Admin extends React.Component {
             activeBooking: true,
             currentBookingId: bookingId,
             value: '',
+        });
+    };
+
+    handleConfirm = () => {
+        const { currentBookingId } = this.state;
+        const { updateStatus } = this.props;
+        const status = 'accepted';
+        confirm({
+            title: 'Do you want to accept these booking?',
+            icon: <ExclamationCircleOutlined />,
+            content:
+                'When clicked the OK button, this booking will be accepted',
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    updateStatus(currentBookingId, status)
+                        .then(() => {
+                            resolve();
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() {},
+        });
+    };
+
+    handleCancel = () => {
+        const { currentBookingId } = this.state;
+        const { updateStatus } = this.props;
+        const status = 'canceled';
+        confirm({
+            title: 'Do you want to cancel these booking?',
+            icon: <ExclamationCircleOutlined />,
+            content:
+                'When clicked the OK button, this booking will be canceled',
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    updateStatus(currentBookingId, status)
+                        .then(() => {
+                            resolve();
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() {},
+        });
+    };
+
+    handleFinish = () => {
+        const { currentBookingId } = this.state;
+        const { updateStatus } = this.props;
+        const status = 'finished';
+        confirm({
+            title: 'Do you want to finish these booking?',
+            icon: <ExclamationCircleOutlined />,
+            content:
+                'When clicked the OK button, this booking will be finished',
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    updateStatus(currentBookingId, status)
+                        .then(() => {
+                            resolve();
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() {},
         });
     };
 
@@ -191,13 +267,10 @@ class Admin extends React.Component {
                             .then((data) => {
                                 if (data) {
                                     const newChat = this.transChatRecords(data);
-                                    const {
-                                        chatId,
-                                        originalChat
-                                    } = newChat;
+                                    const { chatId, originalChat } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat
+                                        originalChat,
                                     });
                                 }
                             })
@@ -222,13 +295,10 @@ class Admin extends React.Component {
                             .then((data) => {
                                 if (data) {
                                     const newChat = this.transChatRecords(data);
-                                    const {
-                                        chatId,
-                                        originalChat
-                                    } = newChat;
+                                    const { chatId, originalChat } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat
+                                        originalChat,
                                     });
                                 }
                             })
@@ -352,13 +422,20 @@ class Admin extends React.Component {
             subject,
             content,
             bookingDate,
-            attachment
+            attachment,
+            bookingNum,
         } = bookingDetail;
+
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm a');
         return (
             <div>
+                <div className='l-admin__header'>
+                    <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
+                    <div className='l-admin__action'>
+                        {this.renderActionBtn(status)}
+                    </div>
+                </div>
                 <Descriptions
-                    title={`Booking Detail - ${_id}`}
                     bordered
                     column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
                 >
@@ -431,10 +508,24 @@ class Admin extends React.Component {
         );
     };
 
+    renderActionBtn = (status) => {
+        switch (status) {
+            case 'pending':
+                return <Button onClick={this.handleConfirm}>Accept</Button>;
+            case 'accepted':
+                return <Button onClick={this.handleCancel}>Cancel</Button>;
+            case 'processing':
+                return <Button onClick={this.handleFinish}>Finish</Button>;
+            default:
+                return null;
+        }
+    };
+
     renderOfflineBookingDetail = (bookingDetail) => {
         const { submitting, value, comments } = this.state;
         const {
             _id,
+            bookingNum,
             status,
             campus,
             userId,
@@ -444,12 +535,19 @@ class Admin extends React.Component {
             bookingDate,
             attachment,
         } = bookingDetail;
+        console.log(status);
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm a');
+        //TODO
 
         return (
             <div>
+                <div className='l-admin__header'>
+                    <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
+                    <div className='l-admin__action'>
+                        {this.renderActionBtn(status)}
+                    </div>
+                </div>
                 <Descriptions
-                    title={`Booking Detail - ${_id}`}
                     bordered
                     column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
                 >
@@ -532,6 +630,7 @@ class Admin extends React.Component {
 
     render() {
         const { bookings, bookingDetail } = this.props;
+
         const { activeBooking } = this.state;
         let onlineBooking = [];
         let offlineBooking = [];
@@ -622,6 +721,8 @@ const mapDispatchToProps = (dispatch) => ({
     getBookingDetail: (bookingId) =>
         dispatch(fetchBookingDetailThunkAction(bookingId)),
     fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
+    updateStatus: (currentBookingId, status) =>
+        dispatch(updateStatusThunkAction(currentBookingId, status)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Admin);

@@ -253,12 +253,26 @@ class MyFaceToFaceBooking extends React.Component {
             content,
             bookingDate,
             attachment,
+            bookingNum,
+            confirmedDate,
         } = bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm a');
+/*         if (confirmedDate) {
+            const now = new Date().getTime();
+            const time = new Date(confirmedDate).getTime();
+            const isExpired = now - time > 0;
+        }
+
+        status === 'accepted' &&  */
 
         return (
             <div>
-                <h3>{`Booking Number - ${_id}`}</h3>
+                <div className='l-admin__header'>
+                    <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
+                    <div className='l-admin__action'>
+                        {/* {this.renderActionBtn(status)} */}
+                    </div>
+                </div>
                 <Descriptions
                     bordered
                     column={{

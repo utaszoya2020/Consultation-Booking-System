@@ -13,6 +13,7 @@ import {
     fetchAllBookings,
     fetchBookingDetail,
     addBooking,
+    updateBookingStatus,
 } from '../../utils/api/booking';
 
 export const fetchBookingAction = () => ({
@@ -110,5 +111,19 @@ export const addBookingThunkAction = (
         })
         .catch((error) => {
             dispatch(addBookingFailure(error));
+        });
+};
+
+export const updateStatusThunkAction = (currentBookingId, status) => (
+    dispatch
+) => {
+    console.log("object");
+    updateBookingStatus(currentBookingId, status)
+        .then((data) => {
+            dispatch(fetchBookingDetailSuccess(data));
+        })
+        .catch((error) => {
+            console.log(error);
+            dispatch(fetchBookingFailure(error));
         });
 };

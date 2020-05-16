@@ -29,7 +29,6 @@
 		&--active {
 			background-color: white;
 			border-bottom: 0;
-
 			&::after {
 				content: '';
 				display: block;
@@ -49,9 +48,22 @@
 		padding: 8px 16px;
 	}
 }
-.l-admin__content {
-	border: 1px solid lightgrey;
-	margin: 6px;
-	min-height: 95vh;
-	padding: 16px;
+.l-admin {
+	&__content {
+		border: 1px solid lightgrey;
+		margin: 6px;
+		min-height: 95vh;
+		padding: 16px;
+	}
+	&__header {
+		display: flex;
+		justify-content: space-between;
+	}
+	&__action {
+
+	}
+
+}
+.ant-btn svg {
+	vertical-align: baseline !important;
 }

@@ -252,12 +252,15 @@ class MyOnlineBooking extends React.Component {
             content,
             bookingDate,
             attachment,
+            bookingNum,
         } = bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY, h:mm a');
 
         return (
             <div>
-                <h3>{`Booking Number - ${_id}`}</h3>
+                <div className='l-admin__header'>
+                    <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
+                </div>
                 <Descriptions
                     bordered
                     column={{
