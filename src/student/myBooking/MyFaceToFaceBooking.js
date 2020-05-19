@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Input, Descriptions, Comment, Avatar, Form, Button, List } from 'antd';
+import { Input, Comment, Avatar, Form, Button, List, Modal } from 'antd';
 import BookingCard from './components/BookingCard';
 import {
     fetchBookingDetailThunkAction,
     fetchBookingThunkAction,
+    updateStatusThunkAction,
 } from '../../redux/actions/bookingAction';
 import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import { fetchUserId } from '../../utils/authentication';
@@ -14,10 +15,11 @@ import {
     updateChat,
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './styles/myFaceToFaceBooking.scss';
 
 const { TextArea } = Input;
+const { confirm } = Modal;
 
 const CommentList = ({ comments }) => (
     <List
@@ -178,10 +180,7 @@ class MyFaceToFaceBooking extends React.Component {
                             .then((data) => {
                                 if (data) {
                                     const newChat = this.transChatRecords(data);
-                                    const {
-                                        chatId,
-                                        originalChat,
-                                    } = newChat;
+                                    const { chatId, originalChat } = newChat;
                                     this.setState({
                                         chatId,
                                         originalChat,
@@ -210,10 +209,7 @@ class MyFaceToFaceBooking extends React.Component {
                             .then((data) => {
                                 if (data) {
                                     const newChat = this.transChatRecords(data);
-                                    const {
-                                        chatId,
-                                        originalChat,
-                                    } = newChat;
+                                    const { chatId, originalChat } = newChat;
                                     this.setState({
                                         chatId,
                                         originalChat,
@@ -241,6 +237,30 @@ class MyFaceToFaceBooking extends React.Component {
         });
     };
 
+    handleCancel = () => {
+        const { currentBookingId } = this.state;
+        const { updateStatus } = this.props;
+        const status = 'canceled';
+        confirm({
+            title: 'Do you want to cancel these booking?',
+            icon: <ExclamationCircleOutlined />,
+            content:
+                'When clicked the OK button, this booking will be canceled',
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    updateStatus(currentBookingId, status)
+                        .then(() => {
+                            resolve();
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() {},
+        });
+    };
+
     renderBookingDetail = (bookingDetail) => {
         const { submitting, value, comments } = this.state;
         const {
@@ -253,23 +273,26 @@ class MyFaceToFaceBooking extends React.Component {
             bookingDate,
             attachment,
             bookingNum,
-            confirmedDate,
         } = bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY, hh:mm a');
-/*         if (confirmedDate) {
+        let canCancel = false;
+        console.log(status);
+        if (bookingDate) {
             const now = new Date().getTime();
-            const time = new Date(confirmedDate).getTime();
-            const isExpired = now - time > 0;
+            const bookDate = new Date(bookingDate).getTime();
+            if ((bookDate - now > 86400000) && (status === 'pending' || status === 'accepted')) {
+                canCancel = true;
+            }
         }
-
-        status === 'accepted' &&  */
 
         return (
             <div>
                 <div className='l-admin__header'>
                     <p className='l-admin__title'>{`Booking Number - ${bookingNum}`}</p>
                     <div className='l-admin__action'>
-                        {/* {this.renderActionBtn(status)} */}
+                        {canCancel ? (
+                            <Button onClick={this.handleCancel}>Cancel</Button>
+                        ) : null}
                     </div>
                 </div>
                 <div className='c-table'>
@@ -463,6 +486,8 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(fetchBookingDetailThunkAction(bookingId)),
     fetchMyBooking: (userId) => dispatch(fetchBookingThunkAction(userId)),
     fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
+    updateStatus: (currentBookingId, status) =>
+        dispatch(updateStatusThunkAction(currentBookingId, status)),
 });
 
 export default connect(
