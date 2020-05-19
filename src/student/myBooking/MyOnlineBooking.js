@@ -248,76 +248,121 @@ class MyOnlineBooking extends React.Component {
             campus,
             userId,
             topic,
-            subject,
             content,
             bookingDate,
             attachment,
             bookingNum,
         } = bookingDetail;
-        const date = moment(bookingDate).format('MMMM Do YYYY, h:mm a');
+        const date = moment(bookingDate).format('MMMM Do YYYY, hh:mm a');
 
         return (
             <div>
                 <div className='l-admin__header'>
-                    <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
+                    <p className='l-admin__title'>{`Booking Number - ${bookingNum}`}</p>
                 </div>
-                <Descriptions
-                    bordered
-                    column={{
-                        xxl: 3,
-                        xl: 3,
-                        lg: 3,
-                        md: 3,
-                        sm: 2,
-                        xs: 1,
-                    }}
-                >
-                    <Descriptions.Item label='Name'>
-                        {userId ? `${userId.firstName} ${userId.lastName}` : ''}
-                    </Descriptions.Item>
-                    <Descriptions.Item label='Campus'>
-                        {campus}
-                    </Descriptions.Item>
-                    <Descriptions.Item label='Booking Date'>
-                        {date}
-                    </Descriptions.Item>
-                    <Descriptions.Item label='Topic'>{topic}</Descriptions.Item>
-                    <Descriptions.Item label='Subject'>
-                        {subject}
-                    </Descriptions.Item>
-                    <Descriptions.Item label='Status'>
-                        {status}
-                    </Descriptions.Item>
-                    <Descriptions.Item label='Content' span={3}>
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: content,
-                            }}
-                        ></div>
-                    </Descriptions.Item>
-                    <Descriptions.Item label='Attachment'>
-                        {attachment
-                            ? attachment.map((item) => {
-                                  const { _id, fileName, fileLocation } = item;
-                                  return (
-                                      <div key={_id} className='l-download'>
-                                          <p>{fileName}</p>
-                                          <Button
-                                              type='primary'
-                                              icon={<DownloadOutlined />}
-                                              size='small'
-                                              target='_blank'
-                                              download
-                                              href={fileLocation}
-                                          >
-                                              Download
-                                          </Button>
-                                      </div>
-                                  );
-                              })
-                            : null}
-                    </Descriptions.Item>
-                </Descriptions>
+                <div className='c-table'>
+                    <div className='c-table__row'>
+                        <div className='c-table__column flex-1'>
+                            <span>ID Number</span>
+                            <div className='c-table__content'>
+                                <p>453654</p>
+                            </div>
+                        </div>
+                        <div className='c-table__column flex-2'>
+                            <span>Name</span>
+                            <div className='c-table__content'>
+                                <p>
+                                    {userId
+                                        ? `${userId.firstName} ${userId.lastName}`
+                                        : ''}
+                                </p>
+                            </div>
+                        </div>
+                        <div className='c-table__column flex-1'>
+                            <span>Campus</span>
+                            <div className='c-table__content'>
+                                <p>{campus}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='c-table__row'>
+                        <div className='c-table__column flex-1'>
+                            <span>Booking Date</span>
+                            <div className='c-table__content'>
+                                <p>{date}</p>
+                            </div>
+                        </div>
+                        <div className='c-table__column flex-2'>
+                            <span>Topic</span>
+                            <div className='c-table__content'>
+                                <p>{topic}</p>
+                            </div>
+                        </div>
+                        <div className='c-table__column flex-1'>
+                            <span>Status</span>
+                            <div className='c-table__content'>
+                                <p>{status}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='c-table__row'>
+                        <div className='c-table__column flex-1'>
+                            <span>Current Course</span>
+                            <div className='c-table__content'>
+                                <p>MICT</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='c-table__row'>
+                        <div className='c-table__column flex-1'>
+                            <span>Content</span>
+                            <div className='c-table__content'>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: content,
+                                    }}
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='c-table__row'>
+                        <div className='c-table__column flex-1'>
+                            <span>Attachment</span>
+                            <div className='c-table__content'>
+                                {attachment
+                                    ? attachment.map((item) => {
+                                          const {
+                                              _id,
+                                              fileName,
+                                              fileLocation,
+                                          } = item;
+                                          return (
+                                              <div
+                                                  key={_id}
+                                                  className='l-admin__download'
+                                              >
+                                                  <p>{fileName}</p>
+                                                  <Button
+                                                      type='primary'
+                                                      icon={
+                                                          <DownloadOutlined />
+                                                      }
+                                                      size='small'
+                                                      target='_blank'
+                                                      download
+                                                      href={fileLocation}
+                                                  >
+                                                      Download
+                                                  </Button>
+                                              </div>
+                                          );
+                                      })
+                                    : null}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
