@@ -7,7 +7,7 @@
 	border-bottom: 1px solid lightgrey;
 	&__menu {
 		display: flex;
-		padding-left: 20px;
+		padding-left: 10px;
 		list-style-type: none;
 		margin-bottom: 8px;
 	}
@@ -16,16 +16,17 @@
 	}
 	&__link {
 		background-color: lightgrey;
-		padding: 8px 12px;
+		padding: 8px 8px;
 		border: 1px solid lightgrey;
 		position: relative;
 		font-size: 16px;
-		box-shadow: 
-			1px -1px 1px rgba(0, 0, 0, 0.11),
-			2px -2px 2px rgba(0, 0, 0, 0.11),
-			4px -4px 4px rgba(0, 0, 0, 0.05),
+		box-shadow: 1px -1px 1px rgba(0, 0, 0, 0.11),
+			2px -2px 2px rgba(0, 0, 0, 0.11), 4px -4px 4px rgba(0, 0, 0, 0.05),
 			8px -8px 8px rgba(0, 0, 0, 0.05),
 			16px -16px 16px rgba(0, 0, 0, 0.05);
+		@media only screen and (min-width: 320px) and (max-width: 767px) {
+			padding: 4px 8px;
+		}
 		&--active {
 			background-color: white;
 			border-bottom: 0;
@@ -44,8 +45,54 @@
 	}
 }
 .c-sidemenu {
+	height: 100%;
 	&__search {
-		padding: 8px 16px;
+		padding: 8px 10px;
+
+		@media only screen and (min-width: 320px) and (max-width: 767px) {
+			padding: 6px 4px;
+		}
+	}
+	&__content {
+		height: 100vh;
+		max-height: 100vh;
+		overflow: hidden;
+		&:hover {
+			overflow-y: scroll;
+			max-height: 100vh;
+		}
+	}
+}
+.c-table {
+	background-color: #f4f4f4;
+	width: 100%;
+	padding: 8px;
+	&__row {
+		display: flex;
+		@media only screen and (min-width: 320px) and (max-width: 767px) {
+			flex-direction: column;
+		}
+	}
+	&__column {
+		margin: 4px 8px;
+		display: flex;
+		flex-direction: column;
+
+		span {
+			font-size: 14px;
+			font-weight: 500;
+			color: black;
+		}
+	}
+	&__content {
+		background-color: white;
+		padding: 2px 4px;
+		margin-right: 10px;
+		min-height: 26px;
+		p {
+			font-size: 14px;
+			margin: 0;
+		}
 	}
 }
 .l-admin {
@@ -53,17 +100,65 @@
 		border: 1px solid lightgrey;
 		margin: 6px;
 		min-height: 95vh;
-		padding: 16px;
+		padding: 8px 16px 16px;
 	}
 	&__header {
 		display: flex;
 		justify-content: space-between;
 	}
-	&__action {
+	&__title {
+		margin-bottom: 10px;
+		color: rgba(0, 0, 0, 0.85);
+		font-weight: bold;
+		font-size: 18px;
+		line-height: 1.5715;
+		padding-left: 16px;
 
+		@media only screen and (min-width: 320px) and (max-width: 767px) {
+			font-size: 16px;
+		}
 	}
+	&__action {
+		button {
+			&:hover {
+				color: #090;
+				border-color: #090;
+			}
+			&:focus {
+				color: #090;
+				border-color: #090;
+			}
+		}
+	}
+	&__download {
+		display: flex;
+		justify-content: space-between;
 
+		@media only screen and (min-width: 320px) and (max-width: 767px) {
+			display: block;
+		}
+		span {
+			color: white;
+			font-weight: 400;
+		}
+		a {
+			background-color: #090;
+			border: none;
+			&:hover {
+				background-color: #0c0;
+			}
+		}
+	}
 }
 .ant-btn svg {
 	vertical-align: baseline !important;
+}
+
+.flex {
+	&-1 {
+		flex: 1.2;
+	}
+	&-2 {
+		flex: 2;
+	}
 }

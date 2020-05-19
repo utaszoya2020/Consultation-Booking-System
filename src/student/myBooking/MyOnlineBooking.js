@@ -343,7 +343,7 @@ class MyOnlineBooking extends React.Component {
 
     render() {
         const { bookings, bookingDetail } = this.props;
-        const { activeCard } = this.state;
+        const { activeCard, currentBookingId } = this.state;
 
         const { Search } = Input;
         const myOnlineBookings = bookings.filter((booking) => {
@@ -369,11 +369,12 @@ class MyOnlineBooking extends React.Component {
                                           bookingId={booking._id}
                                           firstName={booking.userId.firstName}
                                           lastName={booking.userId.lastName}
-                                          subject={booking.subject}
+                                          topic={booking.topic}
                                           status={booking.status}
                                           handleClickBooking={
                                               this.handleClickBooking
                                           }
+                                          currentBookingId={currentBookingId}
                                       />
                                   );
                               })
