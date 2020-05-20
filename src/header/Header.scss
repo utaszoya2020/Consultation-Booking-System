@@ -10,6 +10,12 @@
 	color: #212529 !important;
 	background-color: transparent !important;
 }
+.dropdown-item:hover {
+    background-color: #0c0 !important;
+}
+.dropdown-item:active {
+    background-color: #090 !important;
+}
 
 #responsive-navbar-nav > div > div {
 	margin: auto 8px;

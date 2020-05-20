@@ -11,6 +11,7 @@ import {
     List,
     Form,
     Modal,
+    Empty,
 } from 'antd';
 import BookingCard from '../../student/myBooking/components/BookingCard';
 import { fetchUserId } from '../../utils/authentication';
@@ -364,6 +365,8 @@ class Admin extends React.Component {
                     );
                 });
             }
+        } else {
+            return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         }
     };
 
@@ -412,6 +415,8 @@ class Admin extends React.Component {
                     );
                 });
             }
+        } else {
+            return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         }
     };
 

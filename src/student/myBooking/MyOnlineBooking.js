@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Input, Descriptions, Comment, Avatar, Form, Button, List } from 'antd';
+import { Input, Empty, Comment, Avatar, Form, Button, List } from 'antd';
 import {
     fetchBookingDetailThunkAction,
     fetchBookingThunkAction,
@@ -453,9 +453,11 @@ class MyOnlineBooking extends React.Component {
                         size='large'
                     />
                     <div className='list-group'>
-                        {myOnlineBookings.length
-                            ? this.renderOnlineBookingCard(myOnlineBookings)
-                            : null}
+                        {myOnlineBookings.length ? (
+                            this.renderOnlineBookingCard(myOnlineBookings)
+                        ) : (
+                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        )}
                     </div>
                 </section>
                 <section className='mybooking__right'>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Input, Comment, Avatar, Form, Button, List, Modal } from 'antd';
+import { Input, Comment, Empty, Avatar, Form, Button, List, Modal } from 'antd';
 import BookingCard from './components/BookingCard';
 import {
     fetchBookingDetailThunkAction,
@@ -498,9 +498,11 @@ class MyFaceToFaceBooking extends React.Component {
                         size='large'
                     />
                     <div className='list-group'>
-                        {myOfflineBookings.length ? this.renderOnlineBookingCard(
-                            myOfflineBookings
-                        ) : null}
+                        {myOfflineBookings.length ? (
+                            this.renderOnlineBookingCard(myOfflineBookings)
+                        ) : (
+                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        )}
                     </div>
                 </section>
                 <section className='mybooking__right'>
