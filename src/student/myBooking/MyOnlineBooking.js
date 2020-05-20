@@ -55,6 +55,7 @@ class MyOnlineBooking extends React.Component {
             userId: '',
             submitting: false,
             value: '',
+            searchValue: '',
             activeCard: false,
             currentBookingId: '',
             error: null,
@@ -76,6 +77,10 @@ class MyOnlineBooking extends React.Component {
         this.setState({ userId }, () => {
             fetchUserDetail(userId);
         });
+    };
+
+    searchBooking = (value) => {
+        this.setState({ searchValue: value });
     };
 
     transChatRecords = (chat) => {
@@ -174,13 +179,10 @@ class MyOnlineBooking extends React.Component {
                             .then((data) => {
                                 if (data) {
                                     const newChat = this.transChatRecords(data);
-                                    const {
-                                        chatId,
-                                        originalChat
-                                    } = newChat;
+                                    const { chatId, originalChat } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat
+                                        originalChat,
                                     });
                                 }
                             })
@@ -209,13 +211,10 @@ class MyOnlineBooking extends React.Component {
                             .then((data) => {
                                 if (data) {
                                     const newChat = this.transChatRecords(data);
-                                    const {
-                                        chatId,
-                                        originalChat
-                                    } = newChat;
+                                    const { chatId, originalChat } = newChat;
                                     this.setState({
                                         chatId,
-                                        originalChat
+                                        originalChat,
                                     });
                                 }
                             })
@@ -238,6 +237,54 @@ class MyOnlineBooking extends React.Component {
         this.setState({
             value: e.target.value,
         });
+    };
+
+    renderOnlineBookingCard = (myOfflineBookings) => {
+        const { searchValue, currentBookingId } = this.state;
+        if (myOfflineBookings.length) {
+            // Search Filter
+            if (searchValue) {
+                const result = myOfflineBookings.filter((booking) => {
+                    return (
+                        booking.userId.firstName === searchValue ||
+                        booking.userId.lastName === searchValue ||
+                        booking.topic === searchValue ||
+                        booking.content === searchValue ||
+                        booking.bookingNum === searchValue ||
+                        booking.status === searchValue
+                    );
+                });
+                return result.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            } else {
+                return myOfflineBookings.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            }
+        }
     };
 
     renderBookingDetail = (bookingDetail) => {
@@ -388,7 +435,7 @@ class MyOnlineBooking extends React.Component {
 
     render() {
         const { bookings, bookingDetail } = this.props;
-        const { activeCard, currentBookingId } = this.state;
+        const { activeCard } = this.state;
 
         const { Search } = Input;
         const myOnlineBookings = bookings.filter((booking) => {
@@ -401,28 +448,13 @@ class MyOnlineBooking extends React.Component {
                     <h2 className='mybooking__title'>Booking List</h2>
                     <Search
                         placeholder='input search text'
-                        onSearch={(value) => console.log(value)}
+                        onSearch={(value) => this.searchBooking(value)}
                         enterButton='Search'
                         size='large'
                     />
                     <div className='list-group'>
                         {myOnlineBookings.length
-                            ? myOnlineBookings.map((booking) => {
-                                  return (
-                                      <BookingCard
-                                          key={booking._id}
-                                          bookingId={booking._id}
-                                          firstName={booking.userId.firstName}
-                                          lastName={booking.userId.lastName}
-                                          topic={booking.topic}
-                                          status={booking.status}
-                                          handleClickBooking={
-                                              this.handleClickBooking
-                                          }
-                                          currentBookingId={currentBookingId}
-                                      />
-                                  );
-                              })
+                            ? this.renderOnlineBookingCard(myOnlineBookings)
                             : null}
                     </div>
                 </section>

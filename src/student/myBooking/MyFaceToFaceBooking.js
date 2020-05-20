@@ -57,6 +57,7 @@ class MyFaceToFaceBooking extends React.Component {
             userId: '',
             submitting: false,
             value: '',
+            searchValue: '',
             activeCard: false,
             currentBookingId: '',
             error: null,
@@ -78,6 +79,10 @@ class MyFaceToFaceBooking extends React.Component {
         this.setState({ userId }, () => {
             fetchUserDetail(userId);
         });
+    };
+
+    searchBooking = (value) => {
+        this.setState({ searchValue: value });
     };
 
     transChatRecords = (chat) => {
@@ -261,6 +266,54 @@ class MyFaceToFaceBooking extends React.Component {
         });
     };
 
+    renderOnlineBookingCard = (myOfflineBookings) => {
+        const { searchValue, currentBookingId } = this.state;
+        if (myOfflineBookings.length) {
+            // Search Filter
+            if (searchValue) {
+                const result = myOfflineBookings.filter((booking) => {
+                    return (
+                        booking.userId.firstName === searchValue ||
+                        booking.userId.lastName === searchValue ||
+                        booking.topic === searchValue ||
+                        booking.content === searchValue ||
+                        booking.bookingNum === searchValue ||
+                        booking.status === searchValue
+                    );
+                });
+                return result.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            } else {
+                return myOfflineBookings.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            }
+        }
+    };
+
     renderBookingDetail = (bookingDetail) => {
         const { submitting, value, comments } = this.state;
         const {
@@ -280,7 +333,10 @@ class MyFaceToFaceBooking extends React.Component {
         if (bookingDate) {
             const now = new Date().getTime();
             const bookDate = new Date(bookingDate).getTime();
-            if ((bookDate - now > 86400000) && (status === 'pending' || status === 'accepted')) {
+            if (
+                bookDate - now > 86400000 &&
+                (status === 'pending' || status === 'accepted')
+            ) {
                 canCancel = true;
             }
         }
@@ -424,7 +480,7 @@ class MyFaceToFaceBooking extends React.Component {
 
     render() {
         const { bookings, bookingDetail } = this.props;
-        const { activeCard, currentBookingId } = this.state;
+        const { activeCard } = this.state;
 
         const { Search } = Input;
         const myOfflineBookings = bookings.filter((booking) => {
@@ -437,29 +493,14 @@ class MyFaceToFaceBooking extends React.Component {
                     <h2 className='mybooking__title'>Booking List</h2>
                     <Search
                         placeholder='input search text'
-                        onSearch={(value) => console.log(value)}
+                        onSearch={(value) => this.searchBooking(value)}
                         enterButton='Search'
                         size='large'
                     />
                     <div className='list-group'>
-                        {myOfflineBookings.length
-                            ? myOfflineBookings.map((booking) => {
-                                  return (
-                                      <BookingCard
-                                          key={booking._id}
-                                          bookingId={booking._id}
-                                          firstName={booking.userId.firstName}
-                                          lastName={booking.userId.lastName}
-                                          topic={booking.topic}
-                                          status={booking.status}
-                                          handleClickBooking={
-                                              this.handleClickBooking
-                                          }
-                                          currentBookingId={currentBookingId}
-                                      />
-                                  );
-                              })
-                            : null}
+                        {myOfflineBookings.length ? this.renderOnlineBookingCard(
+                            myOfflineBookings
+                        ) : null}
                     </div>
                 </section>
                 <section className='mybooking__right'>

@@ -28,18 +28,22 @@ class Home extends React.Component {
 
     render() {
         const { bookings, firstName, lastName } = this.props;
+        const fullName = `${firstName} ${lastName}`;
         const upComingBookings = bookings.filter((booking) => {
+            const { bookingDate, status } = booking;
             const now = new Date().getTime();
-            const time = new Date(booking.bookingDate).getTime();
+            const time = new Date(bookingDate).getTime();
             const isExpired = now - time > 0;
-            return !isExpired;
+            return (
+                !isExpired && (status === 'pending' || status === 'accepted')
+            );
         });
         const bookingNumbers = upComingBookings.length;
         return (
             <div className='homepage'>
                 <div className='homepage__block'>
                     <h1 className='homepage__title'>
-                        {`Welcome ${firstName}, You have ${bookingNumbers} up coming
+                        {`Welcome ${fullName}, You have ${bookingNumbers} up coming
                         booking!`}
                     </h1>
                 </div>

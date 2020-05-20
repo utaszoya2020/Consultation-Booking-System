@@ -3,12 +3,12 @@ import './bookingDetail.scss';
 import moment from 'moment';
 
 function BookingDetail(props) {
-    const {_id, bookingDate, campus, subject, status} = props.booking;
+    const {bookingNum, bookingDate, campus, topic, status} = props.booking;
     const time = moment(bookingDate).format('DD/MM/YY  HH:mm');
 
     return (
         <div className='homepage__mybooking'>
-            <h5 className='booking__title'>Ticket Number: {_id}</h5>
+            <h5 className='booking__title'>Ticket Number: {bookingNum}</h5>
             <p>
                 <strong>Date</strong>: {time}
             </p>
@@ -16,7 +16,7 @@ function BookingDetail(props) {
                 <strong>Campus</strong>: {campus}
             </p>
             <p>
-                <strong>Subject</strong>: {subject}
+                <strong>Topic</strong>: {topic}
             </p>
             <p>
                 <strong>Status</strong>: Your request is {status}!

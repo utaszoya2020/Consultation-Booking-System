@@ -329,7 +329,9 @@ class Admin extends React.Component {
                         booking.userId.firstName === searchValue ||
                         booking.userId.lastName === searchValue ||
                         booking.topic === searchValue ||
-                        booking.content === searchValue
+                        booking.content === searchValue ||
+                        booking.bookingNum === searchValue ||
+                        booking.status === searchValue
                     );
                 });
                 return result.map((booking) => {
@@ -375,7 +377,9 @@ class Admin extends React.Component {
                         booking.userId.firstName === searchValue ||
                         booking.userId.lastName === searchValue ||
                         booking.topic === searchValue ||
-                        booking.content === searchValue
+                        booking.content === searchValue ||
+                        booking.bookingNum === searchValue ||
+                        booking.status === searchValue
                     );
                 });
                 return result.map((booking) => {
@@ -582,7 +586,6 @@ class Admin extends React.Component {
             campus,
             userId,
             topic,
-            subject,
             content,
             bookingDate,
             attachment,
