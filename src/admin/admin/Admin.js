@@ -595,7 +595,6 @@ class Admin extends React.Component {
             bookingDate,
             attachment,
         } = bookingDetail;
-        console.log(status);
         const date = moment(bookingDate).format('MMMM Do YYYY, hh:mm a');
         //TODO
 
