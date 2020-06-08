@@ -14,6 +14,7 @@ function Confirm(props) {
         subject,
         content,
         bookingDate,
+        bookingTime,
         attachment,
         isPosted,
         error,
@@ -63,6 +64,7 @@ function Confirm(props) {
                             subject,
                             content,
                             bookingDate,
+                            bookingTime,
                             attachment
                         );
                     }}
@@ -89,6 +91,7 @@ const mapDispatchToProps = (dispatch) => ({
         subject,
         content,
         bookingDate,
+        bookingTime,
         attachment
     ) =>
         dispatch(
@@ -100,6 +103,7 @@ const mapDispatchToProps = (dispatch) => ({
                 subject,
                 content,
                 bookingDate,
+                bookingTime,
                 attachment
             )
         ),

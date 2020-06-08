@@ -29,6 +29,7 @@ export const addBooking = (
     subject,
     content,
     bookingDate,
+    bookingTime,
     attachment
 ) => {
     const url = API_BOOKING_URL;
@@ -41,6 +42,7 @@ export const addBooking = (
         subject,
         content,
         bookingDate,
+        bookingTime,
         attachment,
         status,
     };

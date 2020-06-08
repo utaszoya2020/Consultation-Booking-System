@@ -8,8 +8,10 @@ import {
     Input,
     Button,
     Select,
-    DatePicker,
+    Calendar,
 } from 'antd';
+//import Calendar from 'react-calendar';
+import TimePicker from './components/TimePicker';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
@@ -33,10 +35,12 @@ const FaceToFaceBooking = () => {
     const [content, setContent] = useState('');
     const [bookingDate, setBookingDate] = useState('');
     const [attachment, setAttachment] = useState([]);
+    const [dateValue, setDateValue] = useState(moment().format('L'));
+    const [timeValue, setTime] = useState('');
 
     const { Option } = Select;
 
-    function range(start, end) {
+    /* function range(start, end) {
         const result = [];
         for (let i = start; i < end; i++) {
             result.push(i);
@@ -60,7 +64,7 @@ const FaceToFaceBooking = () => {
         }
         result.push(breakTime);
         return result;
-    }
+    } */
 
     function disabledDate(current) {
         // Can not select days before today and today
@@ -70,23 +74,45 @@ const FaceToFaceBooking = () => {
         );
     }
 
-    function disabledDateTime() {
+    /* function disabledDateTime() {
         return {
             disabledHours: () => hourRange(0, 9, 17, 24, 12),
             disabledMinutes: () => range(1, 60),
             disabledSeconds: () => range(1, 60),
         };
-    }
+    } */
 
-    function onDateChange(date, dateString) {
+    /* function onDateChange(date, dateString) {
         const bookingDate = moment(date).toDate();
         setBookingDate(bookingDate);
-    }
+    } */
+    const handleDateChange = (value) => {
+        //const selectDate = moment(value).format('L');
+        setTime('');
+        console.log(value.toDate());
+        setDateValue(value.toDate());
+
+    };
+
+    const handleTimeChange = event => {
+        const time = event.target.value;
+        setTime(time);
+    };
+
+    const handleCheckDate = (rule, value) => {
+        if(!dateValue) {
+            return Promise.reject('Please select your booking date!')
+        }
+        if(!timeValue) {
+            return Promise.reject('Please select your booking time!')
+        }
+        return Promise.resolve();
+    };
 
     const handleContentChange = event => {
         const content = event.target.value;
         setContent(content);
-    }
+    };
 
     const handleAttachmentbeforeUpload = (file) => {
         const isLt10M = file.size / 1024 / 1024 < 10;
@@ -156,7 +182,8 @@ const FaceToFaceBooking = () => {
                 topic={topic}
                 subject={subject}
                 content={content}
-                bookingDate={bookingDate}
+                bookingDate={dateValue}
+                bookingTime={timeValue}
                 attachment={attachment}
                 onHide={() => setModalShow(false)}
             />
@@ -210,12 +237,19 @@ const FaceToFaceBooking = () => {
                     name='date'
                     rules={[
                         {
-                            required: true,
                             message: 'Please select your booking date!',
                         },
+                        { validator: handleCheckDate }
                     ]}
                 >
-                    <DatePicker
+                    <div className='booking__calender'>
+                        <div className='react-calender'>
+                            <Calendar disabledDate={disabledDate} fullscreen={false} onPanelChange={handleDateChange} />
+                        </div>
+                        
+                        <TimePicker time={timeValue} handleTimeChange={handleTimeChange}/>
+                    </div>
+                    {/* <DatePicker
                         format='YYYY-MM-DD HH:mm:ss'
                         disabledDate={disabledDate}
                         disabledTime={disabledDateTime}
@@ -223,7 +257,7 @@ const FaceToFaceBooking = () => {
                             defaultValue: moment('00:00:00', 'HH:mm:ss'),
                         }}
                         onChange={onDateChange}
-                    />
+                    /> */}
                 </Form.Item>
 
                 <Form.Item label='Content' name='content'>

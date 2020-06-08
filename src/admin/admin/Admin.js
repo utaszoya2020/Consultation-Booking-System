@@ -593,10 +593,11 @@ class Admin extends React.Component {
             topic,
             content,
             bookingDate,
+            bookingTime,
             attachment,
         } = bookingDetail;
-        const date = moment(bookingDate).format('MMMM Do YYYY, hh:mm a');
-        //TODO
+        const date = moment(bookingDate).format('MMMM Do YYYY');
+        const time = `${date} ${bookingTime}:00 - ${bookingTime}:50`;
 
         return (
             <div>
@@ -635,7 +636,7 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Booking Date</span>
                             <div className='c-table__content'>
-                                <p>{date}</p>
+                                <p>{time}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-2'>

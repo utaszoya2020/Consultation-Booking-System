@@ -93,6 +93,7 @@ export const addBookingThunkAction = (
     subject,
     content,
     bookingDate,
+    bookingTime,
     attachment
 ) => (dispatch) => {
     dispatch(addBookingAction());
@@ -104,6 +105,7 @@ export const addBookingThunkAction = (
         subject,
         content,
         bookingDate,
+        bookingTime,
         attachment
     )
         .then((data) => {
@@ -117,7 +119,6 @@ export const addBookingThunkAction = (
 export const updateStatusThunkAction = (currentBookingId, status) => (
     dispatch
 ) => {
-    console.log("object");
     updateBookingStatus(currentBookingId, status)
         .then((data) => {
             dispatch(fetchBookingDetailSuccess(data));

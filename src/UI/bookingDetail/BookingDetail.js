@@ -3,8 +3,9 @@ import './bookingDetail.scss';
 import moment from 'moment';
 
 function BookingDetail(props) {
-    const {bookingNum, bookingDate, campus, topic, status} = props.booking;
-    const time = moment(bookingDate).format('DD/MM/YY  HH:mm');
+    const {bookingNum, bookingDate, bookingTime, campus, topic, status} = props.booking;
+    const date = moment(bookingDate).format('DD/MM/YY');
+    const time = `${date} ${bookingTime}:00 - ${bookingTime}:50`;
 
     return (
         <div className='homepage__mybooking'>
