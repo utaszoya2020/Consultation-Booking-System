@@ -1,4 +1,4 @@
 .body {
 	background-color: #f4f4f4;
-	min-height: calc(100vh - 48px);
+	min-height: 100vh;
 }
