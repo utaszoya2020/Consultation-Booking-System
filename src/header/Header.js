@@ -23,18 +23,12 @@ class Header extends React.Component {
         this.state = {};
     }
 
-    componentDidMount() {
-        //const userType = fetchUserType();
-        // TODO Fix userType render
-        //this.setState({ userType });
-    }
-
     handleLogOut = (history) => {
         deleteToken();
         history.push(LOGOUT_SUCCESS_URL);
     };
 
-    renderAdminNavbar = (history) => {
+    renderAdminNavbar = () => {
         return (
             <Fragment>
                 <Nav className='mr-auto'>
@@ -45,21 +39,11 @@ class Header extends React.Component {
                         <Nav.Link href={ADMIN_SCHEDULING_URL}>Scheduling</Nav.Link>
                     </NavLink>
                 </Nav>
-                {isAuthenticated() ? (
-                    <Button
-                        variant='danger'
-                        as='button'
-                        className='c-btn__logout'
-                        onClick={() => this.handleLogOut(history)}
-                    >
-                        Log Out
-                    </Button>
-                ) : null}
             </Fragment>
         );
     };
 
-    renderStudentNavbar = (history) => {
+    renderStudentNavbar = () => {
         return (
             <Fragment>
                 <Nav className='mr-auto'>
@@ -102,16 +86,6 @@ class Header extends React.Component {
                         </Nav.Link>
                     </NavLink>
                 </Nav>
-                {isAuthenticated() ? (
-                    <Button
-                        variant='danger'
-                        as='button'
-                        className='c-btn__logout'
-                        onClick={() => this.handleLogOut(history)}
-                    >
-                        Log Out
-                    </Button>
-                ) : null}
             </Fragment>
         );
     };
@@ -119,22 +93,32 @@ class Header extends React.Component {
     render() {
         const { history } = this.props;
         return (
-            <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
-                <Navbar.Brand href='#'>
-                    <img
-                        src={AIBTLogo}
-                        width='237'
-                        className='d-inline-block align-top header__img'
-                        alt='AIBT logo'
-                    />
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls='responsive-navbar-nav' />
-                <Navbar.Collapse id='responsive-navbar-nav'>
-                    {isAdmin()
-                        ? this.renderAdminNavbar(history)
-                        : this.renderStudentNavbar(history)}
-                </Navbar.Collapse>
-            </Navbar>
+            isAuthenticated() ? (
+                <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
+                    <Navbar.Brand href='#'>
+                        <img
+                            src={AIBTLogo}
+                            width='237'
+                            className='d-inline-block align-top header__img'
+                            alt='AIBT logo'
+                        />
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+                    <Navbar.Collapse id='responsive-navbar-nav'>
+                        {isAdmin()
+                            ? this.renderAdminNavbar(history)
+                            : this.renderStudentNavbar(history)}
+                        <Button
+                            variant='danger'
+                            as='button'
+                            className='c-btn__logout'
+                            onClick={() => this.handleLogOut(history)}
+                        >
+                            Log Out
+                        </Button>
+                    </Navbar.Collapse>
+                </Navbar>
+            ) : null
         );
     }
 }
