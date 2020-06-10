@@ -2,9 +2,9 @@ import React from 'react';
 
 import '../styles/timePicker.scss';
 
-const Item = ({handleTimeChange, active, value, name}) => {
+const Item = ({handleTimeChange, time, value}) => {
     let activeClass = '';
-    if(active === value) {
+    if(time === value) {
         activeClass = 'c-timepicker__btn--active';
     }
     return (
@@ -13,7 +13,6 @@ const Item = ({handleTimeChange, active, value, name}) => {
                 type='button'
                 onClick={handleTimeChange}
                 value={value}
-                name={name}
             >
                 {`${value}:00 - ${value}:50`}
         </button>
@@ -22,57 +21,31 @@ const Item = ({handleTimeChange, active, value, name}) => {
 
 const TimePicker = props => {
     const { handleTimeChange, time } = props;
+    const sessionList = [];
+    for (let i = 9; i < 17; i++) {
+        let key = '';
+        if(i===9) {
+            key = '09';
+        } else {
+            key = i.toString();
+        }
+        sessionList.push(key);
+    }
 
     return (
         <div className='c-timepicker'>
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='9'
-                name='s1'
-                active={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='10'
-                name='s2'
-                active={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='11'
-                name='s3'
-                active={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='12'
-                name='s4'
-                active={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='13'
-                name='s5'
-                active={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='14'
-                name='s6'
-                active={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='15'
-                name='s7'
-                active={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='16'
-                name='s8'
-                active={time}
-            />
+            {
+                sessionList.map(session => {
+                    return (
+                        <Item
+                            handleTimeChange={handleTimeChange}
+                            value={session}
+                            time={time}
+                            key={session}
+                        />
+                    );
+                })
+            }
         </div>
     );
 }
