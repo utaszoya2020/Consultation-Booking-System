@@ -27,57 +27,31 @@ const Item = ({handleTimeChange, time, value, name}) => {
 
 const SessionPicker = props => {
     const { handleTimeChange, time } = props;
+    const sessionList = [];
+    for (let i = 9; i < 17; i++) {
+        let key = '';
+        if(i===9) {
+            key = '09';
+        } else {
+            key = i.toString();
+        }
+        sessionList.push(key);
+    }
 
     return (
         <div className='c-sessionpicker'>
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='09'
-                name='s1'
-                time={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='10'
-                name='s2'
-                time={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='11'
-                name='s3'
-                time={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='12'
-                name='s4'
-                time={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='13'
-                name='s5'
-                time={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='14'
-                name='s6'
-                time={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='15'
-                name='s7'
-                time={time}
-            />
-            <Item
-                handleTimeChange={handleTimeChange}
-                value='16'
-                name='s8'
-                time={time}
-            />
+            {
+                sessionList.map(session => {
+                    return (
+                        <Item
+                            handleTimeChange={handleTimeChange}
+                            value={session}
+                            time={time}
+                            key={session}
+                        />
+                    );
+                })
+            }
         </div>
     );
 }
