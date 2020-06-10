@@ -24,6 +24,8 @@ for (let i = 9; i < 17; i++) {
     }
 }
 
+const validRange = [moment(), moment().add(17,'days')];
+
 class Scheduling extends Component {
     constructor(props) {
         super(props);
@@ -158,7 +160,7 @@ class Scheduling extends Component {
 
     render() {
         const { selectedDate, currentSessionTime, campus, selectedKeys } = this.state;
-        const validRange = [moment().subtract(1, 'days'), moment().add(17,'days')];
+
         return (
             <div className='l-scheduling'>
                 <h4 className='l-scheduling__title'>Please select the available time</h4>
