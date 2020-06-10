@@ -4,8 +4,6 @@ import './SessionPicker.scss';
 
 const Item = ({handleTimeChange, time, value, name}) => {
     let activeClass = '';
-    console.log(time);
-    console.log(value);
     const timeSet = new Set(time);
     if(timeSet.has(value)) {
         activeClass = 'c-sessionpicker__btn--active';

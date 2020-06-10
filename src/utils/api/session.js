@@ -14,18 +14,18 @@ export const addSession = (date, currentSessionTime, campus) => {
 };
 
 export const fetchSession = (date, campus) => {
-    const url = `${API_SESSION_URL}?date=${date}&?campus=${campus}`;
+    const url = `${API_SESSION_URL}?date=${date}&campus=${campus}`;
     return get(url).then((response) => response.data);
 };
 
-export const updateSession = (sessionId, date, currentSessionTime, campus) => {
+export const updateSession = (sessionId, currentSessionTime) => {
     const url = `${API_SESSION_URL}/${sessionId}`;
-    const data = {date, time: currentSessionTime, campus};
+    const data = {time: currentSessionTime};
     return put(url, data).then((response) => response.data);
 };
 
 export const deleteSession = (date, campus) => {
-    const url = `${API_SESSION_URL}?date=${date}&?campus=${campus}`;
+    const url = `${API_SESSION_URL}?date=${date}&campus=${campus}`;
     return del(url).then((response) => response.data);
 };
 

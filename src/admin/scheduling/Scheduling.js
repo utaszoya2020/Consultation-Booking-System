@@ -34,6 +34,7 @@ class Scheduling extends Component {
             //value: moment(),
             selectedDate: moment(),
             //time: [],
+            selectedKeys: [],
             currentSessionTime: [],
             existSession: {},
             campus: '',
@@ -42,51 +43,26 @@ class Scheduling extends Component {
         };
     }
 
-    componentDidMount() {
-        //this.getInitialSession();
-    }
-
-/*     componentDidUpdate() {
-        const { campus, value } = this.state;
-        const date = value.format('YYYY-MM-DD');
-        if(campus) {
-            fetchSession(date, campus).then(data => {
-                console.log(data);
-                const { time } = data;
-                this.setState({ currentSessionTime: time, existSession: data });
-            })
-            .catch((error) =>
-                this.setState({ error })
-            );
-        }
-    } */
-
-    /* getInitialSession = () => {
-        const { value, campus } = this.state;
-        const date = value.format('YYYY-MM-DD');
-        fetchSession(date, campus).then(data => {
-            const { time } = data;
-            this.setState({ currentSessionTime: time, existSession: data });
-        })
-        .catch((error) =>
-            this.setState({ error })
-        );
-    } */
 
     handleDateChange = value => {
         const { campus } = this.state;
         this.setState({
-            //value,
+            currentSessionTime: [],
+            existSession: [],
             selectedDate: value,
         }, () => {
-            const date = value.format('YYYY-MM-DD');
+            if(campus) {
+                const date = value.format('YYYY-MM-DD');
             fetchSession(date, campus).then(data => {
-                const { time } = data;
-                this.setState({ currentSessionTime: time, existSession: data });
+                if(data) {
+                    const { time } = data;
+                    this.setState({ currentSessionTime: time, existSession: data });
+                }
             })
             .catch((error) =>
                 this.setState({ error })
             );
+            }
         });
     };
     
@@ -95,12 +71,18 @@ class Scheduling extends Component {
     }; */
 
     handleCampusChange = value => {
-        const {selectedDate, campus} = this.state;
-        this.setState({ campus: value }, () => {
+        const {selectedDate} = this.state;
+        this.setState({
+            campus: value,
+            currentSessionTime: [],
+            existSession: [],
+        }, () => {
             const date = selectedDate.format('YYYY-MM-DD');
-            fetchSession(date, campus).then(data => {
-                const { time } = data;
-                this.setState({ currentSessionTime: time, existSession: data });
+            fetchSession(date, value).then(data => {
+                if(data) {
+                    const { time } = data;
+                    this.setState({ currentSessionTime: time, existSession: data });
+                }
             })
             .catch((error) =>
                 this.setState({ error })
@@ -110,54 +92,44 @@ class Scheduling extends Component {
 
 /*     handleTimeChange = event => {
         const selectTime = event.target.value;
-        const { time } = this.state;
-        const checkTime = time.filter(item => item!==selectTime);
-        if(checkTime.length === time.length) {
-            this.setState((state) => {
-                return {time: [...state.time, selectTime]};
-            });
-        } else {
-            this.setState((state) => {
-                //const test = state.time.filter(item => item!==selectTime);
-                return {time: checkTime};
-            });
-        }
+        this.setState((state) => {
+            const index = state.time.indexOf(selectTime);
+            //const checkTime = state.time.filter(item => item===selectTime);
+            if(index === -1) {
+                    return {time: [...state.time, selectTime]};
+            }
+            const newTime = state.time.filter(item => item!==selectTime);
+            return {time: newTime};
+        });
         
     } */
 
     handleChange = (nextTargetKeys, direction, moveKeys) => {
         this.setState({ currentSessionTime: nextTargetKeys });
     
-        console.log('targetKeys: ', nextTargetKeys);
-        console.log('direction: ', direction);
-        console.log('moveKeys: ', moveKeys);
+        //console.log('targetKeys: ', nextTargetKeys);
+        //console.log('direction: ', direction);
+        //console.log('moveKeys: ', moveKeys);
     };
     
     handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
-        this.setState({ currentSessionTime: [...sourceSelectedKeys, ...targetSelectedKeys] });
+        this.setState({ selectedKeys: [...sourceSelectedKeys, ...targetSelectedKeys] });
     
-        console.log('sourceSelectedKeys: ', sourceSelectedKeys);
-        console.log('targetSelectedKeys: ', targetSelectedKeys);
+        //console.log('sourceSelectedKeys: ', sourceSelectedKeys);
+        //console.log('targetSelectedKeys: ', targetSelectedKeys);
     };
     
     handleScroll = (direction, e) => {
-        console.log('direction:', direction);
-        console.log('target:', e.target);
+        //console.log('direction:', direction);
+        //console.log('target:', e.target);
     };
 
     handleUpdate = () => {
         const { currentSessionTime, selectedDate, campus, existSession } = this.state;
         
-        /* const sessions = currentSessionTime.map(item => {
-            return {
-                date: selectedDate.format('YYYY-MM-DD'),
-                time: item,
-                campus: campus
-            };
-        }); */
         const date = selectedDate.format('YYYY-MM-DD');
         this.setState({ isLoading: true }, () => {
-            if(existSession.time.length === 0) {
+            if(!existSession.time) {
                 addSession(date, currentSessionTime, campus).then(() => {
                     this.setState({ isLoading: false });
                 })
@@ -173,7 +145,7 @@ class Scheduling extends Component {
                 );
             } else {
                 const sessionId = existSession._id;
-                updateSession(sessionId, date, currentSessionTime, campus).then(() => {
+                updateSession(sessionId, currentSessionTime).then(() => {
                     this.setState({ isLoading: false });
                 })
                 .catch((error) =>
@@ -190,7 +162,7 @@ class Scheduling extends Component {
     };
 
     render() {
-        const { selectedDate, time, currentSessionTime, isLoading, campus } = this.state;
+        const { selectedDate, time, currentSessionTime, isLoading, campus, selectedKeys } = this.state;
         const validRange = [moment().subtract(1, 'days'), moment().add(17,'days')];
         const y = true;
         return (
@@ -221,7 +193,8 @@ class Scheduling extends Component {
                                     <Transfer
                                         dataSource={mockData}
                                         titles={['Session', 'Available']}
-                                        currentSessionTime={currentSessionTime}
+                                        targetKeys={currentSessionTime}
+                                        selectedKeys={selectedKeys}
                                         onChange={this.handleChange}
                                         onSelectChange={this.handleSelectChange}
                                         onScroll={this.handleScroll}

@@ -3,15 +3,15 @@
 	text-align: center;
 	align-self: center;
 	display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    &__btn {
-        font-size: 18px;
-        padding: 5px 14px;
-        margin: 6px;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	&__btn {
+		font-size: 18px;
+		padding: 5px 14px;
+		margin: 6px;
 		background-color: white;
-        border: 1px solid #d9d9d9;
+		border: 1px solid #d9d9d9;
 		&--active {
 			background-color: #1890ff;
 			color: white;
@@ -20,11 +20,5 @@
 		&:hover {
 			background-color: rgba(228, 227, 227, 0.835);
 		}
-
-		&:focus {
-			background-color: #1890ff;
-			color: white;
-			outline: none;
-		}
-    }
+	}
 }
