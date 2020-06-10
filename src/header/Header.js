@@ -10,6 +10,7 @@ import {
     FACE_TO_FACE_BOOKING_URL,
     ONLINE_BOOKING_URL,
     ADMIN_HOME_URL,
+    ADMIN_SCHEDULING_URL,
     LOGOUT_SUCCESS_URL,
 } from '../routes/URLMap.js';
 
@@ -38,7 +39,10 @@ class Header extends React.Component {
             <Fragment>
                 <Nav className='mr-auto'>
                     <NavLink className='nav-left_brand' to={ADMIN_HOME_URL}>
-                        <Nav.Link>Home</Nav.Link>
+                        <Nav.Link href={ADMIN_HOME_URL}>Home</Nav.Link>
+                    </NavLink>
+                    <NavLink className='nav-left__nav-item' to={ADMIN_SCHEDULING_URL}>
+                        <Nav.Link href={ADMIN_SCHEDULING_URL}>Scheduling</Nav.Link>
                     </NavLink>
                 </Nav>
                 {isAuthenticated() ? (

@@ -1,0 +1,60 @@
+.l-scheduling {
+	padding: 16px;
+	min-height: 93vh;
+	background-color: white;
+	&__title {
+		text-align: center;
+	}
+	&__container {
+		margin-top: 20px;
+		display: flex;
+	}
+	&__left {
+		flex: 2;
+		border: 1px solid lightgrey;
+		padding: 0 8px;
+		margin-right: 20px;
+	}
+	&__right {
+		flex: 1;
+		border: 2px solid black;
+		padding: 8px;
+	}
+	&__location {
+		margin-top: 16px;
+		display: flex;
+		align-items: center;
+	}
+	&__label {
+		margin: 0 8px 0 16px;
+		font-size: 16px;
+		font-weight: 700;
+		color: rgba(0, 0, 0, 0.85);
+	}
+	&__detail {
+		margin-top: 16px;
+		h5 {
+			font-size: 16px;
+			font-weight: 700;
+			margin-left: 16px;
+		}
+	}
+	&__list {
+		display: flex;
+		flex-direction: row;
+	}
+	&__btn {
+		display: flex;
+		flex-direction: row-reverse;
+		margin-right: 40px;
+		margin-top: 16px;
+	}
+}
+
+/* .ant-btn-primary {
+	background-color: #090 !important;
+	border-color: #090 !important;
+	&:hover {
+		background-color: #0c0 !important;
+	}
+} */

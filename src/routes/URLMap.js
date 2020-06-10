@@ -14,3 +14,4 @@ export const ERROR_URL = '/error';
 
 // Admin url
 export const ADMIN_HOME_URL = '/admin/home';
+export const ADMIN_SCHEDULING_URL = '/admin/scheduling';
