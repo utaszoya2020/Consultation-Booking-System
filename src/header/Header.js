@@ -36,7 +36,7 @@ class Header extends React.Component {
                         <Nav.Link href={ADMIN_HOME_URL}>Home</Nav.Link>
                     </NavLink>
                     <NavLink className='nav-left__nav-item' to={ADMIN_SCHEDULING_URL}>
-                        <Nav.Link href={ADMIN_SCHEDULING_URL}>Scheduling</Nav.Link>
+                        <Nav.Link href={ADMIN_SCHEDULING_URL}>Schedule</Nav.Link>
                     </NavLink>
                 </Nav>
             </Fragment>
