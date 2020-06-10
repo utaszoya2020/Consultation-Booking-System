@@ -1,37 +1,34 @@
 import React, { Component } from 'react';
-import { Calendar, Alert, Select, Button, Transfer } from 'antd';
+import { Calendar, Alert, Select, Button, Transfer, Popconfirm, message } from 'antd';
 import moment from 'moment';
-import SessionPicker from './SessionPicker';
+//import SessionPicker from './SessionPicker';
 import { addSession, fetchSession, deleteSession, updateSession } from '../../utils/api/session';
 import './Scheduling.scss';
-import { updateBookingStatus } from '../../utils/api/booking';
 
 const { Option } = Select;
 
-const mockData = [];
+const sessionData = [];
 for (let i = 9; i < 17; i++) {
     if(i===9) {
         const key = '09';
-        mockData.push({
+        sessionData.push({
             key,
             title: `${key}:00 - ${key}:50`,
         });
     } else {
         const key = i.toString();
-        mockData.push({
+        sessionData.push({
             key,
             title: `${key}:00 - ${key}:50`,
         });
     }
 }
-//const oricurrentSessionTime = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
 
 class Scheduling extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            //value: moment(),
             selectedDate: moment(),
             //time: [],
             selectedKeys: [],
@@ -43,12 +40,12 @@ class Scheduling extends Component {
         };
     }
 
-
     handleDateChange = value => {
         const { campus } = this.state;
         this.setState({
             currentSessionTime: [],
             existSession: [],
+            selectedKeys: [],
             selectedDate: value,
         }, () => {
             if(campus) {
@@ -65,10 +62,6 @@ class Scheduling extends Component {
             }
         });
     };
-    
-/*     onPanelChange = value => {
-        this.setState({ value });
-    }; */
 
     handleCampusChange = value => {
         const {selectedDate} = this.state;
@@ -76,6 +69,7 @@ class Scheduling extends Component {
             campus: value,
             currentSessionTime: [],
             existSession: [],
+            selectedKeys: []
         }, () => {
             const date = selectedDate.format('YYYY-MM-DD');
             fetchSession(date, value).then(data => {
@@ -101,7 +95,6 @@ class Scheduling extends Component {
             const newTime = state.time.filter(item => item!==selectTime);
             return {time: newTime};
         });
-        
     } */
 
     handleChange = (nextTargetKeys) => {
@@ -119,43 +112,56 @@ class Scheduling extends Component {
         this.setState({ isLoading: true }, () => {
             if(!existSession.time) {
                 addSession(date, currentSessionTime, campus).then(() => {
-                    this.setState({ isLoading: false });
+                    this.setState({ isLoading: false }, () => {
+                        message.success('Update success!');
+                    });
                 })
                 .catch((error) =>
-                    this.setState({ error, isLoading: false })
+                    this.setState({ error, isLoading: false }, () => {
+                        message.error('Update failed!');
+                    })
                 );
             } else if(currentSessionTime.length === 0) {
                 deleteSession(date, campus).then(() => {
-                    this.setState({ isLoading: false });
+                    this.setState({ isLoading: false }, () => {
+                        message.success('Update success!');
+                    });
                 })
                 .catch((error) =>
-                    this.setState({ error, isLoading: false })
+                    this.setState({ error, isLoading: false }, () => {
+                        message.error('Update failed!');
+                    })
                 );
             } else {
                 const sessionId = existSession._id;
                 updateSession(sessionId, currentSessionTime).then(() => {
-                    this.setState({ isLoading: false });
+                    this.setState({ isLoading: false }, () => {
+                        message.success('Update success!');
+                    });
                 })
                 .catch((error) =>
-                    this.setState({ error, isLoading: false })
+                    this.setState({ error, isLoading: false }, () => {
+                        message.error('Update failed!');
+                    })
                 );
             }
-            /* addSession(sessions).then(() => {
-                this.setState({ isLoading: false });
-            })
-            .catch((error) =>
-                this.setState({ error, isLoading: false })
-            ); */
         });
     };
 
+    onConfirm = () => {
+        const { campus } = this.state;
+        if(!campus) {
+            return message.warning('Please select a campus!');
+        }
+        this.handleUpdate();
+    }
+
     render() {
-        const { selectedDate, time, currentSessionTime, isLoading, campus, selectedKeys } = this.state;
+        const { selectedDate, currentSessionTime, campus, selectedKeys } = this.state;
         const validRange = [moment().subtract(1, 'days'), moment().add(17,'days')];
-        const y = true;
         return (
             <div className='l-scheduling'>
-                <h4 className='l-scheduling__title'>Please select the available time below</h4>
+                <h4 className='l-scheduling__title'>Please select the available time</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
                         <Calendar validRange={validRange} value={selectedDate} onSelect={this.handleDateChange} />
@@ -177,16 +183,16 @@ class Scheduling extends Component {
                             <div className='l-scheduling__detail' >
                                 <h5>Available Time: </h5>
                                 <div className='l-scheduling__list'>
-                                    {/* <SessionPicker handleTimeChange={this.handleTimeChange} time={time} /> */}
+                                    {/* <SessionPicker handleTimeChange={this.handleTimeChange} time={this.state.time} /> */}
                                     <Transfer
-                                        dataSource={mockData}
-                                        titles={['Session', 'Available']}
+                                        dataSource={sessionData}
+                                        titles={['Session', 'Active']}
                                         targetKeys={currentSessionTime}
                                         selectedKeys={selectedKeys}
                                         onChange={this.handleChange}
                                         onSelectChange={this.handleSelectChange}
                                         render={item => item.title}
-                                        oneWay={y}
+                                        oneWay
                                         listStyle={{
                                             height: 314,
                                             width: 175
@@ -195,9 +201,16 @@ class Scheduling extends Component {
                                     />
                                 </div>
                                 <div className='l-scheduling__btn'>
-                                    <Button type="primary" loading={isLoading} size='large' onClick={this.handleUpdate}>
-                                        Update
-                                    </Button>
+                                    <Popconfirm
+                                        title="Are you sure to update?"
+                                        onConfirm={this.onConfirm}
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        <Button type="primary" size='large' onClick={this.test}>
+                                            Update
+                                        </Button>
+                                    </Popconfirm>
                                 </div>
                             </div>
                         </div>
