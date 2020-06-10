@@ -22,6 +22,7 @@ function Confirm(props) {
 
     let successRedirector = null;
     if (isPosted) {
+        //TODO Update available session
         successRedirector = (
             <Redirect to={{ pathname: SUCCESS_URL, state: { type } }} />
         );

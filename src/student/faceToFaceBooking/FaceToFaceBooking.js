@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
@@ -15,6 +15,7 @@ import TimePicker from './components/TimePicker';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
+import { fetchSession } from '../../utils/api/session';
 import './styles/faceToFaceBooking.scss';
 
 const layout = {
@@ -28,70 +29,65 @@ const tailLayout = {
 const FaceToFaceBooking = () => {
     const userId = fetchUserId();
     const [modalShow, setModalShow] = React.useState(false);
-    const [type, setType] = useState('Offline');
-    const [campus, setCampus] = useState('Hobart');
+    const [type] = useState('Offline');
+    const [campus] = useState('hobart');
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
     const [content, setContent] = useState('');
-    const [bookingDate, setBookingDate] = useState('');
+    //const [bookingDate, setBookingDate] = useState('');
     const [attachment, setAttachment] = useState([]);
-    const [dateValue, setDateValue] = useState(moment().format('L'));
+    const [dateValue, setDateValue] = useState(moment().format('YYYY-MM-DD'));
     const [timeValue, setTime] = useState('');
+    const [session, setSession] = useState([]);
+    const [error, setError] = useState(null);
 
     const { Option } = Select;
 
-    /* function range(start, end) {
-        const result = [];
-        for (let i = start; i < end; i++) {
-            result.push(i);
-        }
-        return result;
-    }
-
-    function hourRange(
-        firstStart,
-        FirstEnd,
-        secondStart,
-        secondEnd,
-        breakTime
-    ) {
-        const result = [];
-        for (let i = firstStart; i < FirstEnd; i++) {
-            result.push(i);
-        }
-        for (let i = secondStart; i < secondEnd; i++) {
-            result.push(i);
-        }
-        result.push(breakTime);
-        return result;
-    } */
-
+    // Can not select days before today and today
     function disabledDate(current) {
-        // Can not select days before today and today
         return (
             moment().add(-1, 'days') >= current ||
             moment().add(2, 'weeks') <= current
         );
     }
 
-    /* function disabledDateTime() {
-        return {
-            disabledHours: () => hourRange(0, 9, 17, 24, 12),
-            disabledMinutes: () => range(1, 60),
-            disabledSeconds: () => range(1, 60),
-        };
-    } */
+    useEffect(()=>{
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        fetchSession(dateValue, campus, { signal: signal }).then(data => {
+            if(data) {
+                const { time } = data;
+                setSession(time);
+            }
+        })
+        .catch((error) =>
+            setError(error)
+        );
+
+        return function cleanup() {
+            abortController.abort();
+        }
+    });
 
     /* function onDateChange(date, dateString) {
         const bookingDate = moment(date).toDate();
         setBookingDate(bookingDate);
     } */
     const handleDateChange = (value) => {
-        //const selectDate = moment(value).format('L');
         setTime('');
-        console.log(value.toDate());
+        setSession([]);
         setDateValue(value.toDate());
-
+        const selectDate = moment(value).format('YYYY-MM-DD');
+        fetchSession(selectDate, campus).then(data => {
+            if(data) {
+                const { time } = data;
+                setSession(time);
+            }
+        })
+        .catch((error) =>
+            setError(error)
+        );
     };
 
     const handleTimeChange = event => {
@@ -190,7 +186,6 @@ const FaceToFaceBooking = () => {
             <div className='online-booking__title'>
                 <h3>Face To Face Consultation</h3>
             </div>
-
             <Form
                 {...layout}
                 name='faceToFaceBookingForm'
@@ -231,7 +226,6 @@ const FaceToFaceBooking = () => {
                 >
                     <Input placeholder='Type your subject' />
                 </Form.Item>
-
                 <Form.Item
                     label='Date'
                     name='date'
@@ -247,7 +241,7 @@ const FaceToFaceBooking = () => {
                             <Calendar disabledDate={disabledDate} fullscreen={false} onPanelChange={handleDateChange} />
                         </div>
                         
-                        <TimePicker time={timeValue} handleTimeChange={handleTimeChange}/>
+                        <TimePicker session={session} time={timeValue} handleTimeChange={handleTimeChange}/>
                     </div>
                     {/* <DatePicker
                         format='YYYY-MM-DD HH:mm:ss'
@@ -259,7 +253,6 @@ const FaceToFaceBooking = () => {
                         onChange={onDateChange}
                     /> */}
                 </Form.Item>
-
                 <Form.Item label='Content' name='content'>
                     <Input.TextArea
                         rows={4}
@@ -267,7 +260,6 @@ const FaceToFaceBooking = () => {
                         onChange={handleContentChange}
                     />
                 </Form.Item>
-
                 <Form.Item label='Attachment' name='attachment'>
                     <Dragger {...fileProps}>
                         <p className='ant-upload-drag-icon'>
@@ -281,7 +273,6 @@ const FaceToFaceBooking = () => {
                         </p>
                     </Dragger>
                 </Form.Item>
-
                 <Form.Item {...tailLayout}>
                         <Button
                             type='primary'

@@ -5,31 +5,45 @@
 	align-self: center;
 	display: flex;
 	flex-direction: column;
-	border: 1px solid #d9d9d9;
 	border-radius: 2px;
+	padding: 0;
 
 	&__btn {
 		font-size: 16px;
-		padding: 5px 14px;
+		margin: 3px 0;
+		padding: 4px 14px;
 		background-color: white;
-		border: 1px solid transparent;
+		border: 1px solid #d9d9d9;
+		&:hover {
+			background-color: rgba(228, 227, 227, 0.835);
+		}
+		&:focus {
+			outline: none;
+		}
 		&--active {
 			background-color: #1890ff;
 			color: white;
 			outline: none;
-		}
-		&:hover {
-			background-color: rgba(228, 227, 227, 0.835);
+			&:hover {
+				background-color: #1890ff;
+			}
 		}
 	}
+	/* .isDisabled {
+		cursor: not-allowed !important;
+		opacity: 0.5;
+		text-decoration: none;
+		//pointer-events: none;
+	} */
+	button[disabled=disabled], button:disabled {
+		background-color: white;
+		cursor: not-allowed;
+		opacity: 0.4;
+		text-decoration: none;// your css rules
+	}
 }
-.isDisabled {
-	color: currentColor;
-	cursor: not-allowed;
-	opacity: 0.5;
-	text-decoration: none;
-}
+
 .react-calendar__tile:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+	cursor: not-allowed;
 }

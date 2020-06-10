@@ -2,7 +2,7 @@ import React from 'react';
 
 import './SessionPicker.scss';
 
-const Item = ({handleTimeChange, time, value, name}) => {
+const Item = ({handleTimeChange, time, value}) => {
     let activeClass = '';
     const timeSet = new Set(time);
     if(timeSet.has(value)) {
@@ -16,7 +16,6 @@ const Item = ({handleTimeChange, time, value, name}) => {
                 type='button'
                 onClick={handleTimeChange}
                 value={value}
-                name={name}
             >
                 {`${value}:00 - ${value}:50`}
         </button>
@@ -52,6 +51,6 @@ const SessionPicker = props => {
             }
         </div>
     );
-}
+};
 
 export default SessionPicker;

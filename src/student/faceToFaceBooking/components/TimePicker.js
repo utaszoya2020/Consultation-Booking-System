@@ -2,17 +2,23 @@ import React from 'react';
 
 import '../styles/timePicker.scss';
 
-const Item = ({handleTimeChange, time, value}) => {
+const Item = ({handleTimeChange, time, value, session}) => {
     let activeClass = '';
     if(time === value) {
         activeClass = 'c-timepicker__btn--active';
     }
+    const flag = session.indexOf(value) === -1 ? true : false;
+    //let flag = true;
+    
+
+
     return (
         <button
                 className={`c-timepicker__btn ${activeClass}`}
                 type='button'
                 onClick={handleTimeChange}
                 value={value}
+                disabled={flag}
             >
                 {`${value}:00 - ${value}:50`}
         </button>
@@ -20,8 +26,8 @@ const Item = ({handleTimeChange, time, value}) => {
 };
 
 const TimePicker = props => {
-    const { handleTimeChange, time } = props;
-    const sessionList = [];
+    const { session, handleTimeChange, time } = props;
+    const valueList = [];
     for (let i = 9; i < 17; i++) {
         let key = '';
         if(i===9) {
@@ -29,19 +35,20 @@ const TimePicker = props => {
         } else {
             key = i.toString();
         }
-        sessionList.push(key);
+        valueList.push(key);
     }
 
     return (
         <div className='c-timepicker'>
             {
-                sessionList.map(session => {
+                valueList.map(value => {
                     return (
                         <Item
                             handleTimeChange={handleTimeChange}
-                            value={session}
+                            value={value}
                             time={time}
-                            key={session}
+                            session={session}
+                            key={value}
                         />
                     );
                 })
