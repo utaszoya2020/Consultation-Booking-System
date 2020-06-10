@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Calendar, Alert, Select, Button, Transfer } from 'antd';
 import moment from 'moment';
 import SessionPicker from './SessionPicker';
-import { addSession, fetchAllSessionByDate } from '../../utils/api/session';
+import { addSession, fetchSession, deleteSession, updateSession } from '../../utils/api/session';
 import './Scheduling.scss';
+import { updateBookingStatus } from '../../utils/api/booking';
 
 const { Option } = Select;
 
@@ -23,17 +24,18 @@ for (let i = 9; i < 17; i++) {
         });
     }
 }
-//const oriTargetKeys = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
+//const oricurrentSessionTime = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
 
 class Scheduling extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            value: moment(),
-            selectedValue: moment(),
-            time: [],
-            targetKeys: [],
+            //value: moment(),
+            selectedDate: moment(),
+            //time: [],
+            currentSessionTime: [],
+            existSession: {},
             campus: '',
             isLoading: false,
             error: null
@@ -41,30 +43,46 @@ class Scheduling extends Component {
     }
 
     componentDidMount() {
-        this.getInitialSession();
+        //this.getInitialSession();
     }
 
-    getInitialSession = () => {
-        const { value } = this.state;
-        fetchAllSessionByDate(value.format('YYYY-MM-DD')).then(data => {
-            console.log(data);
-            const target = data.map(item => item.time);
-            this.setState({ targetKeys: target });
+/*     componentDidUpdate() {
+        const { campus, value } = this.state;
+        const date = value.format('YYYY-MM-DD');
+        if(campus) {
+            fetchSession(date, campus).then(data => {
+                console.log(data);
+                const { time } = data;
+                this.setState({ currentSessionTime: time, existSession: data });
+            })
+            .catch((error) =>
+                this.setState({ error })
+            );
+        }
+    } */
+
+    /* getInitialSession = () => {
+        const { value, campus } = this.state;
+        const date = value.format('YYYY-MM-DD');
+        fetchSession(date, campus).then(data => {
+            const { time } = data;
+            this.setState({ currentSessionTime: time, existSession: data });
         })
         .catch((error) =>
             this.setState({ error })
         );
-    }
+    } */
 
     handleDateChange = value => {
+        const { campus } = this.state;
         this.setState({
-            value,
-            selectedValue: value,
+            //value,
+            selectedDate: value,
         }, () => {
-            fetchAllSessionByDate(value.format('YYYY-MM-DD')).then(data => {
-                console.log(data);
-                const target = data.map(item => item.time);
-                this.setState({ targetKeys: target });
+            const date = value.format('YYYY-MM-DD');
+            fetchSession(date, campus).then(data => {
+                const { time } = data;
+                this.setState({ currentSessionTime: time, existSession: data });
             })
             .catch((error) =>
                 this.setState({ error })
@@ -72,15 +90,25 @@ class Scheduling extends Component {
         });
     };
     
-    onPanelChange = value => {
+/*     onPanelChange = value => {
         this.setState({ value });
-    };
+    }; */
 
     handleCampusChange = value => {
-        this.setState({ campus: value });
+        const {selectedDate, campus} = this.state;
+        this.setState({ campus: value }, () => {
+            const date = selectedDate.format('YYYY-MM-DD');
+            fetchSession(date, campus).then(data => {
+                const { time } = data;
+                this.setState({ currentSessionTime: time, existSession: data });
+            })
+            .catch((error) =>
+                this.setState({ error })
+            );
+        });
     }
 
-    handleTimeChange = event => {
+/*     handleTimeChange = event => {
         const selectTime = event.target.value;
         const { time } = this.state;
         const checkTime = time.filter(item => item!==selectTime);
@@ -95,10 +123,10 @@ class Scheduling extends Component {
             });
         }
         
-    }
+    } */
 
     handleChange = (nextTargetKeys, direction, moveKeys) => {
-        this.setState({ targetKeys: nextTargetKeys });
+        this.setState({ currentSessionTime: nextTargetKeys });
     
         console.log('targetKeys: ', nextTargetKeys);
         console.log('direction: ', direction);
@@ -106,7 +134,7 @@ class Scheduling extends Component {
     };
     
     handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
-        this.setState({ selectedKeys: [...sourceSelectedKeys, ...targetSelectedKeys] });
+        this.setState({ currentSessionTime: [...sourceSelectedKeys, ...targetSelectedKeys] });
     
         console.log('sourceSelectedKeys: ', sourceSelectedKeys);
         console.log('targetSelectedKeys: ', targetSelectedKeys);
@@ -118,27 +146,51 @@ class Scheduling extends Component {
     };
 
     handleUpdate = () => {
-        const { targetKeys, selectedValue, campus } = this.state;
-        const sessions = targetKeys.map(item => {
+        const { currentSessionTime, selectedDate, campus, existSession } = this.state;
+        
+        /* const sessions = currentSessionTime.map(item => {
             return {
-                date: selectedValue.format('YYYY-MM-DD'),
+                date: selectedDate.format('YYYY-MM-DD'),
                 time: item,
                 campus: campus
             };
-        });
-        console.log(sessions);
+        }); */
+        const date = selectedDate.format('YYYY-MM-DD');
         this.setState({ isLoading: true }, () => {
-            addSession(sessions).then(() => {
+            if(existSession.time.length === 0) {
+                addSession(date, currentSessionTime, campus).then(() => {
+                    this.setState({ isLoading: false });
+                })
+                .catch((error) =>
+                    this.setState({ error, isLoading: false })
+                );
+            } else if(currentSessionTime.length === 0) {
+                deleteSession(date, campus).then(() => {
+                    this.setState({ isLoading: false });
+                })
+                .catch((error) =>
+                    this.setState({ error, isLoading: false })
+                );
+            } else {
+                const sessionId = existSession._id;
+                updateSession(sessionId, date, currentSessionTime, campus).then(() => {
+                    this.setState({ isLoading: false });
+                })
+                .catch((error) =>
+                    this.setState({ error, isLoading: false })
+                );
+            }
+            /* addSession(sessions).then(() => {
                 this.setState({ isLoading: false });
             })
             .catch((error) =>
                 this.setState({ error, isLoading: false })
-            );
+            ); */
         });
     };
 
     render() {
-        const { value, selectedValue, time, targetKeys, isLoading } = this.state;
+        const { selectedDate, time, currentSessionTime, isLoading, campus } = this.state;
         const validRange = [moment().subtract(1, 'days'), moment().add(17,'days')];
         const y = true;
         return (
@@ -146,11 +198,11 @@ class Scheduling extends Component {
                 <h4 className='l-scheduling__title'>Please select the available time below</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
-                        <Calendar validRange={validRange} value={value} onSelect={this.handleDateChange} onPanelChange={this.onPanelChange} />
+                        <Calendar validRange={validRange} value={selectedDate} onSelect={this.handleDateChange} />
                     </div>
                     <div className='l-scheduling__right'>
                         <Alert
-                            message={`Selected Date: ${selectedValue && selectedValue.format('MMM Do YY')}`}
+                            message={`Selected Date: ${selectedDate && selectedDate.format('MMM Do YY')}`}
                         />
                         <div className='l-scheduling__content' >
                             <div className='l-scheduling__location'>
@@ -165,11 +217,11 @@ class Scheduling extends Component {
                             <div className='l-scheduling__detail' >
                                 <h5>Available Time: </h5>
                                 <div className='l-scheduling__list'>
-                                    <SessionPicker handleTimeChange={this.handleTimeChange} time={time} />
-                                    {/* <Transfer
+                                    {/* <SessionPicker handleTimeChange={this.handleTimeChange} time={time} /> */}
+                                    <Transfer
                                         dataSource={mockData}
                                         titles={['Session', 'Available']}
-                                        targetKeys={targetKeys}
+                                        currentSessionTime={currentSessionTime}
                                         onChange={this.handleChange}
                                         onSelectChange={this.handleSelectChange}
                                         onScroll={this.handleScroll}
@@ -179,7 +231,8 @@ class Scheduling extends Component {
                                             height: 314,
                                             width: 175
                                         }}
-                                    /> */}
+                                        disabled={!campus}
+                                    />
                                 </div>
                                 <div className='l-scheduling__btn'>
                                     <Button type="primary" loading={isLoading} size='large' onClick={this.handleUpdate}>
