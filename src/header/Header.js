@@ -82,7 +82,7 @@ class Header extends React.Component {
                         to={FACE_TO_FACE_BOOKING_URL}
                     >
                         <Nav.Link href={FACE_TO_FACE_BOOKING_URL}>
-                            Book Face-to-face Consultation
+                            Start Face-to-face Consultation
                         </Nav.Link>
                     </NavLink>
                 </Nav>
