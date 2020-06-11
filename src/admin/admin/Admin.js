@@ -573,7 +573,12 @@ class Admin extends React.Component {
     renderActionBtn = (status) => {
         switch (status) {
             case 'pending':
-                return <Button onClick={this.handleConfirm}>Accept</Button>;
+                return (
+                    <div>
+                        <Button onClick={this.handleConfirm}>Accept</Button>
+                        <Button onClick={this.handleCancel}>Reject</Button>
+                    </div>
+                );
             case 'accepted':
                 return <Button onClick={this.handleCancel}>Cancel</Button>;
             case 'processing':
@@ -753,10 +758,10 @@ class Admin extends React.Component {
         let offlineBooking = [];
         if (bookings) {
             onlineBooking = bookings.filter((booking) => {
-                return booking.type === 'Online';
+                return booking.type === 'online';
             });
             offlineBooking = bookings.filter((booking) => {
-                return booking.type === 'Offline';
+                return booking.type === 'offline';
             });
         }
         const { activeTab } = this.state;

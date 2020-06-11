@@ -33,7 +33,7 @@ export const addBooking = (
     attachment
 ) => {
     const url = API_BOOKING_URL;
-    const status = type === 'Online' ? 'processing' : 'pending';
+    const status = type === 'online' ? 'processing' : 'pending';
     const data = {
         type,
         campus,
