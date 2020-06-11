@@ -12,6 +12,7 @@ import LogoutSuccess from '../UI/successMessage/LogoutSuccess';
 import ErrorMessage from '../UI/errorMessage/ErrorMessage';
 import Admin from '../admin/admin/Admin';
 import Scheduling from '../admin/scheduling/Scheduling';
+import Calender from '../admin/calender/Calender';
 
 import {
     LOGIN_URL,
@@ -25,6 +26,7 @@ import {
     ADMIN_HOME_URL,
     ADMIN_SCHEDULING_URL,
     LOGOUT_SUCCESS_URL,
+    ADMIN_CALENDER_URL
 } from './URLMap';
 
 const Routes = () => {
@@ -60,6 +62,7 @@ const Routes = () => {
                 <Route exact path={ERROR_URL} component={ErrorMessage} />
                 <ProtectedRoute exact path={ADMIN_HOME_URL} component={Admin} />
                 <ProtectedRoute exact path={ADMIN_SCHEDULING_URL} component={Scheduling} />
+                <ProtectedRoute exact path={ADMIN_CALENDER_URL} component={Calender} />
             </Switch>
         </React.Fragment>
     );

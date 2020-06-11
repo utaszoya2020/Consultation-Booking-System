@@ -15,6 +15,11 @@ export const fetchAllBookings = () => {
     const url = `${API_BOOKING_URL}`;
     return get(url).then((response) => response.data);
 };
+//TODO optimise
+export const fetchAllOfflineBookings = () => {
+    const url = `${API_BOOKING_URL}?type=offline`;
+    return get(url).then((response) => response.data);
+};
 
 export const fetchBookingDetail = (bookingId) => {
     const url = `${API_BOOKING_URL}/${bookingId}`;
