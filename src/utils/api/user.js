@@ -1,4 +1,4 @@
-import { get, post } from './axios';
+import { get } from './axios';
 const API_USER_URL = './users';
 
 export const fetchUserDetail = (userId) => {

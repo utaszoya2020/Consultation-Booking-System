@@ -318,7 +318,6 @@ class MyFaceToFaceBooking extends React.Component {
     renderBookingDetail = (bookingDetail) => {
         const { submitting, value, comments } = this.state;
         const {
-            _id,
             status,
             campus,
             userId,

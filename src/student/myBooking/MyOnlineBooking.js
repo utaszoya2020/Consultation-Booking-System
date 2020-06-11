@@ -291,7 +291,6 @@ class MyOnlineBooking extends React.Component {
     renderBookingDetail = (bookingDetail) => {
         const { comments, submitting, value } = this.state;
         const {
-            _id,
             status,
             campus,
             userId,

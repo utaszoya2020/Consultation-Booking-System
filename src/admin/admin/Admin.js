@@ -449,7 +449,6 @@ class Admin extends React.Component {
     renderOnlineBookingDetail = (bookingDetail) => {
         const { submitting, value, comments } = this.state;
         const {
-            _id,
             status,
             campus,
             userId,
@@ -617,7 +616,6 @@ class Admin extends React.Component {
     renderOfflineBookingDetail = (bookingDetail) => {
         const { submitting, value, comments } = this.state;
         const {
-            _id,
             bookingNum,
             status,
             campus,

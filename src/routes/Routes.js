@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Home from '../student/home/Home';
 import LoginForm from '../logIn/LogIn';
 import OnlineBooking from '../student/onlineBooking/OnlineBooking';
@@ -15,7 +15,6 @@ import Scheduling from '../admin/scheduling/Scheduling';
 
 import {
     LOGIN_URL,
-    REGISTER_URL,
     STUDENT_HOME_URL,
     MY_ONLINE_BOOKING_URL,
     MY_FACETOFACE_BOOKING_URL,
@@ -61,7 +60,6 @@ const Routes = () => {
                 <Route exact path={ERROR_URL} component={ErrorMessage} />
                 <ProtectedRoute exact path={ADMIN_HOME_URL} component={Admin} />
                 <ProtectedRoute exact path={ADMIN_SCHEDULING_URL} component={Scheduling} />
-                {/* <ProtectedRoute exact path={CHECKOUT_URL} component={CheckOut} /> */}
             </Switch>
         </React.Fragment>
     );
