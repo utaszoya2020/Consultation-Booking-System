@@ -69,7 +69,7 @@ const FaceToFaceBooking = () => {
         return function cleanup() {
             abortController.abort();
         }
-    });
+    }, []);
 
     /* function onDateChange(date, dateString) {
         const bookingDate = moment(date).toDate();
