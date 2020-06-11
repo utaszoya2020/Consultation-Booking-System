@@ -15,13 +15,15 @@ const tailLayout = {
     wrapperCol: { offset: 4, span: 20 },
 };
 
+const type = 'online';
+// TODO testing data
+const campus = 'hobart'; 
+
 const OnlineBooking = () => {
     const userId = fetchUserId();
     const [modalShow, setModalShow] = React.useState(false);
     const editor = useRef(null);
     const [content, setContent] = useState('');
-    const [type] = useState('Online');
-    const [campus] = useState('Hobart');
     const [bookingDate] = useState(new Date());
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');

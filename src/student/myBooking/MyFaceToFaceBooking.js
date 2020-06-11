@@ -15,6 +15,7 @@ import {
     updateChat,
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
+import _ from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './styles/myFaceToFaceBooking.scss';
 
@@ -373,7 +374,7 @@ class MyFaceToFaceBooking extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Campus</span>
                             <div className='c-table__content'>
-                                <p>{campus}</p>
+                                <p>{_.capitalize(campus)}</p>
                             </div>
                         </div>
                     </div>
@@ -387,13 +388,13 @@ class MyFaceToFaceBooking extends React.Component {
                         <div className='c-table__column flex-2'>
                             <span>Topic</span>
                             <div className='c-table__content'>
-                                <p>{topic}</p>
+                                <p>{_.capitalize(topic)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
                             <span>Status</span>
                             <div className='c-table__content'>
-                                <p>{status}</p>
+                                <p>{_.capitalize(status)}</p>
                             </div>
                         </div>
                     </div>
@@ -485,7 +486,7 @@ class MyFaceToFaceBooking extends React.Component {
 
         const { Search } = Input;
         const myOfflineBookings = bookings.filter((booking) => {
-            return booking.type === 'Offline';
+            return booking.type === 'offline';
         });
 
         return (

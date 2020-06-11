@@ -26,11 +26,13 @@ const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
 
+const type = 'offline';
+// TODO testing data, should retrive from user data
+const campus = 'hobart'; 
+
 const FaceToFaceBooking = () => {
     const userId = fetchUserId();
     const [modalShow, setModalShow] = React.useState(false);
-    const [type] = useState('Offline');
-    const [campus] = useState('hobart');
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
     const [content, setContent] = useState('');
@@ -38,7 +40,7 @@ const FaceToFaceBooking = () => {
     const [attachment, setAttachment] = useState([]);
     const [dateValue, setDateValue] = useState(moment().format('YYYY-MM-DD'));
     const [timeValue, setTime] = useState('');
-    const [session, setSession] = useState([]);
+    const [currentSession, setCurrentSession] = useState({});
     const [error, setError] = useState(null);
 
     const { Option } = Select;
@@ -57,8 +59,7 @@ const FaceToFaceBooking = () => {
 
         fetchSession(dateValue, campus, { signal: signal }).then(data => {
             if(data) {
-                const { time } = data;
-                setSession(time);
+                setCurrentSession(data);
             }
         })
         .catch((error) =>
@@ -76,13 +77,12 @@ const FaceToFaceBooking = () => {
     } */
     const handleDateChange = (value) => {
         setTime('');
-        setSession([]);
+        setCurrentSession({});
         setDateValue(value.toDate());
         const selectDate = moment(value).format('YYYY-MM-DD');
         fetchSession(selectDate, campus).then(data => {
             if(data) {
-                const { time } = data;
-                setSession(time);
+                setCurrentSession(data);
             }
         })
         .catch((error) =>
@@ -249,7 +249,7 @@ const FaceToFaceBooking = () => {
                             <Calendar disabledDate={disabledDate} fullscreen={false} onPanelChange={handleDateChange} />
                         </div>
                         
-                        <TimePicker session={session} time={timeValue} handleTimeChange={handleTimeChange}/>
+                        <TimePicker session={currentSession.time} time={timeValue} handleTimeChange={handleTimeChange}/>
                     </div>
                     {/* <DatePicker
                         format='YYYY-MM-DD HH:mm:ss'

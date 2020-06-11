@@ -26,6 +26,7 @@ import {
     updateChat,
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
+import _ from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './admin.scss';
 
@@ -464,7 +465,7 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Campus</span>
                             <div className='c-table__content'>
-                                <p>{campus}</p>
+                                <p>{_.capitalize(campus)}</p>
                             </div>
                         </div>
                     </div>
@@ -478,13 +479,13 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-2'>
                             <span>Topic</span>
                             <div className='c-table__content'>
-                                <p>{topic}</p>
+                                <p>{_.capitalize(topic)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
                             <span>Status</span>
                             <div className='c-table__content'>
-                                <p>{status}</p>
+                                <p>{_.capitalize(status)}</p>
                             </div>
                         </div>
                     </div>
@@ -628,7 +629,7 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Campus</span>
                             <div className='c-table__content'>
-                                <p>{campus}</p>
+                                <p>{_.capitalize(campus)}</p>
                             </div>
                         </div>
                     </div>
@@ -642,13 +643,13 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-2'>
                             <span>Topic</span>
                             <div className='c-table__content'>
-                                <p>{topic}</p>
+                                <p>{_.capitalize(topic)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
                             <span>Status</span>
                             <div className='c-table__content'>
-                                <p>{status}</p>
+                                <p>{_.capitalize(status)}</p>
                             </div>
                         </div>
                     </div>

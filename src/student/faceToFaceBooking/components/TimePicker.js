@@ -7,10 +7,10 @@ const Item = ({handleTimeChange, time, value, session}) => {
     if(time === value) {
         activeClass = 'c-timepicker__btn--active';
     }
-    const flag = session.indexOf(value) === -1 ? true : false;
-    //let flag = true;
-    
-
+    let flag = true;
+    if(session) {
+        flag = session.indexOf(value) === -1 ? true : false;
+    }
 
     return (
         <button
