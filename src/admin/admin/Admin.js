@@ -12,6 +12,8 @@ import {
     Form,
     Modal,
     Empty,
+    Drawer,
+    Divider,
 } from 'antd';
 import BookingCard from '../../student/myBooking/components/BookingCard';
 import { fetchUserId } from '../../utils/authentication';
@@ -25,6 +27,7 @@ import {
     addChat,
     updateChat,
     fetchAllChatByBookingId,
+    fetchAllMyBookings,
 } from '../../utils/api/booking';
 import _ from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -62,6 +65,13 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </div>
 );
 
+const DescriptionItem = ({ title, content }) => (
+    <div className="site-description-item-profile-wrapper">
+      <p className="site-description-item-profile-p-label">{title}:</p>
+      {content}
+    </div>
+  );
+
 class Admin extends React.Component {
     constructor(props) {
         super(props);
@@ -77,6 +87,9 @@ class Admin extends React.Component {
             originalChat: [], //chatRecord in database
             comments: [],
             error: null,
+            visible: false,
+            childrenDrawer: false,
+            userBookingHistory: []
         };
     }
 
@@ -88,6 +101,18 @@ class Admin extends React.Component {
             fetchUserDetail(userId);
         });
     }
+
+    showDrawer = () => {
+        this.setState({
+          visible: true,
+        });
+      };
+    
+      onClose = () => {
+        this.setState({
+          visible: false,
+        });
+      };
 
     changeTabKey = (event) => {
         const activeTab = event.target.id;
@@ -454,12 +479,13 @@ class Admin extends React.Component {
                         </div>
                         <div className='c-table__column flex-2'>
                             <span>Name</span>
-                            <div className='c-table__content'>
+                            <div className='c-table__content c-table__content-name'>
                                 <p>
                                     {userId
                                         ? `${userId.firstName} ${userId.lastName}`
                                         : ''}
                                 </p>
+                                <a onClick={this.showDrawer}>View Profile</a>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
@@ -623,12 +649,13 @@ class Admin extends React.Component {
                         </div>
                         <div className='c-table__column flex-2'>
                             <span>Name</span>
-                            <div className='c-table__content'>
+                            <div className='c-table__content c-table__content-name'>
                                 <p>
                                     {userId
                                         ? `${userId.firstName} ${userId.lastName}`
                                         : ''}
                                 </p>
+                                <a onClick={this.showDrawer}>View Profile</a>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
@@ -750,6 +777,84 @@ class Admin extends React.Component {
             : this.renderOfflineBookingDetail(bookingDetail);
     };
 
+    showChildrenDrawer = (userId) => {
+        fetchAllMyBookings(userId)
+        .then(data => {
+            this.setState({ userBookingHistory: data });
+        })
+        .catch(error => {
+            this.setState({ error });
+        }); 
+        this.setState({
+            childrenDrawer: true,
+        });
+    };
+    
+    onChildrenDrawerClose = () => {
+
+        this.setState({
+            childrenDrawer: false,
+        });
+    };
+
+    renderViewProfile = (bookingDetail) => {
+        //const { firstName, lastName, studentId, gender, phone, campus, email } = bookingDetail.userId;
+        if(bookingDetail.userId) {
+            const { firstName, lastName, studentId, gender, phone, campus, email, _id: userId } = bookingDetail.userId;
+            return (
+                <Drawer
+                title="User Profile"
+                placement="right"
+                closable={true}
+                onClose={this.onClose}
+                visible={this.state.visible}
+                >
+                    <p className="site-description-item-profile-p">Personal</p>
+                    <Row>
+                        <Col span={12}>
+                            <DescriptionItem title="Full Name" content={`${firstName} ${lastName}`} />
+                        </Col>
+                        <Col span={12}>
+                            <DescriptionItem title="Student ID" content={studentId} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <DescriptionItem title="Gender" content={_.capitalize(gender)} />
+                        </Col>
+                        <Col span={12}>
+                            <DescriptionItem title="Campus" content={_.capitalize(campus)} />
+                        </Col>
+                    </Row>
+                    <Divider />
+                    <p className="site-description-item-profile-p">Contacts</p>
+                    <Row>
+                        <Col span={12}>
+                            <DescriptionItem title="Phone Number" content={phone} />
+                        </Col>
+                        <Col span={12}>
+                            <DescriptionItem title="Email" content={email} />
+                        </Col>
+                    </Row>
+                    <Divider />
+                    <Button type="primary" onClick={() => this.showChildrenDrawer(userId)}>
+                        Booking History
+                    </Button>
+                    <Drawer
+                        title="Booking History"
+                        width={320}
+                        closable={false}
+                        onClose={this.onChildrenDrawerClose}
+                        visible={this.state.childrenDrawer}
+                    >
+                        This is two-level drawer
+                    </Drawer>
+                </Drawer>
+            );
+        }
+        return null;
+    }
+
     render() {
         const { bookings, bookingDetail } = this.props;
 
@@ -819,13 +924,16 @@ class Admin extends React.Component {
                         </Col>
                         <Col span={18}>
                             <div className='l-admin__content'>
-                                {bookingDetail && activeBooking
+                                {bookingDetail.userId && activeBooking
                                     ? this.renderBookingDetail(bookingDetail)
                                     : null}
                             </div>
                         </Col>
                     </Row>
                 </div>
+                {bookingDetail && activeBooking
+                    ? this.renderViewProfile(bookingDetail)
+                    : null}
             </div>
         );
     }

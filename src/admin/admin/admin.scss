@@ -84,6 +84,16 @@
 			font-weight: 500;
 			color: black;
 		}
+		.c-table__content-name {
+			display: flex;
+			a {
+				margin-left: 16px;
+				color: #090;
+				&:hover {
+					color: #0c0;
+				}
+			}
+		}
 	}
 	&__content {
 		background-color: white;
@@ -102,6 +112,13 @@
 		margin: 6px;
 		min-height: 95vh;
 		padding: 8px 16px 16px;
+		.ant-btn-primary {
+			background-color: #090;
+			border-color: #090;
+			&:hover {
+				background-color: #0c0;
+			}
+		}
 	}
 	&__header {
 		display: flex;
@@ -156,11 +173,48 @@
 .ant-btn svg {
 	vertical-align: baseline !important;
 }
+.anticon svg {
+	vertical-align: baseline;
+}
 .flex {
 	&-1 {
 		flex: 1.2;
 	}
 	&-2 {
 		flex: 2;
+	}
+}
+.site-description-item-profile-wrapper {
+	margin-bottom: 7px;
+	color: rgba(0, 0, 0, 0.65);
+	font-size: 14px;
+	line-height: 1.5715;
+}
+[data-theme='compact'] .site-description-item-profile-wrapper {
+	font-size: 12px;
+	line-height: 1.66667;
+}
+.ant-drawer-body p.site-description-item-profile-p {
+	display: block;
+	margin-bottom: 16px;
+	color: rgba(0, 0, 0, 0.85);
+	font-size: 16px;
+	line-height: 1.5715;
+}
+[data-theme='compact'] .ant-drawer-body p.site-description-item-profile-p {
+	font-size: 14px;
+	line-height: 1.66667;
+}
+.site-description-item-profile-p-label {
+	display: inline-block;
+	margin-right: 8px;
+	color: rgba(0, 0, 0, 0.85);
+}
+// Cover default inline-css from antd.
+.ant-drawer-content-wrapper {
+	width: 500px !important;
+
+	@media only screen and (min-width: 320px) and (max-width: 767px) {
+		width: 100% !important;
 	}
 }
