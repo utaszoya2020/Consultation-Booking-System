@@ -15,7 +15,7 @@ import {
 import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import BookingCard from './components/BookingCard';
 import { DownloadOutlined } from '@ant-design/icons';
-import _ from 'lodash';
+import { capitalize } from 'lodash';
 import './styles/myOnlineBooking.scss';
 
 const { TextArea } = Input;
@@ -329,7 +329,7 @@ class MyOnlineBooking extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Campus</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(campus)}</p>
+                                <p>{capitalize(campus)}</p>
                             </div>
                         </div>
                     </div>
@@ -343,13 +343,13 @@ class MyOnlineBooking extends React.Component {
                         <div className='c-table__column flex-2'>
                             <span>Topic</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(topic)}</p>
+                                <p>{capitalize(topic)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
                             <span>Status</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(status)}</p>
+                                <p>{capitalize(status)}</p>
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ import {
     updateChat,
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
-import _ from 'lodash';
+import { capitalize } from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './styles/myFaceToFaceBooking.scss';
 
@@ -374,7 +374,7 @@ class MyFaceToFaceBooking extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Campus</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(campus)}</p>
+                                <p>{capitalize(campus)}</p>
                             </div>
                         </div>
                     </div>
@@ -388,13 +388,13 @@ class MyFaceToFaceBooking extends React.Component {
                         <div className='c-table__column flex-2'>
                             <span>Topic</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(topic)}</p>
+                                <p>{capitalize(topic)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
                             <span>Status</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(status)}</p>
+                                <p>{capitalize(status)}</p>
                             </div>
                         </div>
                     </div>
