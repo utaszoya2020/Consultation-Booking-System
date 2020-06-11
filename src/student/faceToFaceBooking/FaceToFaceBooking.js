@@ -146,9 +146,10 @@ const FaceToFaceBooking = () => {
     const onFinish = (values) => {
         setTopic(values.topic);
         setSubject(values.subject);
-        if (values.attachment && !values.attachment.file.response.error) {
+        console.log(values);
+        if (values.attachment) {
             const files = [];
-            values.attachment.fileList.forEach((file) => {
+            values.attachment.forEach((file) => {
                 const res = file.response;
                 files.push({
                     fileName: res.fileName,
@@ -166,6 +167,13 @@ const FaceToFaceBooking = () => {
 
     const onReset = () => {
         faceToFaceBookingForm.resetFields();
+    };
+
+    const getFileList = (e) => {
+        if(Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
     };
 
     return (
@@ -260,7 +268,8 @@ const FaceToFaceBooking = () => {
                         onChange={handleContentChange}
                     />
                 </Form.Item>
-                <Form.Item label='Attachment' name='attachment'>
+                <Form.Item label='Attachment' name='attachment' valuePropName='fileList' 
+                        getValueFromEvent={getFileList}>
                     <Dragger {...fileProps}>
                         <p className='ant-upload-drag-icon'>
                             <InboxOutlined />

@@ -67,16 +67,14 @@ const OnlineBooking = () => {
         beforeUpload: (info) => handleAttachmentbeforeUpload(info),
     };
 
-    
-
     const [onlineBookingForm] = Form.useForm();
 
     const onFinish = (values) => {
         setTopic(values.topic);
         setSubject(values.subject);
-        if(values.attachment && !values.attachment.file.response.error) {
+        if(values.attachment) {
             const files = [];
-            values.attachment.fileList.forEach(file => {
+            values.attachment.forEach(file => {
                 const res = file.response;
                 files.push({
                     fileName: res.fileName,
@@ -94,6 +92,13 @@ const OnlineBooking = () => {
 
     const onReset = () => {
         onlineBookingForm.resetFields();
+    };
+
+    const getFileList = (e) => {
+        if(Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
     };
 
     return (
@@ -173,7 +178,8 @@ const OnlineBooking = () => {
                     />
                 </Form.Item>
 
-                <Form.Item label='Attachment' name='attachment'>
+                <Form.Item label='Attachment' name='attachment' valuePropName='fileList' 
+                        getValueFromEvent={getFileList}>
                     <Dragger {...fileProps}>
                         <p className='ant-upload-drag-icon'>
                             <InboxOutlined />

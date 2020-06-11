@@ -53,5 +53,13 @@
 		&:hover {
 			background-color: #0c0;
 		}
+		&:active {
+			background-color: #090;
+			border-color: #090;
+		}
+		&:focus {
+			background-color: #090;
+			border-color: #090;
+		}
 	}
 }
