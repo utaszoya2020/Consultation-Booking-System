@@ -163,7 +163,7 @@ class Scheduling extends Component {
 
         return (
             <div className='l-scheduling'>
-                <h4 className='l-scheduling__title'>Please select the available time</h4>
+                <h4 className='l-scheduling__title'>Schedule Dashboard</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
                         <Calendar validRange={validRange} value={selectedDate} onSelect={this.handleDateChange} />
