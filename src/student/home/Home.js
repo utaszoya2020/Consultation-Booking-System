@@ -38,16 +38,26 @@ class Home extends React.Component {
                 !isExpired && (status === 'pending' || status === 'accepted')
             );
         });
-        const bookingNumbers = upComingBookings.length;
+        const activeOnlineBooking = bookings.filter(booking => {
+            const { status } = booking;
+            return status === 'processing';
+        });
+
+        const bookingNumbers = upComingBookings.length + activeOnlineBooking.length;
         return (
             <div className='homepage'>
                 <div className='homepage__block'>
                     <h1 className='homepage__title'>
-                        {`Welcome ${fullName}, You have ${bookingNumbers} up coming
+                        {`Welcome ${fullName}, You have ${bookingNumbers} ongoing
                         booking!`}
                     </h1>
                 </div>
                 {upComingBookings.map((booking) => {
+                    return (
+                        <BookiingDetail key={booking._id} booking={booking} />
+                    );
+                })}
+                {activeOnlineBooking.map((booking) => {
                     return (
                         <BookiingDetail key={booking._id} booking={booking} />
                     );

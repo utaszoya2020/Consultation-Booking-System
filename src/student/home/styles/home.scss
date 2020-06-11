@@ -38,6 +38,10 @@
 			-ms-transform: translateY(-10px);
 			-moz-transform: translateY(-10px);
 		}
+		strong {
+			color: rgba(0, 0, 0, 0.85);
+			font-weight: 700;
+		}
 
 		@media only screen and (min-width: 320px) and (max-width: 767px) {
 			margin: 22px auto;
@@ -47,6 +51,7 @@
 			}
 		}
 		.booking__title {
+			font-weight: 700;
 			margin-bottom: 16px;
 		}
 	}

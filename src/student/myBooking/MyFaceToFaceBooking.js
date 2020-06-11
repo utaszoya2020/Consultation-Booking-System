@@ -321,7 +321,7 @@ class MyFaceToFaceBooking extends React.Component {
             status,
             campus,
             userId,
-            topic,
+            subject,
             content,
             bookingDate,
             bookingTime,
@@ -385,9 +385,9 @@ class MyFaceToFaceBooking extends React.Component {
                             </div>
                         </div>
                         <div className='c-table__column flex-2'>
-                            <span>Topic</span>
+                            <span>Subject</span>
                             <div className='c-table__content'>
-                                <p>{capitalize(topic)}</p>
+                                <p>{capitalize(subject)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>

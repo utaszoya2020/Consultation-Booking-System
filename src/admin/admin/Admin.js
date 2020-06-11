@@ -452,7 +452,7 @@ class Admin extends React.Component {
             status,
             campus,
             userId,
-            topic,
+            subject,
             content,
             bookingDate,
             attachment,
@@ -502,9 +502,9 @@ class Admin extends React.Component {
                             </div>
                         </div>
                         <div className='c-table__column flex-2'>
-                            <span>Topic</span>
+                            <span>Subject</span>
                             <div className='c-table__content'>
-                                <p>{capitalize(topic)}</p>
+                                <p>{capitalize(subject)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
@@ -620,7 +620,7 @@ class Admin extends React.Component {
             status,
             campus,
             userId,
-            topic,
+            subject,
             content,
             bookingDate,
             bookingTime,
@@ -671,9 +671,9 @@ class Admin extends React.Component {
                             </div>
                         </div>
                         <div className='c-table__column flex-2'>
-                            <span>Topic</span>
+                            <span>Subject</span>
                             <div className='c-table__content'>
-                                <p>{capitalize(topic)}</p>
+                                <p>{capitalize(subject)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
