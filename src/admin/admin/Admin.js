@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
@@ -29,7 +29,7 @@ import {
     fetchAllChatByBookingId,
     fetchAllMyBookings,
 } from '../../utils/api/booking';
-import _ from 'lodash';
+import { orderBy, capitalize } from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './admin.scss';
 
@@ -491,7 +491,7 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Campus</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(campus)}</p>
+                                <p>{capitalize(campus)}</p>
                             </div>
                         </div>
                     </div>
@@ -505,13 +505,13 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-2'>
                             <span>Topic</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(topic)}</p>
+                                <p>{capitalize(topic)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
                             <span>Status</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(status)}</p>
+                                <p>{capitalize(status)}</p>
                             </div>
                         </div>
                     </div>
@@ -661,7 +661,7 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>Campus</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(campus)}</p>
+                                <p>{capitalize(campus)}</p>
                             </div>
                         </div>
                     </div>
@@ -675,13 +675,13 @@ class Admin extends React.Component {
                         <div className='c-table__column flex-2'>
                             <span>Topic</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(topic)}</p>
+                                <p>{capitalize(topic)}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>
                             <span>Status</span>
                             <div className='c-table__content'>
-                                <p>{_.capitalize(status)}</p>
+                                <p>{capitalize(status)}</p>
                             </div>
                         </div>
                     </div>
@@ -780,7 +780,8 @@ class Admin extends React.Component {
     showChildrenDrawer = (userId) => {
         fetchAllMyBookings(userId)
         .then(data => {
-            this.setState({ userBookingHistory: data });
+            this.setState(() => { 
+                return {userBookingHistory: data};});
         })
         .catch(error => {
             this.setState({ error });
@@ -798,7 +799,11 @@ class Admin extends React.Component {
     };
 
     renderViewProfile = (bookingDetail) => {
-        //const { firstName, lastName, studentId, gender, phone, campus, email } = bookingDetail.userId;
+        const { userBookingHistory } = this.state;
+        let bookingArray = [];
+        if(userBookingHistory) {
+            bookingArray = orderBy(userBookingHistory, ['bookingDate'], ['desc']);
+        }
         if(bookingDetail.userId) {
             const { firstName, lastName, studentId, gender, phone, campus, email, _id: userId } = bookingDetail.userId;
             return (
@@ -820,10 +825,10 @@ class Admin extends React.Component {
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <DescriptionItem title="Gender" content={_.capitalize(gender)} />
+                            <DescriptionItem title="Gender" content={capitalize(gender)} />
                         </Col>
                         <Col span={12}>
-                            <DescriptionItem title="Campus" content={_.capitalize(campus)} />
+                            <DescriptionItem title="Campus" content={capitalize(campus)} />
                         </Col>
                     </Row>
                     <Divider />
@@ -843,11 +848,37 @@ class Admin extends React.Component {
                     <Drawer
                         title="Booking History"
                         width={320}
-                        closable={false}
+                        closable={true}
                         onClose={this.onChildrenDrawerClose}
                         visible={this.state.childrenDrawer}
                     >
-                        This is two-level drawer
+                        {userBookingHistory ? (
+                                    bookingArray.map(item => {
+                                        const { bookingNum, topic, type, bookingDate, status } = item;
+                                        return (
+                                            <Fragment key={bookingNum}>
+                                                <p className="site-description-item-profile-p">{`Booking Number: ${bookingNum}`}</p>
+                                                <Row>
+                                                    <Col span={12}>
+                                                        <DescriptionItem title="Topic" content={capitalize(topic)} />
+                                                    </Col>
+                                                    <Col span={12}>
+                                                        <DescriptionItem title="Type" content={capitalize(type)} />
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col span={12}>
+                                                        <DescriptionItem title="Date" content={moment(bookingDate).format('YYYY-MM-DD')} />
+                                                    </Col>
+                                                    <Col span={12}>
+                                                        <DescriptionItem title="Status" content={capitalize(status)} />
+                                                    </Col>
+                                                </Row>
+                                                <Divider />
+                                            </Fragment>
+                                        );
+                                    })
+                        ) : null }
                     </Drawer>
                 </Drawer>
             );
