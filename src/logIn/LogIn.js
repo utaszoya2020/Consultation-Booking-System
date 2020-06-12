@@ -145,7 +145,6 @@ class LoginForm extends React.Component {
                         </div>
                     </Fragment>
                 )}
-                ;
             </div>
         );
     }
