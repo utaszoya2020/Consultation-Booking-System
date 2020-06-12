@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import { fetchAllOfflineBookings } from '../../utils/api/booking';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './calender.scss';
 
 const localizer = momentLocalizer(moment);
 
@@ -34,11 +35,19 @@ class Calender extends React.Component {
     transDataList = (data) => {
         const dataList = [];
         data.forEach(item => {
-            const { bookingDate, bookingTime, campus, userId, bookingNum, topic } = item;
+            const { bookingDate, bookingTime, userId, bookingNum } = item;
+            const { firstName, lastName, studentId } = userId;
+            const formatDate = moment(bookingDate).format('YYYY-MM-DD');
+            const formatTime = `${bookingTime}:00:00`;
+            const formatEndTime = `${bookingTime}:50:00`;
+            const startString = `${formatDate} ${formatTime}`;
+            const endString = `${formatDate} ${formatEndTime}`;
+            const start = new Date(startString);
+            const end = new Date(endString);
             const object = {
-                title: `${userId.firstName} ${userId.lastName}`,
-                start: bookingDate,
-                end: bookingDate,
+                title: `${firstName} ${lastName} (${studentId}) ${bookingNum}`,
+                start,
+                end,
             };
             dataList.push(object);
         });
@@ -47,13 +56,13 @@ class Calender extends React.Component {
 
     render() {
         return (
-            <div style={{paddingTop: '26px'}}>
+            <div style={{ paddingTop: 18, }}>
                 <Calendar
                     localizer={localizer}
                     events={this.state.bookings}
                     startAccessor="start"
                     endAccessor="end"
-                    style={{ height: 550 }}
+                    style={{ height: 650, }}
                 />
             </div>
         );

@@ -65,7 +65,6 @@ export const fetchBookingDetailThunkAction = (bookingId) => (dispatch) => {
             dispatch(fetchBookingDetailSuccess(data));
         })
         .catch((error) => {
-            console.log(error);
             dispatch(fetchBookingFailure(error));
         });
 };
@@ -124,7 +123,6 @@ export const updateStatusThunkAction = (currentBookingId, status) => (
             dispatch(fetchBookingDetailSuccess(data));
         })
         .catch((error) => {
-            console.log(error);
             dispatch(fetchBookingFailure(error));
         });
 };

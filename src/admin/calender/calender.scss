@@ -1,0 +1,13 @@
+.rbc-event {
+    background-color: #090;
+    border-color: #090;
+    &:focus {
+        outline: none;
+    }
+}
+.rbc-calendar .rbc-selected {
+    background-color: #0c0;
+}
+.rbc-day-slot .rbc-event {
+    border: 1px solid #090;
+}

@@ -25,7 +25,8 @@ class LoginForm extends React.Component {
         this.setState({ [key]: value });
     };
 
-    loginUser = () => {
+    loginUser = (event) => {
+        event.preventDefault();
         const {handleLogIn} = this.props;
         const {email, password} = this.state;
         handleLogIn(email, password);
@@ -38,10 +39,6 @@ class LoginForm extends React.Component {
             error,
             userType,
         } = this.props;
-
-        const onFinish = (values) => {
-            console.log('Received values of form: ', values);
-        };
 
         let authRedirect = null;
         if (isAuthenticated && userType === 'student') {
@@ -75,7 +72,6 @@ class LoginForm extends React.Component {
                                 initialValues={{
                                     remember: true,
                                 }}
-                                onFinish={onFinish}
                             >
                                 {errorMessage}
                                 <Form.Item

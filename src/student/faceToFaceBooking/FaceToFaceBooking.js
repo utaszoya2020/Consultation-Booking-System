@@ -146,7 +146,6 @@ const FaceToFaceBooking = () => {
     const onFinish = (values) => {
         setTopic(values.topic);
         setSubject(values.subject);
-        console.log(values);
         if (values.attachment) {
             const files = [];
             values.attachment.forEach((file) => {
