@@ -33,8 +33,8 @@ const Routes = () => {
     return (
         <React.Fragment>
             <Switch>
-                <ProtectedRoute exact from='/' to={STUDENT_HOME_URL} />
-                <ProtectedRoute exact from='/student' to={STUDENT_HOME_URL} />
+                <ProtectedRoute exact from='/' to={LOGIN_URL} />
+                <ProtectedRoute exact from='/student' to={LOGIN_URL} />
                 <Route exact path={LOGIN_URL} component={LoginForm} />
                 <ProtectedRoute exact path={STUDENT_HOME_URL} component={Home} />
                 <ProtectedRoute
