@@ -5,6 +5,7 @@ import { Upload, message, Form, Input, Button, Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
+import BASE_URL from '../../constants/env';
 import './onlineBooking.scss';
 
 const layout = {
@@ -55,7 +56,7 @@ const OnlineBooking = () => {
         name: 'file',
         multiple: true,
         accept: '.doc,.docx,.pdf,.xlsx.jpg.jpeg.png',  // Limit file type 
-        action: 'http://localhost:4000/api/bookings/upload',
+        action: `${BASE_URL}/bookings/upload`,
         onChange(info) {
             const { status } = info.file;
             if (status === 'done') {

@@ -16,6 +16,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
 import { fetchSession } from '../../utils/api/session';
+import BASE_URL from '../../constants/env';
 import './styles/faceToFaceBooking.scss';
 
 const layout = {
@@ -124,7 +125,7 @@ const FaceToFaceBooking = () => {
     const fileProps = {
         name: 'file',
         accept: '.doc,.docx,.pdf,.xlsx.jpg.jpeg.png', // Limit file type
-        action: 'http://localhost:4000/api/bookings/upload',
+        action: `${BASE_URL}/bookings/upload`,
         onChange(info) {
             const { status } = info.file;
             if (status === 'done') {
