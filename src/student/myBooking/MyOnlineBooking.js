@@ -16,6 +16,7 @@ import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import BookingCard from './components/BookingCard';
 import { DownloadOutlined } from '@ant-design/icons';
 import { capitalize } from 'lodash';
+import AvatarLogo from '../../assets/icon/avatar.png';
 import './styles/myOnlineBooking.scss';
 
 const { TextArea } = Input;
@@ -95,8 +96,7 @@ class MyOnlineBooking extends React.Component {
 
                 const newChat = {
                     author: authorName,
-                    avatar:
-                        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    avatar: AvatarLogo,
                     content,
                     datetime: moment(time).fromNow(),
                 };
@@ -120,7 +120,7 @@ class MyOnlineBooking extends React.Component {
             .then((chat) => {
                 const newChat = this.transChatRecords(chat);
                 const { chatId, originalChat, chatRecords } = newChat;
-                this.setState({ chatId, originalChat, chatRecords });
+                this.setState({ chatId, originalChat, comments: chatRecords });
             })
             .catch((error) => {
                 this.setState({ error, isLoading: false });
@@ -154,8 +154,7 @@ class MyOnlineBooking extends React.Component {
                     comments: [
                         {
                             author,
-                            avatar:
-                                'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                            avatar: AvatarLogo,
                             content: value,
                             datetime: moment().fromNow(),
                         },
@@ -415,7 +414,7 @@ class MyOnlineBooking extends React.Component {
                     <Comment
                         avatar={
                             <Avatar
-                                src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                src={AvatarLogo}
                                 alt='Han Solo'
                             />
                         }

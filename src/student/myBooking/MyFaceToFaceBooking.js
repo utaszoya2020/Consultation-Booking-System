@@ -17,6 +17,7 @@ import {
 } from '../../utils/api/booking';
 import { capitalize } from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import AvatarLogo from '../../assets/icon/avatar.png';
 import './styles/myFaceToFaceBooking.scss';
 
 const { TextArea } = Input;
@@ -97,8 +98,7 @@ class MyFaceToFaceBooking extends React.Component {
 
                 const newChat = {
                     author: authorName,
-                    avatar:
-                        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    avatar: AvatarLogo,
                     content,
                     datetime: moment(time).fromNow(),
                 };
@@ -160,8 +160,7 @@ class MyFaceToFaceBooking extends React.Component {
                     comments: [
                         {
                             author,
-                            avatar:
-                                'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                            avatar: AvatarLogo,
                             content: value,
                             datetime: moment().fromNow(),
                         },
@@ -461,7 +460,7 @@ class MyFaceToFaceBooking extends React.Component {
                     <Comment
                         avatar={
                             <Avatar
-                                src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                src={AvatarLogo}
                                 alt='Han Solo'
                             />
                         }
