@@ -409,7 +409,7 @@ class MyOnlineBooking extends React.Component {
                     </div>
                 </div>
 
-                <div>
+                <div className='l-admin__comment'>
                     {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
                         avatar={

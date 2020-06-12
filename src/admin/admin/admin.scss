@@ -16,6 +16,8 @@
 	}
 	&__link {
 		background-color: lightgrey;
+		font-weight: 700;
+		color: black;
 		padding: 8px 8px;
 		border: 1px solid lightgrey;
 		position: relative;
@@ -49,6 +51,9 @@
 	height: 100%;
 	&__search {
 		padding: 8px 10px;
+		.anticon svg {
+			vertical-align: middle;
+		}
 
 		@media only screen and (min-width: 320px) and (max-width: 767px) {
 			padding: 6px 4px;
@@ -162,6 +167,9 @@
 		display: flex;
 		justify-content: space-between;
 		padding: 2px 2px 2px 0;
+		svg {
+			vertical-align: baseline;
+		}
 
 		@media only screen and (min-width: 320px) and (max-width: 767px) {
 			display: block;
@@ -178,13 +186,13 @@
 			}
 		}
 	}
+	&__comment {
+		svg {
+			vertical-align: baseline;
+		}
+	}
 }
-.ant-btn svg {
-	vertical-align: baseline !important;
-}
-.anticon svg {
-	vertical-align: baseline;
-}
+
 .flex {
 	&-1 {
 		flex: 1.2;

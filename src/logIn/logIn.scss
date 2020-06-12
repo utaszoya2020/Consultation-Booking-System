@@ -17,21 +17,23 @@
 	&__register {
 		float: left;
 	}
-
 	.login-form {
 		width: 100%;
 	}
+	.anticon svg {
+		vertical-align: middle;
+	}
 }
-
+.site-form-item-icon {
+    color: rgba(0, 0, 0, 0.25) !important;
+}
 .b-form-container {
 	display: flex;
 	justify-content: center;
 }
-
-.login-form-forgot {
+-form-forgot {
 	float: right;
 }
-
 .ant-checkbox-wrapper {
 	float: left;
 }

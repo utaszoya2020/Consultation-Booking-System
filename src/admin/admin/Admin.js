@@ -571,7 +571,7 @@ class Admin extends React.Component {
                     </div>
                 </div>
 
-                <div>
+                <div className='l-admin__comment'>
                     {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
                         avatar={
@@ -739,7 +739,7 @@ class Admin extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div>
+                <div className='l-admin__comment'>
                     {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
                         avatar={
