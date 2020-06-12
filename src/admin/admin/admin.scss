@@ -117,6 +117,15 @@
 			border-color: #090;
 			&:hover {
 				background-color: #0c0;
+				border-color: #0c0;
+			}
+			&:active {
+				background-color: #0c0;
+				border-color: #0c0;
+			}
+			&:focus {
+				background-color: #0c0;
+				border-color: #0c0;
 			}
 		}
 	}

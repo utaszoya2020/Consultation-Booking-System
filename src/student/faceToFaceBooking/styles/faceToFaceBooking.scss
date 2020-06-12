@@ -41,6 +41,7 @@ div.ant-upload.ant-upload-drag {
 
 		@media only screen and (min-width: 320px) and (max-width: 767px) {
 			margin-bottom: 24px;
+			width: 100%;
 		}
 		.react-calendar__tile--now {
 			background-color: rgb(50, 170, 39);
@@ -58,4 +59,9 @@ div.ant-upload.ant-upload-drag {
 	font-family: SimSun, sans-serif;
 	line-height: 1;
 	content: '*';
+}
+.ant-row .ant-col-offset-4 {
+	@media only screen and (min-width: 320px) and (max-width: 767px) {
+		margin-left: 0;
+	}
 }

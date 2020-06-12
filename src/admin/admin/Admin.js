@@ -31,6 +31,7 @@ import {
 } from '../../utils/api/booking';
 import { orderBy, capitalize } from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import AvatarLogo from '../../assets/icon/avatar.png';
 import './admin.scss';
 
 const { Search, TextArea } = Input;
@@ -228,8 +229,7 @@ class Admin extends React.Component {
 
                 const newChat = {
                     author: authorName,
-                    avatar:
-                        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    avatar: AvatarLogo,
                     content,
                     datetime: moment(time).fromNow(),
                 };
@@ -267,8 +267,7 @@ class Admin extends React.Component {
                     comments: [
                         {
                             author,
-                            avatar:
-                                'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                            avatar: AvatarLogo,
                             content: value,
                             datetime: moment().fromNow(),
                         },
@@ -577,7 +576,7 @@ class Admin extends React.Component {
                     <Comment
                         avatar={
                             <Avatar
-                                src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                src={AvatarLogo}
                                 alt='Han Solo'
                             />
                         }
@@ -745,7 +744,7 @@ class Admin extends React.Component {
                     <Comment
                         avatar={
                             <Avatar
-                                src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                src={AvatarLogo}
                                 alt='Han Solo'
                             />
                         }
