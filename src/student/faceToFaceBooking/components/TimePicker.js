@@ -1,4 +1,6 @@
 import React from 'react';
+import { SESSION_RANGE } from '../../../constants/setting';
+import { sessionValuesCreator } from '../../../utils/function';
 
 import '../styles/timePicker.scss';
 
@@ -27,16 +29,7 @@ const Item = ({handleTimeChange, time, value, session}) => {
 
 const TimePicker = props => {
     const { session, handleTimeChange, time } = props;
-    const valueList = [];
-    for (let i = 9; i < 17; i++) {
-        let key = '';
-        if(i===9) {
-            key = '09';
-        } else {
-            key = i.toString();
-        }
-        valueList.push(key);
-    }
+    const valueList = sessionValuesCreator(SESSION_RANGE);
 
     return (
         <div className='c-timepicker'>

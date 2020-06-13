@@ -3,26 +3,11 @@ import { Calendar, Alert, Select, Button, Transfer, Popconfirm, message } from '
 import moment from 'moment';
 //import SessionPicker from './SessionPicker';
 import { addSession, fetchSession, deleteSession, updateSession } from '../../utils/api/session';
+import { SESSION_RANGE } from '../../constants/setting';
+import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
 
 const { Option } = Select;
-
-const sessionData = [];
-for (let i = 9; i < 17; i++) {
-    if(i===9) {
-        const key = '09';
-        sessionData.push({
-            key,
-            title: `${key}:00 - ${key}:50`,
-        });
-    } else {
-        const key = i.toString();
-        sessionData.push({
-            key,
-            title: `${key}:00 - ${key}:50`,
-        });
-    }
-}
 
 const validRange = [moment(), moment().add(17,'days')];
 
@@ -98,6 +83,9 @@ class Scheduling extends Component {
             return {time: newTime};
         });
     } */
+    getSessionData = () => {
+        return sessionCreator(SESSION_RANGE);
+    }
 
     handleChange = (nextTargetKeys) => {
         this.setState({ currentSessionTime: nextTargetKeys });
@@ -187,7 +175,7 @@ class Scheduling extends Component {
                                 <div className='l-scheduling__list'>
                                     {/* <SessionPicker handleTimeChange={this.handleTimeChange} time={this.state.time} /> */}
                                     <Transfer
-                                        dataSource={sessionData}
+                                        dataSource={this.getSessionData()}
                                         titles={['Session', 'Active']}
                                         targetKeys={currentSessionTime}
                                         selectedKeys={selectedKeys}
