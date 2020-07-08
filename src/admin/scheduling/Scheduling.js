@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { Calendar, Alert, Select, Button, Transfer, Popconfirm, message } from 'antd';
+import { Calendar, Badge, Alert, Select, Button, Transfer, Popconfirm, message } from 'antd';
 import moment from 'moment';
+import { unionBy, capitalize } from 'lodash';
 //import SessionPicker from './SessionPicker';
-import { addSession, fetchSession, deleteSession, updateSession } from '../../utils/api/session';
+import { addSession, fetchSession, deleteSession, updateSession, fetchAllSessions } from '../../utils/api/session';
 import { SESSION_RANGE } from '../../constants/setting';
 import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
 
 const { Option } = Select;
-
-const validRange = [moment(), moment().add(17,'days')];
 
 class Scheduling extends Component {
     constructor(props) {
@@ -17,6 +16,7 @@ class Scheduling extends Component {
 
         this.state = {
             selectedDate: moment(),
+            dateRenderData: [],
             //time: [],
             selectedKeys: [],
             currentSessionTime: [],
@@ -25,6 +25,59 @@ class Scheduling extends Component {
             isLoading: false,
             error: null
         };
+    }
+
+    componentDidMount() {
+        this.getAllSessions();
+    }
+
+    getAllSessions = () => {
+        fetchAllSessions().then(data => {
+                const dateRenderData = this.getDateRenderData(data);
+                this.setState({ dateRenderData });
+        })
+        .catch(error => {
+            this.setState({ error });
+        });
+    }
+
+    getDateRenderData = (allSessions) => {
+        let campusDate = [];
+        allSessions.map(item => {
+            if(item.time.length > 0) {
+                let date=item.date.toString();
+                let campus = item.campus;
+                let object = {date, campus};
+                campusDate.push(object);
+            }
+        });
+        return unionBy(campusDate, 'date');
+    }
+
+    getListData = value => {
+        const { dateRenderData } = this.state;
+        let listData =[];
+        dateRenderData.map(item => {
+            if (value.format('YYYY-MM-DD')===item.date) {
+                listData = [{
+                    type: 'success', content: capitalize(item.campus)
+                }];
+            }
+        });
+        return listData;
+    }
+
+    dateCellRender = value => {
+        const listData = this.getListData(value);
+        return (
+            <ul className='l-scheduling__events'>
+                {listData.map(item => (
+                    <li key={item.content} className='l-scheduling__list-item'>
+                        <Badge status={item.type} text={item.content} />
+                    </li>
+                ))}
+            </ul>
+        );
     }
 
     handleDateChange = value => {
@@ -103,6 +156,7 @@ class Scheduling extends Component {
             if(!existSession.time) {
                 addSession(date, currentSessionTime, campus).then(() => {
                     this.setState({ isLoading: false }, () => {
+                        this.getAllSessions();
                         message.success('Update success!');
                     });
                 })
@@ -114,6 +168,7 @@ class Scheduling extends Component {
             } else if(currentSessionTime.length === 0) {
                 deleteSession(date, campus).then(() => {
                     this.setState({ isLoading: false }, () => {
+                        this.getAllSessions();
                         message.success('Update success!');
                     });
                 })
@@ -126,6 +181,7 @@ class Scheduling extends Component {
                 const sessionId = existSession._id;
                 updateSession(sessionId, currentSessionTime).then(() => {
                     this.setState({ isLoading: false }, () => {
+                        this.getAllSessions();
                         message.success('Update success!');
                     });
                 })
@@ -154,7 +210,7 @@ class Scheduling extends Component {
                 <h4 className='l-scheduling__title'>Schedule Dashboard</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
-                        <Calendar validRange={validRange} value={selectedDate} onSelect={this.handleDateChange} />
+                        <Calendar dateCellRender={this.dateCellRender} value={selectedDate} onSelect={this.handleDateChange} />
                     </div>
                     <div className='l-scheduling__right'>
                         <Alert
