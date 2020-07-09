@@ -159,13 +159,13 @@ class MyFaceToFaceBooking extends React.Component {
                     submitting: false,
                     value: '',
                     comments: [
+                        ...this.state.comments,
                         {
                             author,
                             avatar: AvatarLogo,
                             content: value,
                             datetime: moment().fromNow(),
-                        },
-                        ...this.state.comments,
+                        }
                     ],
                 }),
                 () => {
