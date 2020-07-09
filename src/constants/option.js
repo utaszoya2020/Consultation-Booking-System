@@ -1,8 +1,8 @@
 export const CAMPUS = {
     SYDNEY: 'sydney',
-    Melbourne: 'melbourne',
-    Brisbane: 'brisbane',
-    Hobart: 'hobart'
+    MELBOURNE: 'melbourne',
+    BRISBANE: 'brisbane',
+    HOBART: 'hobart'
 };
 
 export const BOOKING_TOPIC = {
@@ -20,11 +20,11 @@ export const BOOKING_TYPE = {
 export const ONLINE_BOOKING_STATUS = {
     PROCESSING: 'processing',
     FINISHED: 'finished',
-}
+};
 
 export const OFFLINE_BOOKING_STATUS = {
     PENDING: 'pending',
     ACCEPTED: 'accepted',
     FINISHED: 'finished',
     CANCELED: 'canceled'
-}
+};
