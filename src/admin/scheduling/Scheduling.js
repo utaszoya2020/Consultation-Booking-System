@@ -210,10 +210,10 @@ class Scheduling extends Component {
                             <div className='l-scheduling__location'>
                                 <label className='l-scheduling__label'>Campus:</label>
                                 <Select placeholder='Select a campus' defaultValue={capitalize(SCHEDULE_DEFAULT_CAMPUS)} style={{ width: 200, }} onChange={this.handleCampusChange}>
-                                    <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.Brisbane)}</Option>
+                                    <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
                                     <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
-                                    <Option value={CAMPUS.MELBOURNE}>{capitalize(CAMPUS.Melbourne)}</Option>
-                                    <Option value={CAMPUS.HOBART}>{capitalize(CAMPUS.Hobart)}</Option>
+                                    <Option value={CAMPUS.MELBOURNE}>{capitalize(CAMPUS.MELBOURNE)}</Option>
+                                    <Option value={CAMPUS.HOBART}>{capitalize(CAMPUS.HOBART)}</Option>
                                 </Select>
                             </div>
                             <div className='l-scheduling__detail' >
