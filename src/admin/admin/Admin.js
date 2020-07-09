@@ -31,6 +31,7 @@ import {
 } from '../../utils/api/booking';
 import { orderBy, capitalize } from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { ONLINE_BOOKING_STATUS, OFFLINE_BOOKING_STATUS } from '../../constants/option';
 import AvatarLogo from '../../assets/icon/avatar.png';
 import './admin.scss';
 
@@ -149,7 +150,7 @@ class Admin extends React.Component {
     handleConfirm = () => {
         const { currentBookingId } = this.state;
         const { updateStatus } = this.props;
-        const status = 'accepted';
+        const status = OFFLINE_BOOKING_STATUS.ACCEPTED;
         confirm({
             title: 'Do you want to accept these booking?',
             icon: <ExclamationCircleOutlined />,
@@ -173,7 +174,7 @@ class Admin extends React.Component {
     handleCancel = () => {
         const { currentBookingId } = this.state;
         const { updateStatus } = this.props;
-        const status = 'canceled';
+        const status = OFFLINE_BOOKING_STATUS.CANCELED;
         confirm({
             title: 'Do you want to cancel these booking?',
             icon: <ExclamationCircleOutlined />,
@@ -197,7 +198,7 @@ class Admin extends React.Component {
     handleFinish = () => {
         const { currentBookingId } = this.state;
         const { updateStatus } = this.props;
-        const status = 'finished';
+        const status = ONLINE_BOOKING_STATUS.FINISHED;
         confirm({
             title: 'Do you want to finish these booking?',
             icon: <ExclamationCircleOutlined />,
@@ -596,16 +597,16 @@ class Admin extends React.Component {
 
     renderActionBtn = (status) => {
         switch (status) {
-            case 'pending':
+            case OFFLINE_BOOKING_STATUS.PENDING:
                 return (
                     <div>
                         <Button onClick={this.handleConfirm}>Accept</Button>
                         <Button onClick={this.handleCancel}>Reject</Button>
                     </div>
                 );
-            case 'accepted':
+            case OFFLINE_BOOKING_STATUS.ACCEPTED:
                 return <Button onClick={this.handleCancel}>Cancel</Button>;
-            case 'processing':
+            case ONLINE_BOOKING_STATUS.PROCESSING:
                 return <Button onClick={this.handleFinish}>Finish</Button>;
             default:
                 return null;

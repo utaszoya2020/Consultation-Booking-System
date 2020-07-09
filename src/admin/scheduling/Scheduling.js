@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Calendar, Badge, Alert, Select, Button, Transfer, Popconfirm, message } from 'antd';
 import moment from 'moment';
 import { unionBy, capitalize } from 'lodash';
-//import SessionPicker from './SessionPicker';
 import { addSession, fetchSession, deleteSession, updateSession, fetchAllSessions } from '../../utils/api/session';
-import { SESSION_RANGE } from '../../constants/setting';
+import { SESSION_RANGE, SCHEDULE_DEFAULT_CAMPUS } from '../../constants/setting';
+import { CAMPUS } from '../../constants/option';
 import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
 
@@ -17,11 +17,10 @@ class Scheduling extends Component {
         this.state = {
             selectedDate: moment(),
             dateRenderData: [],
-            //time: [],
             selectedKeys: [],
             currentSessionTime: [],
             existSession: {},
-            campus: '',
+            campus: SCHEDULE_DEFAULT_CAMPUS,
             isLoading: false,
             error: null
         };
@@ -33,8 +32,10 @@ class Scheduling extends Component {
 
     getAllSessions = () => {
         fetchAllSessions().then(data => {
-                const dateRenderData = this.getDateRenderData(data);
-                this.setState({ dateRenderData });
+            const currentDate = moment().format('YYYY-MM-DD');
+            const existSession = data.filter(item => item.date === currentDate)[0];
+            const dateRenderData = this.getDateRenderData(data);
+            this.setState({ dateRenderData, existSession });
         })
         .catch(error => {
             this.setState({ error });
@@ -90,6 +91,7 @@ class Scheduling extends Component {
         }, () => {
             if(campus) {
                 const date = value.format('YYYY-MM-DD');
+                console.log(date);
             fetchSession(date, campus).then(data => {
                 if(data) {
                     const { time } = data;
@@ -124,18 +126,6 @@ class Scheduling extends Component {
         });
     }
 
-/*     handleTimeChange = event => {
-        const selectTime = event.target.value;
-        this.setState((state) => {
-            const index = state.time.indexOf(selectTime);
-            //const checkTime = state.time.filter(item => item===selectTime);
-            if(index === -1) {
-                    return {time: [...state.time, selectTime]};
-            }
-            const newTime = state.time.filter(item => item!==selectTime);
-            return {time: newTime};
-        });
-    } */
     getSessionData = () => {
         return sessionCreator(SESSION_RANGE);
     }
@@ -219,11 +209,11 @@ class Scheduling extends Component {
                         <div className='l-scheduling__content' >
                             <div className='l-scheduling__location'>
                                 <label className='l-scheduling__label'>Campus:</label>
-                                <Select placeholder="Select a campus" style={{ width: 200, }} onChange={this.handleCampusChange}>
-                                    <Option value="brisbane">Brisbane</Option>
-                                    <Option value="sydney">Sydney</Option>
-                                    <Option value="melbourne">Melbourne</Option>
-                                    <Option value="hobart">Hobart</Option>
+                                <Select placeholder='Select a campus' defaultValue={capitalize(SCHEDULE_DEFAULT_CAMPUS)} style={{ width: 200, }} onChange={this.handleCampusChange}>
+                                    <Option value={CAMPUS.Brisbane}>{capitalize(CAMPUS.Brisbane)}</Option>
+                                    <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
+                                    <Option value={CAMPUS.Melbourne}>{capitalize(CAMPUS.Melbourne)}</Option>
+                                    <Option value={CAMPUS.Hobart}>{capitalize(CAMPUS.Hobart)}</Option>
                                 </Select>
                             </div>
                             <div className='l-scheduling__detail' >
@@ -248,12 +238,12 @@ class Scheduling extends Component {
                                 </div>
                                 <div className='l-scheduling__btn'>
                                     <Popconfirm
-                                        title="Are you sure to update?"
+                                        title='Are you sure to update?'
                                         onConfirm={this.onConfirm}
-                                        okText="Yes"
-                                        cancelText="No"
+                                        okText='Yes'
+                                        cancelText='No'
                                     >
-                                        <Button type="primary" size='large' onClick={this.test}>
+                                        <Button type='primary' size='large' onClick={this.test}>
                                             Update
                                         </Button>
                                     </Popconfirm>

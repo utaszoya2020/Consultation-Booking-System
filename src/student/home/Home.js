@@ -4,6 +4,7 @@ import BookiingDetail from '../../UI/bookingDetail/BookingDetail';
 import { fetchUserId } from '../../utils/authentication';
 import { fetchBookingThunkAction } from '../../redux/actions/bookingAction';
 import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
+import { ONLINE_BOOKING_STATUS, OFFLINE_BOOKING_STATUS } from '../../constants/option';
 import './styles/home.scss';
 
 class Home extends React.Component {
@@ -35,12 +36,12 @@ class Home extends React.Component {
             const time = new Date(bookingDate).getTime();
             const isExpired = now - time > 0;
             return (
-                !isExpired && (status === 'pending' || status === 'accepted')
+                !isExpired && (status === OFFLINE_BOOKING_STATUS.PENDING || OFFLINE_BOOKING_STATUS.ACCEPTED)
             );
         });
         const activeOnlineBooking = bookings.filter(booking => {
             const { status } = booking;
-            return status === 'processing';
+            return status === ONLINE_BOOKING_STATUS.PROCESSING;
         });
 
         const bookingNumbers = upComingBookings.length + activeOnlineBooking.length;

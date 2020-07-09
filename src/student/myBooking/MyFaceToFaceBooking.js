@@ -16,6 +16,7 @@ import {
     fetchAllChatByBookingId,
 } from '../../utils/api/booking';
 import { capitalize } from 'lodash';
+import { OFFLINE_BOOKING_STATUS } from '../../constants/option';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import AvatarLogo from '../../assets/icon/avatar.png';
 import './styles/myFaceToFaceBooking.scss';
@@ -245,7 +246,7 @@ class MyFaceToFaceBooking extends React.Component {
     handleCancel = () => {
         const { currentBookingId } = this.state;
         const { updateStatus } = this.props;
-        const status = 'canceled';
+        const status = OFFLINE_BOOKING_STATUS.CANCELED;
         confirm({
             title: 'Do you want to cancel these booking?',
             icon: <ExclamationCircleOutlined />,
@@ -335,7 +336,7 @@ class MyFaceToFaceBooking extends React.Component {
             const bookDate = new Date(bookingDate).getTime();
             if (
                 bookDate - now > 86400000 &&
-                (status === 'pending' || status === 'accepted')
+                (status === OFFLINE_BOOKING_STATUS.PENDING || status === OFFLINE_BOOKING_STATUS.ACCEPTED)
             ) {
                 canCancel = true;
             }

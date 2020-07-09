@@ -1,4 +1,5 @@
 import { get, post, put, patch } from './axios';
+import { BOOKING_TYPE, ONLINE_BOOKING_STATUS, OFFLINE_BOOKING_STATUS } from '../../constants/option';
 
 //TODO Move api url to urlmap.js
 const API_BOOKING_URL = './bookings';
@@ -38,7 +39,7 @@ export const addBooking = (
     attachment
 ) => {
     const url = API_BOOKING_URL;
-    const status = type === 'online' ? 'processing' : 'pending';
+    const status = type === BOOKING_TYPE.ONLINE ? ONLINE_BOOKING_STATUS.PROCESSING : OFFLINE_BOOKING_STATUS.PENDING;
     const data = {
         type,
         campus,

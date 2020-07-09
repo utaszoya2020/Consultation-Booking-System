@@ -4,8 +4,10 @@ import JoditEditor from 'jodit-react';
 import { Upload, message, Form, Input, Button, Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
+import { capitalize } from 'lodash';
 import { fetchUserId } from '../../utils/authentication';
 import BASE_URL from '../../constants/env';
+import { BOOKING_TOPIC, BOOKING_TYPE } from '../../constants/option';
 import './onlineBooking.scss';
 
 const layout = {
@@ -15,9 +17,10 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 4, span: 20 },
 };
+const { Option } = Select;
+const { Dragger } = Upload;
 
-const type = 'online';
-// TODO testing data
+// TODO testing data, should retrive from user data
 const campus = 'hobart'; 
 
 const OnlineBooking = () => {
@@ -33,24 +36,19 @@ const OnlineBooking = () => {
         readonly: false,
     };
 
-    const { Option } = Select;
-
-    const { Dragger } = Upload;
-
-
     const handleAttachmentbeforeUpload = file => {
-    const isLt10M = file.size / 1024 / 1024 < 10;
-    if (!isLt10M) {
-      message.error('File size should not exceed 5M');
-    }
-    return new Promise((resolve, reject) => {
-      if (!isLt10M) {
-        reject(file);
-      } else {
-        resolve(file);
-      }
-    });
-  };
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+            message.error('File size should not exceed 5M');
+        }
+        return new Promise((resolve, reject) => {
+            if (!isLt10M) {
+                reject(file);
+            } else {
+                resolve(file);
+            }
+        });
+    };
 
     const fileProps = {
         name: 'file',
@@ -88,11 +86,6 @@ const OnlineBooking = () => {
         }
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-        setModalShow(false);
-    };
-
     const onReset = () => {
         onlineBookingForm.resetFields();
     };
@@ -108,7 +101,7 @@ const OnlineBooking = () => {
         <div className='online-booking'>
             <Confirm
                 show={modalShow}
-                type={type}
+                type={BOOKING_TYPE.ONLINE}
                 campus={campus}
                 userId={userId}
                 topic={topic}
@@ -129,7 +122,6 @@ const OnlineBooking = () => {
                     remember: true,
                 }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Form.Item
                     name='topic'
@@ -143,10 +135,10 @@ const OnlineBooking = () => {
                     ]}
                 >
                     <Select placeholder='Please select a topic'>
-                        <Option value='finance'>Finance</Option>
-                        <Option value='accommodation'>Accommodation</Option>
-                        <Option value='course'>Course</Option>
-                        <Option value='others'>Others</Option>
+                        <Option value={BOOKING_TOPIC.FINANCE}>{capitalize(BOOKING_TOPIC.FINANCE)}</Option>
+                        <Option value={BOOKING_TOPIC.ACCOMMODATION}>{capitalize(BOOKING_TOPIC.ACCOMMODATION)}</Option>
+                        <Option value={BOOKING_TOPIC.COURSE}>{capitalize(BOOKING_TOPIC.COURSE)}</Option>
+                        <Option value={BOOKING_TOPIC.OTHERS}>{capitalize(BOOKING_TOPIC.OTHERS)}</Option>
                     </Select>
                 </Form.Item>
                 <Form.Item
@@ -161,7 +153,6 @@ const OnlineBooking = () => {
                 >
                     <Input placeholder='Type your subject' />
                 </Form.Item>
-
                 <Form.Item
                     label='Content'
                     name='content'
@@ -180,7 +171,6 @@ const OnlineBooking = () => {
                         onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
                     />
                 </Form.Item>
-
                 <Form.Item label='Attachment' name='attachment' valuePropName='fileList' 
                         getValueFromEvent={getFileList}>
                     <Dragger {...fileProps}>
@@ -195,7 +185,6 @@ const OnlineBooking = () => {
                         </p>
                     </Dragger>
                 </Form.Item>
-
                 <Form.Item {...tailLayout}>
                     <Button
                         type='primary'
@@ -215,6 +204,7 @@ const OnlineBooking = () => {
 
 const mapStateToProps = (state) => ({
     error: state.booking.error,
+    campus: state.user.campus,
     isLoading: state.booking.isLoading,
 });
 

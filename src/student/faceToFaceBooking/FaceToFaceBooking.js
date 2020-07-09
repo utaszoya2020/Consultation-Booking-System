@@ -10,13 +10,14 @@ import {
     Select,
     Calendar,
 } from 'antd';
-//import Calendar from 'react-calendar';
+import { capitalize } from 'lodash';
 import TimePicker from './components/TimePicker';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
 import { fetchSession } from '../../utils/api/session';
 import BASE_URL from '../../constants/env';
+import { BOOKING_TOPIC, BOOKING_TYPE } from '../../constants/option';
 import './styles/faceToFaceBooking.scss';
 
 const layout = {
@@ -26,8 +27,8 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
+const { Option } = Select;
 
-const type = 'offline';
 // TODO testing data, should retrive from user data
 const campus = 'hobart'; 
 
@@ -37,14 +38,11 @@ const FaceToFaceBooking = () => {
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
     const [content, setContent] = useState('');
-    //const [bookingDate, setBookingDate] = useState('');
     const [attachment, setAttachment] = useState([]);
     const [dateValue, setDateValue] = useState(moment().format('YYYY-MM-DD'));
     const [timeValue, setTime] = useState('');
     const [currentSession, setCurrentSession] = useState({});
     const [error, setError] = useState(null);
-
-    const { Option } = Select;
 
     // Can not select days before today and today
     function disabledDate(current) {
@@ -156,11 +154,6 @@ const FaceToFaceBooking = () => {
         }
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-        setModalShow(false);
-    };
-
     const onReset = () => {
         faceToFaceBookingForm.resetFields();
     };
@@ -176,7 +169,7 @@ const FaceToFaceBooking = () => {
         <div className='online-booking'>
             <Confirm
                 show={modalShow}
-                type={type}
+                type={BOOKING_TYPE.OFFLINE}
                 campus={campus}
                 userId={userId}
                 topic={topic}
@@ -198,7 +191,6 @@ const FaceToFaceBooking = () => {
                     remember: true,
                 }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Form.Item
                     name='topic'
@@ -212,10 +204,10 @@ const FaceToFaceBooking = () => {
                     ]}
                 >
                     <Select placeholder='Please select a topic'>
-                        <Option value='finance'>Finance</Option>
-                        <Option value='accommodation'>Accommodation</Option>
-                        <Option value='course'>Course</Option>
-                        <Option value='others'>Others</Option>
+                        <Option value={BOOKING_TOPIC.FINANCE}>{capitalize(BOOKING_TOPIC.FINANCE)}</Option>
+                        <Option value={BOOKING_TOPIC.ACCOMMODATION}>{capitalize(BOOKING_TOPIC.ACCOMMODATION)}</Option>
+                        <Option value={BOOKING_TOPIC.COURSE}>{capitalize(BOOKING_TOPIC.COURSE)}</Option>
+                        <Option value={BOOKING_TOPIC.OTHERS}>{capitalize(BOOKING_TOPIC.OTHERS)}</Option>
                     </Select>
                 </Form.Item>
                 <Form.Item
@@ -247,7 +239,6 @@ const FaceToFaceBooking = () => {
                         
                         <TimePicker session={currentSession.time} time={timeValue} handleTimeChange={handleTimeChange}/>
                     </div>
-
                 </Form.Item>
                 <Form.Item label='Content' name='content'>
                     <Input.TextArea
@@ -289,6 +280,7 @@ const FaceToFaceBooking = () => {
 
 const mapStateToProps = (state) => ({
     userId: state.login.userId,
+    campus: state.user.campus,
     disableDate: state.booking.disableDate,
     error: state.booking.error,
     isLoading: state.booking.isLoading,
