@@ -4,9 +4,10 @@ import { Redirect } from 'react-router-dom';
 import {
     LogInThunkAction,
 } from '../redux/actions/loginAction';
-import { Form, Input, Button, Checkbox, Spin, Alert } from 'antd';
+import { Form, Input, Button, Checkbox, Spin, Alert, notification   } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { STUDENT_HOME_URL, ADMIN_HOME_URL } from '../routes/URLMap';
+import { BulbTwoTone } from '@ant-design/icons';
 import './logIn.scss';
 
 class LoginForm extends React.Component {
@@ -40,6 +41,14 @@ class LoginForm extends React.Component {
             userType,
         } = this.props;
 
+        const openNotification = () => {
+            notification.open({
+                message: 'Demo Account',
+                description:
+                    'Student1 Account: test1@test.com  Password: test999 Student2 Account: test2@test.com  Password: test999 Admin Account: admin@test.com  Password: test999',
+            });
+        };
+
         let authRedirect = null;
         if (isAuthenticated && userType === 'student') {
             authRedirect = <Redirect to={STUDENT_HOME_URL} />;
@@ -64,6 +73,9 @@ class LoginForm extends React.Component {
                 ) : (
                     <Fragment>
                         {authRedirect}
+                        <div className='c-bubble' onClick={openNotification}>
+                                <BulbTwoTone />
+                        </div>
                         <h1 className='l-login__title'>AIBT Booking System</h1>
                         <div className='b-form-container'>
                             <Form
@@ -122,12 +134,10 @@ class LoginForm extends React.Component {
                                     >
                                         <Checkbox>Remember me</Checkbox>
                                     </Form.Item>
-
                                     <a className='login-form-forgot' href=''>
                                         Forgot password
                                     </a>
                                 </Form.Item>
-
                                 <Form.Item>
                                     <Button
                                         type='primary'
