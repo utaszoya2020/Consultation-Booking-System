@@ -14,6 +14,7 @@ import {
     Empty,
     Drawer,
     Divider,
+    Select,
 } from 'antd';
 import BookingCard from '../../student/myBooking/components/BookingCard';
 import { fetchUserId } from '../../utils/authentication';
@@ -37,6 +38,7 @@ import './admin.scss';
 
 const { Search, TextArea } = Input;
 const { confirm } = Modal;
+const { Option } = Select;
 
 const CommentList = ({ comments }) => (
     <List
@@ -346,6 +348,7 @@ class Admin extends React.Component {
         });
     };
 
+  
     renderOnlineBookingCard = (onlineBooking) => {
         const { searchValue, currentBookingId } = this.state;
         if (onlineBooking.length) {
@@ -936,6 +939,10 @@ class Admin extends React.Component {
                         <Col span={6}>
                             <div className='c-sidemenu'>
                                 <div className='c-sidemenu__search'>
+                                    <Select defaultValue="pending" onChange={this.handleChangeStatus}>
+                                        <Option value="pending">Pending</Option>
+                                        <Option value="all">ALL</Option>
+                                    </Select>
                                     <Search
                                         placeholder='Search'
                                         onSearch={(value) =>
