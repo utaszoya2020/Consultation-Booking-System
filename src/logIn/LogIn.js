@@ -9,7 +9,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { STUDENT_HOME_URL, ADMIN_HOME_URL } from '../routes/URLMap';
 import { BulbTwoTone } from '@ant-design/icons';
 import './logIn.scss';
-
+//TODO href update
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
@@ -134,7 +134,7 @@ class LoginForm extends React.Component {
                                     >
                                         <Checkbox>Remember me</Checkbox>
                                     </Form.Item>
-                                    <a className='login-form-forgot' href=''>
+                                    <a className='login-form-forgot' href='http://localhost:3001/login'>
                                         Forgot password
                                     </a>
                                 </Form.Item>
@@ -148,7 +148,7 @@ class LoginForm extends React.Component {
                                         Log in
                                     </Button>
                                     <p className='l-login__register'>
-                                        Or <a href=''>register now!</a>
+                                        Or <a href='http://localhost:3001/login'>register now!</a>
                                     </p>
                                 </Form.Item>
                             </Form>
