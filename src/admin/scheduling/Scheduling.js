@@ -82,7 +82,7 @@ class Scheduling extends Component {
     }
 
     disabledDate = current => {
-        return current < moment().endOf('dat');
+        return current < moment().endOf('day');
     }
 
     handleDateChange = value => {
