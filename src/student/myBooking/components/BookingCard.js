@@ -6,6 +6,7 @@ function BookingCard(props) {
         bookingId,
         firstName,
         lastName,
+        studentId,
         topic,
         status,
         handleClickBooking,
@@ -20,7 +21,7 @@ function BookingCard(props) {
         <a onClick={() => handleClickBooking(bookingId)}>
             <div className={`booking-card ${activeClass}`}>
                 <p className='booking-card__text'>
-                    <strong>{`${firstName} ${lastName}`}</strong> (412456)
+                    <strong>{`${firstName} ${lastName}(${studentId})`}</strong> 
                 </p>
                 <p className='booking-card__text'>{topic}</p>
                 <p className='booking-card__text'>{status}</p>

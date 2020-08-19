@@ -81,6 +81,7 @@ class Admin extends React.Component {
         super(props);
 
         this.state = {
+            filterTab: 'all',
             activeTab: 'offline',
             searchValue: '',
             currentBookingId: '',
@@ -125,6 +126,17 @@ class Admin extends React.Component {
             activeBooking: false,
         });
     };
+
+    handleFilter = (value) => {
+        const filterTab = value;
+        console.log(filterTab);
+        this.setState({
+            filterTab,
+            activeBooking: false,
+        });
+    };
+
+
 
     searchBooking = (value) => {
         this.setState({ searchValue: value });
@@ -348,7 +360,7 @@ class Admin extends React.Component {
         });
     };
 
-  
+  // renderOnline booking card
     renderOnlineBookingCard = (onlineBooking) => {
         const { searchValue, currentBookingId } = this.state;
         if (onlineBooking.length) {
@@ -358,6 +370,7 @@ class Admin extends React.Component {
                     return (
                         booking.userId.firstName === searchValue ||
                         booking.userId.lastName === searchValue ||
+                        booking.userId.studentId === searchValue ||
                         booking.topic === searchValue ||
                         booking.content === searchValue ||
                         booking.bookingNum === searchValue ||
@@ -371,6 +384,7 @@ class Admin extends React.Component {
                             bookingId={booking._id}
                             firstName={booking.userId.firstName}
                             lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
                             topic={booking.topic}
                             status={booking.status}
                             handleClickBooking={this.handleClickBooking}
@@ -386,6 +400,7 @@ class Admin extends React.Component {
                             bookingId={booking._id}
                             firstName={booking.userId.firstName}
                             lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
                             topic={booking.topic}
                             status={booking.status}
                             handleClickBooking={this.handleClickBooking}
@@ -399,6 +414,61 @@ class Admin extends React.Component {
         }
     };
 
+//render online pending booking card
+renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
+    const { searchValue, currentBookingId } = this.state;
+    if (onlineProcessingBooking.length) {
+        //TODO improve Search Filter
+        if (searchValue) {
+            const result = onlineProcessingBooking.filter((booking) => {
+                return (
+                    booking.userId.firstName === searchValue ||
+                    booking.userId.lastName === searchValue ||
+                    booking.userId.studentId === searchValue ||
+                    booking.topic === searchValue ||
+                    booking.content === searchValue ||
+                    booking.bookingNum === searchValue ||
+                    booking.status === searchValue
+                );
+            });
+            return result.map((booking) => {
+                return (
+                    <BookingCard
+                        key={booking._id}
+                        bookingId={booking._id}
+                        firstName={booking.userId.firstName}
+                        lastName={booking.userId.lastName}
+                        studentId={booking.userId.studentId}
+                        topic={booking.topic}
+                        status={booking.status}
+                        handleClickBooking={this.handleClickBooking}
+                        currentBookingId={currentBookingId}
+                    />
+                );
+            });
+        } else {
+            return onlineProcessingBooking.map((booking) => {
+                return (
+                    <BookingCard
+                        key={booking._id}
+                        bookingId={booking._id}
+                        firstName={booking.userId.firstName}
+                        lastName={booking.userId.lastName}
+                        studentId={booking.userId.studentId}
+                        topic={booking.topic}
+                        status={booking.status}
+                        handleClickBooking={this.handleClickBooking}
+                        currentBookingId={currentBookingId}
+                    />
+                );
+            });
+        }
+    } else {
+        return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+    }
+};
+
+//render offline booking card
     renderOfflineBookingCard = (offlineBooking) => {
         const { searchValue, currentBookingId } = this.state;
         if (offlineBooking.length) {
@@ -408,6 +478,7 @@ class Admin extends React.Component {
                     return (
                         booking.userId.firstName === searchValue ||
                         booking.userId.lastName === searchValue ||
+                        booking.userId.studentId === searchValue ||
                         booking.topic === searchValue ||
                         booking.content === searchValue ||
                         booking.bookingNum === searchValue ||
@@ -421,6 +492,7 @@ class Admin extends React.Component {
                             bookingId={booking._id}
                             firstName={booking.userId.firstName}
                             lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
                             topic={booking.topic}
                             status={booking.status}
                             handleClickBooking={this.handleClickBooking}
@@ -436,6 +508,60 @@ class Admin extends React.Component {
                             bookingId={booking._id}
                             firstName={booking.userId.firstName}
                             lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            }
+        } else {
+            return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+        }
+    };
+//render offline pending booking card
+    renderOfflinePendingBookingCard = (offlinePendingBooking) => {
+        const { searchValue, currentBookingId } = this.state;
+        if (offlinePendingBooking.length) {
+            // Search Filter
+            if (searchValue) {
+                const result = offlinePendingBooking.filter((booking) => {
+                    return (
+                        booking.userId.firstName === searchValue ||
+                        booking.userId.lastName === searchValue ||
+                        booking.userId.studentId === searchValue ||
+                        booking.topic === searchValue ||
+                        booking.content === searchValue ||
+                        booking.bookingNum === searchValue ||
+                        booking.status === searchValue
+                    );
+                });
+                return result.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            } else {
+                return offlinePendingBooking.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
                             topic={booking.topic}
                             status={booking.status}
                             handleClickBooking={this.handleClickBooking}
@@ -766,10 +892,20 @@ class Admin extends React.Component {
         );
     };
 
-    renderBookingCard = (onlineBooking, offlineBooking) => {
-        return this.state.activeTab === 'online'
-            ? this.renderOnlineBookingCard(onlineBooking)
-            : this.renderOfflineBookingCard(offlineBooking);
+    renderBookingCard = (onlineBooking, offlineBooking, onlineProcessingBooking, offlinePendingBooking ) => {
+
+        if (this.state.activeTab === 'online' & this.state.filterTab === 'all') {
+            return  this.renderOnlineBookingCard(onlineBooking);
+        }   
+        else if (this.state.activeTab === 'offline' & this.state.filterTab === 'all'){
+            return  this.renderOfflineBookingCard(offlineBooking);
+        }
+        else if (this.state.activeTab === 'online' & this.state.filterTab === 'pending'){
+            return this.renderOnlineProcessingBookingCard(onlineProcessingBooking);
+        }
+        else {
+            return this.renderOfflinePendingBookingCard(offlinePendingBooking);
+        }
     };
 
     renderBookingDetail = (bookingDetail) => {
@@ -893,12 +1029,21 @@ class Admin extends React.Component {
         const { activeBooking } = this.state;
         let onlineBooking = [];
         let offlineBooking = [];
+        let onlineProcessingBooking = [];
+        let offlinePendingBooking = [];
         if (bookings) {
             onlineBooking = bookings.filter((booking) => {
                 return booking.type === 'online';
             });
+            onlineProcessingBooking = bookings.filter((onlineBooking) => {
+                return onlineBooking.status === 'processing';
+            });
+            
             offlineBooking = bookings.filter((booking) => {
                 return booking.type === 'offline';
+            });
+            offlinePendingBooking = bookings.filter((offlineBooking) => {
+                return offlineBooking.status === 'pending';
             });
         }
         const { activeTab } = this.state;
@@ -939,7 +1084,7 @@ class Admin extends React.Component {
                         <Col span={6}>
                             <div className='c-sidemenu'>
                                 <div className='c-sidemenu__search'>
-                                    <Select defaultValue="pending" onChange={this.handleChangeStatus}>
+                                    <Select defaultValue="all" onChange={this.handleFilter}>
                                         <Option value="pending">Pending</Option>
                                         <Option value="all">ALL</Option>
                                     </Select>
@@ -953,7 +1098,9 @@ class Admin extends React.Component {
                                 <div className='c-sidemenu__content'>
                                     {this.renderBookingCard(
                                         onlineBooking,
-                                        offlineBooking
+                                        offlineBooking,
+                                        onlineProcessingBooking,
+                                        offlinePendingBooking
                                     )}
                                 </div>
                             </div>
