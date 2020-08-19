@@ -32,10 +32,12 @@ class Scheduling extends Component {
 
     getAllSessions = () => {
         fetchAllSessions().then(data => {
+            console.log(data);
             const currentDate = moment().format('YYYY-MM-DD');
             const existSession = data.filter(item => item.date === currentDate)[0];
             const dateRenderData = this.getDateRenderData(data);
             this.setState({ dateRenderData, existSession });
+            this.setState({campus:existSession.campus})
         })
         .catch(error => {
             this.setState({ error });
@@ -212,8 +214,8 @@ class Scheduling extends Component {
                         />
                         <div className='l-scheduling__content' >
                             <div className='l-scheduling__location'>
-                                <label className='l-scheduling__label'>Campus:</label>
-                                <Select placeholder='Select a campus' defaultValue={capitalize(SCHEDULE_DEFAULT_CAMPUS)} style={{ width: 200, }} onChange={this.handleCampusChange}>
+                                <label className='l-scheduling__label'>Campus:{campus}</label>
+                                <Select placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200, }} onChange={this.handleCampusChange}>
                                     <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
                                     <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
                                     <Option value={CAMPUS.MELBOURNE}>{capitalize(CAMPUS.MELBOURNE)}</Option>
