@@ -1084,7 +1084,7 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
                         <Col span={6}>
                             <div className='c-sidemenu'>
                                 <div className='c-sidemenu__search'>
-                                    <Select defaultValue="all" onChange={this.handleFilter}>
+                                    <Select defaultValue="all" style={{ width: 100 }} onChange={this.handleFilter}>
                                         <Option value="pending">Pending</Option>
                                         <Option value="all">ALL</Option>
                                     </Select>
