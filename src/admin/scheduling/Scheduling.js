@@ -81,6 +81,10 @@ class Scheduling extends Component {
         );
     }
 
+    disabledDate = current => {
+        return current < moment().endOf('dat');
+    }
+
     handleDateChange = value => {
         const { campus } = this.state;
         this.setState({
@@ -200,7 +204,7 @@ class Scheduling extends Component {
                 <h4 className='l-scheduling__title'>Schedule Dashboard</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
-                        <Calendar dateCellRender={this.dateCellRender} value={selectedDate} onSelect={this.handleDateChange} />
+                        <Calendar dateCellRender={this.dateCellRender} disabledDate={this.disabledDate} value={selectedDate} onSelect={this.handleDateChange} />
                     </div>
                     <div className='l-scheduling__right'>
                         <Alert
