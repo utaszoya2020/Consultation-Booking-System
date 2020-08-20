@@ -34,12 +34,20 @@ class Scheduling extends Component {
             checkedList: defaultCheckedList,
             indeterminate: true,
             checkAll: false,
+            hasCampus: false,
             error: null
         };
     }
 
     componentDidMount() {
         this.getAllSessions();
+    }
+
+    checkHasCampus = (campus) => {
+        if(campus){
+            return true;
+        }
+        return false;
     }
 
     //checklist change
@@ -67,6 +75,8 @@ class Scheduling extends Component {
             const dateRenderData = this.getDateRenderData(data);
             this.setState({ dateRenderData, existSession });
             this.setState({campus:existSession.campus});
+            const campusIndicator = this.checkHasCampus(existSession.campus);
+            this.setState({hasCampus : campusIndicator});
             fetchSession(currentDate, existSession.campus).then(data => {
                 console.log(data);
                 if(data) {
@@ -131,7 +141,23 @@ class Scheduling extends Component {
         const { campus } = this.state;
         const { dateRenderData } = this.state;
         let listData =[];
+        console.log('lheeelo');
+        
         dateRenderData.map(item => {
+            console.log('2');
+               fetchAllSessions().then(data => {
+            console.log(data);
+                        const currentDate = value.format('YYYY-MM-DD');
+                        console.log(currentDate);
+                        const existSession = data.filter(item => item.date === currentDate)[0];
+                        console.log(existSession);
+                        if(existSession===undefined){
+                            this.setState({campus:''});
+                            this.setState({hasCampus : false, currentSessionTime:[],checkedList:[]});
+
+                        }
+        }) 
+
             if (value.format('YYYY-MM-DD')===item.date) {
                 console.log(item.date);
                 listData = [{
@@ -140,9 +166,11 @@ class Scheduling extends Component {
                 console.log(listData);
                 if (listData === null) {
                     this.setState({campus:''});
+                    this.setState({hasCampus : false});
                 }else {
 
                     this.setState({campus:item.campus});
+                    this.setState({hasCampus : true});
                     fetchAllSessions().then(data => {
                         console.log(data);
                         const currentDate = value.format('YYYY-MM-DD');
@@ -166,30 +194,33 @@ class Scheduling extends Component {
                     });
         }
             }
-        });
+         })
         
-        this.setState({
-            currentSessionTime: [],
-            existSession: [],
-            selectedKeys: [],
-            selectedDate: value,
-        }, () => {
-            if(campus) {
-                const date = value.format('YYYY-MM-DD');
-                console.log(date);
-            fetchSession(date, campus).then(data => {
-                console.log(data);
-                if(data) {
-                    const { time } = data;
-                    this.setState({ currentSessionTime: time, existSession: data });
-                }
-                this.setState({campus:'', checkedList:[]})
-            })
-            .catch((error) =>
-                this.setState({ error })
-            );
-            }
-        });
+        // this.setState({
+        //     currentSessionTime: [],
+        //     existSession: [],
+        //     selectedKeys: [],
+        //     selectedDate: value,
+        // }, () => {
+        //     if(campus) {
+        //         const date = value.format('YYYY-MM-DD');
+        //         console.log(date);
+        //     fetchSession(date, campus).then(data => {
+        //         console.log(data);
+        //         if(data===null) {
+                    
+        //             this.setState({campus:'', checkedList:[]})
+        //             this.setState({hasCampus : false});
+        //         }
+                
+        //         // const { time } = data;
+        //         // this.setState({ currentSessionTime: time, existSession: data });
+        //     })
+            // .catch((error) =>
+            //     this.setState({ error })
+            // );
+            // }
+        // });
     };
 
     handleCampusChange = value => {
@@ -295,8 +326,9 @@ class Scheduling extends Component {
                         />
                         <div className='l-scheduling__content' >
                             <div className='l-scheduling__location'>
-                                <label className='l-scheduling__label'>Campus:{campus}</label>
-                                <Select placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200, }} onChange={this.handleCampusChange}>
+
+                                <label className='l-scheduling__label'>Campus:{capitalize(campus)}</label>
+                                <Select className={'l-scheduling__hidden'} placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200 }} onChange={this.handleCampusChange}>
                                     <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
                                     <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
                                     <Option value={CAMPUS.MELBOURNE}>{capitalize(CAMPUS.MELBOURNE)}</Option>
