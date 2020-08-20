@@ -14,7 +14,7 @@ import 'antd/dist/antd.css';
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
 const plainOptions = ['09:00-09:50', '10:00-10:50', '11:00-11:50','12:00-12:50','13:00-13:50','14:00-14:50','15:00-15:50','16:00-16:50'];
-const defaultCheckedList = ['09:00-09:50', '10:00-10:50'];
+const defaultCheckedList = [];
 
 class Scheduling extends Component {
     constructor(props) {
@@ -28,6 +28,7 @@ class Scheduling extends Component {
             existSession: {},
             campus: SCHEDULE_DEFAULT_CAMPUS,
             isLoading: false,
+            timeOptions: plainOptions,
             checkedList: defaultCheckedList,
             indeterminate: true,
             checkAll: false,
@@ -63,7 +64,14 @@ class Scheduling extends Component {
             const existSession = data.filter(item => item.date === currentDate)[0];
             const dateRenderData = this.getDateRenderData(data);
             this.setState({ dateRenderData, existSession });
-            this.setState({campus:existSession.campus})
+            this.setState({campus:existSession.campus});
+            fetchSession(currentDate, existSession.campus).then(data => {
+                console.log(data);
+                if(data) {
+                    const { time } = data;
+                    this.setState({ currentSessionTime: time });
+                }
+            })
         })
         .catch(error => {
             this.setState({ error });
@@ -123,7 +131,7 @@ class Scheduling extends Component {
                     type: 'success', content: capitalize(item.campus)
                 }];
                 console.log(listData);
-                if (!listData) {
+                if (listData === null) {
                     this.setState({campus:''});
                 }else {
                     this.setState({campus:item.campus})
@@ -282,7 +290,7 @@ class Scheduling extends Component {
                                     <div className="ant-checkbox-group-item" > 
                                         <CheckboxGroup
                                             
-                                            options={plainOptions}
+                                            options={this.state.timeOptions}
                                             value={this.state.checkedList}
                                             onChange={this.onChange}
                                         />

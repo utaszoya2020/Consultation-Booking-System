@@ -21,6 +21,45 @@ export const sessionCreator = (SESSION_RANGE) => {
     return session;
 };
 
+// adjust array from small to big
+export const  bubbleSort = (arr) => {
+
+    for(var i = 0; i < arr.length; i++) {
+    
+    for(var j = 0; j < arr.length; j++) {
+    
+    if(arr[i] < arr[j]) {
+    
+    var temp = arr[j];
+    
+    arr[j] = arr[i];
+    
+    arr[i] = temp;
+    
+    }
+    
+    }
+    
+    }
+    
+    return arr;
+    
+    }
+    // change current SessionTime to time array
+export const currentSessionCreator = (currentSessionTime) => {
+    const length = currentSessionTime.length;
+    const session = [];
+    for (let i = 0; i < length; i++) {
+        
+            const key = currentSessionTime[i].toString();
+            session.push(
+                `${key}:00 - ${key}:50`,
+            );
+        }
+    
+    return session;
+}
+
 export const sessionValuesCreator = (SESSION_RANGE) => {
     const startHour = SESSION_RANGE[0];
     const endHour = SESSION_RANGE[1];
