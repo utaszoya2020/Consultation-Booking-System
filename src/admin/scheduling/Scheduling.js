@@ -74,8 +74,8 @@ class Scheduling extends Component {
                     this.setState({ currentSessionTime: time });
                         }
                         const sortedCurrentSession = bubbleSort(this.state.currentSessionTime);
-            const showedCurrentSession = currentSessionCreator(sortedCurrentSession);
-            this.setState({checkedList: showedCurrentSession});
+                        const showedCurrentSession = currentSessionCreator(sortedCurrentSession);
+                        this.setState({checkedList: showedCurrentSession});
                                                                 })
                                                                 })
         .catch(error => {
@@ -133,6 +133,7 @@ class Scheduling extends Component {
         let listData =[];
         dateRenderData.map(item => {
             if (value.format('YYYY-MM-DD')===item.date) {
+                console.log(item.date);
                 listData = [{
                     type: 'success', content: capitalize(item.campus)
                 }];
@@ -140,7 +141,29 @@ class Scheduling extends Component {
                 if (listData === null) {
                     this.setState({campus:''});
                 }else {
-                    this.setState({campus:item.campus})
+
+                    this.setState({campus:item.campus});
+                    fetchAllSessions().then(data => {
+                        console.log(data);
+                        const currentDate = value.format('YYYY-MM-DD');
+                        const existSession = data.filter(item => item.date === currentDate)[0];
+                        //const dateRenderData = this.getDateRenderData(data);
+                        this.setState({ existSession });
+                        //this.setState({campus:existSession.campus});
+                        fetchSession(currentDate, existSession.campus).then(data => {
+                            console.log(data);
+                            if(data) {
+                                const { time } = data;
+                                this.setState({ currentSessionTime: time });
+                                    }
+                                    const sortedCurrentSession = bubbleSort(this.state.currentSessionTime);
+                                    const showedCurrentSession = currentSessionCreator(sortedCurrentSession);
+                                    this.setState({checkedList: showedCurrentSession});
+                                                                            })
+                                                                            })
+                    .catch(error => {
+                        this.setState({ error });
+                    });
         }
             }
         });
@@ -160,6 +183,7 @@ class Scheduling extends Component {
                     const { time } = data;
                     this.setState({ currentSessionTime: time, existSession: data });
                 }
+                this.setState({campus:'', checkedList:[]})
             })
             .catch((error) =>
                 this.setState({ error })
