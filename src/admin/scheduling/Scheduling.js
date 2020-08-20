@@ -138,7 +138,7 @@ class Scheduling extends Component {
     }
 
     handleDateChange = value => {
-        const { campus } = this.state;
+        this.setState({selectedDate:value});
         const { dateRenderData } = this.state;
         let listData =[];
         console.log('lheeelo');
@@ -195,32 +195,7 @@ class Scheduling extends Component {
         }
             }
          })
-        
-        // this.setState({
-        //     currentSessionTime: [],
-        //     existSession: [],
-        //     selectedKeys: [],
-        //     selectedDate: value,
-        // }, () => {
-        //     if(campus) {
-        //         const date = value.format('YYYY-MM-DD');
-        //         console.log(date);
-        //     fetchSession(date, campus).then(data => {
-        //         console.log(data);
-        //         if(data===null) {
-                    
-        //             this.setState({campus:'', checkedList:[]})
-        //             this.setState({hasCampus : false});
-        //         }
-                
-        //         // const { time } = data;
-        //         // this.setState({ currentSessionTime: time, existSession: data });
-        //     })
-            // .catch((error) =>
-            //     this.setState({ error })
-            // );
-            // }
-        // });
+       
     };
 
     handleCampusChange = value => {
@@ -328,7 +303,7 @@ class Scheduling extends Component {
                             <div className='l-scheduling__location'>
 
                                 <label className='l-scheduling__label'>Campus:{capitalize(campus)}</label>
-                                <Select className={'l-scheduling__hidden'} placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200 }} onChange={this.handleCampusChange}>
+                                <Select className={this.state.hasCampus ? 'l-scheduling__hidden' : ''} placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200 }} onChange={this.handleCampusChange}>
                                     <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
                                     <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
                                     <Option value={CAMPUS.MELBOURNE}>{capitalize(CAMPUS.MELBOURNE)}</Option>
