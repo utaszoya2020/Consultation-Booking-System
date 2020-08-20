@@ -257,7 +257,7 @@ class Scheduling extends Component {
                 <h4 className='l-scheduling__title'>Schedule Dashboard</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
-                        <Calendar dateCellRender={this.dateCellRender} disabledDate={this.disabledDate} value={selectedDate} onSelect={this.handleDateChange} />
+                        <Calendar className='l-scheduling__calendar'  dateCellRender={this.dateCellRender} disabledDate={this.disabledDate} value={selectedDate} onSelect={this.handleDateChange} />
                     </div>
                     <div className='l-scheduling__right'>
                         <Alert

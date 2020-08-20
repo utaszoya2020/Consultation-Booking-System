@@ -28,6 +28,9 @@
 		border: 1px solid lightgrey;
 		padding: 0 8px;
 		margin-right: 20px;
+		div div div {
+			font-size: 18px;
+		}
 
 		@media only screen and (min-width: 320px) and (max-width: 767px) {
 			margin-right: 0;
@@ -81,6 +84,13 @@
 		  }
   		
 	}
+
+	&__calendar {
+		div:nth-child(2) div div table tbody tr td div div {
+			font-size: 18px;
+		}
+	}
+
 	&__btn {
 		display: flex;
 		flex-direction: row-reverse;
