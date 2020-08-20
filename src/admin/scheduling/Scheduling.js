@@ -8,12 +8,14 @@ import { CAMPUS } from '../../constants/option';
 import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
 import 'antd/dist/antd.css';
+import {bubbleSort} from '../../utils/function';
+import {currentSessionCreator} from '../../utils/function';
 
 
 
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ['09:00-09:50', '10:00-10:50', '11:00-11:50','12:00-12:50','13:00-13:50','14:00-14:50','15:00-15:50','16:00-16:50'];
+const plainOptions = ['09:00 - 09:50', '10:00 - 10:50', '11:00 - 11:50','12:00 - 12:50','13:00 - 13:50','14:00 - 14:50','15:00 - 15:50','16:00 - 16:50'];
 const defaultCheckedList = [];
 
 class Scheduling extends Component {
@@ -70,12 +72,16 @@ class Scheduling extends Component {
                 if(data) {
                     const { time } = data;
                     this.setState({ currentSessionTime: time });
-                }
-            })
-        })
+                        }
+                        const sortedCurrentSession = bubbleSort(this.state.currentSessionTime);
+            const showedCurrentSession = currentSessionCreator(sortedCurrentSession);
+            this.setState({checkedList: showedCurrentSession});
+                                                                })
+                                                                })
         .catch(error => {
             this.setState({ error });
         });
+            
     }
 
     getDateRenderData = (allSessions) => {
