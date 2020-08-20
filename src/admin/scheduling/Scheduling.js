@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Calendar, Badge, Alert, Select, Button, Transfer, Popconfirm, message } from 'antd';
+import { Calendar, Badge, Alert, Select, Button, Checkbox, Popconfirm, message } from 'antd';
 import moment from 'moment';
 import { unionBy, capitalize } from 'lodash';
 import { addSession, fetchSession, deleteSession, updateSession, fetchAllSessions } from '../../utils/api/session';
@@ -7,9 +7,14 @@ import { SESSION_RANGE, SCHEDULE_DEFAULT_CAMPUS } from '../../constants/setting'
 import { CAMPUS } from '../../constants/option';
 import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
+import 'antd/dist/antd.css';
+
 
 
 const { Option } = Select;
+const CheckboxGroup = Checkbox.Group;
+const plainOptions = ['09:00-09:50', '10:00-10:50', '11:00-11:50','12:00-12:50','13:00-13:50','14:00-14:50','15:00-15:50','16:00-16:50'];
+const defaultCheckedList = ['09:00-09:50', '10:00-10:50'];
 
 class Scheduling extends Component {
     constructor(props) {
@@ -23,6 +28,9 @@ class Scheduling extends Component {
             existSession: {},
             campus: SCHEDULE_DEFAULT_CAMPUS,
             isLoading: false,
+            checkedList: defaultCheckedList,
+            indeterminate: true,
+            checkAll: false,
             error: null
         };
     }
@@ -30,6 +38,23 @@ class Scheduling extends Component {
     componentDidMount() {
         this.getAllSessions();
     }
+
+    //checklist change
+    onChange = checkedList => {
+        this.setState({
+          checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
+          checkAll: checkedList.length === plainOptions.length,
+        });
+      };
+
+      onCheckAllChange = e => {
+        this.setState({
+          checkedList: e.target.checked ? plainOptions : [],
+          indeterminate: false,
+          checkAll: e.target.checked,
+        });
+      };
 
     getAllSessions = () => {
         fetchAllSessions().then(data => {
@@ -243,22 +268,25 @@ class Scheduling extends Component {
                             <div className='l-scheduling__detail' >
                                 <h5>Available Time: </h5>
                                 <div className='l-scheduling__list'>
-                                    {/* <SessionPicker handleTimeChange={this.handleTimeChange} time={this.state.time} /> */}
-                                    <Transfer
-                                        dataSource={this.getSessionData()}
-                                        titles={['Session', 'Active']}
-                                        targetKeys={currentSessionTime}
-                                        selectedKeys={selectedKeys}
-                                        onChange={this.handleChange}
-                                        onSelectChange={this.handleSelectChange}
-                                        render={item => item.title}
-                                        oneWay
-                                        listStyle={{
-                                            height: 314,
-                                            width: 175
-                                        }}
-                                        disabled={!campus}
-                                    />
+                                    <div className="site-checkbox-all-wrapper">
+                                        <Checkbox
+                                            indeterminate={this.state.indeterminate}
+                                            onChange={this.onCheckAllChange}
+                                            checked={this.state.checkAll}
+                                        >
+                                            Check all
+                                        </Checkbox>
+                                        <br/>
+                                    </div>
+                                    
+                                    <div className="ant-checkbox-group-item" > 
+                                        <CheckboxGroup
+                                            
+                                            options={plainOptions}
+                                            value={this.state.checkedList}
+                                            onChange={this.onChange}
+                                        />
+                                     </div>
                                 </div>
                                 <div className='l-scheduling__btn'>
                                     <Popconfirm
