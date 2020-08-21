@@ -91,6 +91,12 @@
   		
 	}
 
+	&__list1 {
+		display: flex;
+		flex-direction: row;
+		margin-top: 18px;
+		
+	}
 	&__calendar {
 		div:nth-child(2) div div table tbody tr td div div {
 			font-size: 18px;
