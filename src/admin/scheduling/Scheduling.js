@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Calendar, Badge, Alert, Select, Button, Transfer, Popconfirm, message } from 'antd';
+import { Calendar, Badge, Alert, Select, Button, Checkbox, Popconfirm, message } from 'antd';
 import moment from 'moment';
 import { unionBy, capitalize } from 'lodash';
 import { addSession, fetchSession, deleteSession, updateSession, fetchAllSessions } from '../../utils/api/session';
@@ -7,8 +7,16 @@ import { SESSION_RANGE, SCHEDULE_DEFAULT_CAMPUS } from '../../constants/setting'
 import { CAMPUS } from '../../constants/option';
 import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
+import 'antd/dist/antd.css';
+import {bubbleSort} from '../../utils/function';
+import {currentSessionCreator, transformArray} from '../../utils/function';
+
+
 
 const { Option } = Select;
+const CheckboxGroup = Checkbox.Group;
+const plainOptions = ['09:00 - 09:50', '10:00 - 10:50', '11:00 - 11:50','12:00 - 12:50','13:00 - 13:50','14:00 - 14:50','15:00 - 15:50','16:00 - 16:50'];
+const defaultCheckedList = [];
 
 class Scheduling extends Component {
     constructor(props) {
@@ -22,6 +30,11 @@ class Scheduling extends Component {
             existSession: {},
             campus: SCHEDULE_DEFAULT_CAMPUS,
             isLoading: false,
+            timeOptions: plainOptions,
+            checkedList: defaultCheckedList,
+            indeterminate: true,
+            checkAll: false,
+            hasCampus: false,
             error: null
         };
     }
@@ -30,16 +43,65 @@ class Scheduling extends Component {
         this.getAllSessions();
     }
 
+    checkHasCampus = (campus) => {
+        if(campus){
+            return true;
+        }
+        return false;
+    }
+
+    //checklist change
+    onChange = checkedList => {
+
+        setTimeout(() => {
+            const temperatesession = transformArray(this.state.checkedList);
+            console.log(temperatesession);
+            this.setState({currentSessionTime:temperatesession});
+       
+          }, 0);
+        
+        
+        this.setState({
+          checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
+          checkAll: checkedList.length === plainOptions.length,
+          
+        });
+      };
+
+      onCheckAllChange = e => {
+        this.setState({
+          checkedList: e.target.checked ? plainOptions : [],
+          indeterminate: false,
+          checkAll: e.target.checked,
+        });
+      };
+
     getAllSessions = () => {
         fetchAllSessions().then(data => {
+            console.log(data);
             const currentDate = moment().format('YYYY-MM-DD');
             const existSession = data.filter(item => item.date === currentDate)[0];
             const dateRenderData = this.getDateRenderData(data);
             this.setState({ dateRenderData, existSession });
-        })
+            this.setState({campus:existSession.campus});
+            const campusIndicator = this.checkHasCampus(existSession.campus);
+            this.setState({hasCampus : campusIndicator});
+            fetchSession(currentDate, existSession.campus).then(data => {
+                console.log(data);
+                if(data) {
+                    const { time } = data;
+                    this.setState({ currentSessionTime: time });
+                        }
+                        const sortedCurrentSession = bubbleSort(this.state.currentSessionTime);
+                        const showedCurrentSession = currentSessionCreator(sortedCurrentSession);
+                        this.setState({checkedList: showedCurrentSession});
+                                                                })
+                                                                })
         .catch(error => {
             this.setState({ error });
         });
+            
     }
 
     getDateRenderData = (allSessions) => {
@@ -81,28 +143,69 @@ class Scheduling extends Component {
         );
     }
 
+    disabledDate = current => {
+        return current < moment().endOf('day');
+    }
+
     handleDateChange = value => {
-        const { campus } = this.state;
-        this.setState({
-            currentSessionTime: [],
-            existSession: [],
-            selectedKeys: [],
-            selectedDate: value,
-        }, () => {
-            if(campus) {
-                const date = value.format('YYYY-MM-DD');
-                console.log(date);
-            fetchSession(date, campus).then(data => {
-                if(data) {
-                    const { time } = data;
-                    this.setState({ currentSessionTime: time, existSession: data });
-                }
-            })
-            .catch((error) =>
-                this.setState({ error })
-            );
+        this.setState({selectedDate:value});
+        const { dateRenderData } = this.state;
+        let listData =[];
+        console.log('lheeelo');
+        
+        dateRenderData.map(item => {
+            console.log('2');
+               fetchAllSessions().then(data => {
+            console.log(data);
+                        const currentDate = value.format('YYYY-MM-DD');
+                        console.log(currentDate);
+                        const existSession = data.filter(item => item.date === currentDate)[0];
+                        console.log(existSession);
+                        if(existSession===undefined){
+                            this.setState({campus:''});
+                            this.setState({hasCampus : false, currentSessionTime:[],checkedList:[]});
+
+                        }
+        }) 
+
+            if (value.format('YYYY-MM-DD')===item.date) {
+                console.log(item.date);
+                listData = [{
+                    type: 'success', content: capitalize(item.campus)
+                }];
+                console.log(listData);
+                if (listData === null) {
+                    this.setState({campus:''});
+                    this.setState({hasCampus : false});
+                }else {
+
+                    this.setState({campus:item.campus});
+                    this.setState({hasCampus : true});
+                    fetchAllSessions().then(data => {
+                        console.log(data);
+                        const currentDate = value.format('YYYY-MM-DD');
+                        const existSession = data.filter(item => item.date === currentDate)[0];
+                        //const dateRenderData = this.getDateRenderData(data);
+                        this.setState({ existSession });
+                        //this.setState({campus:existSession.campus});
+                        fetchSession(currentDate, existSession.campus).then(data => {
+                            console.log(data);
+                            if(data) {
+                                const { time } = data;
+                                this.setState({ currentSessionTime: time });
+                                    }
+                                    const sortedCurrentSession = bubbleSort(this.state.currentSessionTime);
+                                    const showedCurrentSession = currentSessionCreator(sortedCurrentSession);
+                                    this.setState({checkedList: showedCurrentSession});
+                                                                            })
+                                                                            })
+                    .catch(error => {
+                        this.setState({ error });
+                    });
+        }
             }
-        });
+         })
+       
     };
 
     handleCampusChange = value => {
@@ -139,11 +242,11 @@ class Scheduling extends Component {
     };
 
     handleUpdate = () => {
-        const { currentSessionTime, selectedDate, campus, existSession } = this.state;
+        const { currentSessionTime, selectedDate, campus, hasCampus, existSession } = this.state;
         
         const date = selectedDate.format('YYYY-MM-DD');
         this.setState({ isLoading: true }, () => {
-            if(!existSession.time) {
+            if(!hasCampus) {
                 addSession(date, currentSessionTime, campus).then(() => {
                     this.setState({ isLoading: false }, () => {
                         this.getAllSessions();
@@ -200,7 +303,7 @@ class Scheduling extends Component {
                 <h4 className='l-scheduling__title'>Schedule Dashboard</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
-                        <Calendar dateCellRender={this.dateCellRender} value={selectedDate} onSelect={this.handleDateChange} />
+                        <Calendar className='l-scheduling__calendar'  dateCellRender={this.dateCellRender} disabledDate={this.disabledDate} value={selectedDate} onSelect={this.handleDateChange} />
                     </div>
                     <div className='l-scheduling__right'>
                         <Alert
@@ -208,8 +311,9 @@ class Scheduling extends Component {
                         />
                         <div className='l-scheduling__content' >
                             <div className='l-scheduling__location'>
-                                <label className='l-scheduling__label'>Campus:</label>
-                                <Select placeholder='Select a campus' defaultValue={capitalize(SCHEDULE_DEFAULT_CAMPUS)} style={{ width: 200, }} onChange={this.handleCampusChange}>
+
+                                <label className='l-scheduling__label'>Campus:{capitalize(campus)}</label>
+                                <Select className={this.state.hasCampus ? 'l-scheduling__hidden' : ''} placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200 }} onChange={this.handleCampusChange}>
                                     <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
                                     <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
                                     <Option value={CAMPUS.MELBOURNE}>{capitalize(CAMPUS.MELBOURNE)}</Option>
@@ -218,23 +322,26 @@ class Scheduling extends Component {
                             </div>
                             <div className='l-scheduling__detail' >
                                 <h5>Available Time: </h5>
-                                <div className='l-scheduling__list1'>
-                                    {/* <SessionPicker handleTimeChange={this.handleTimeChange} time={this.state.time} /> */}
-                                    <Transfer
-                                        dataSource={this.getSessionData()}
-                                        titles={['Session', 'Active']}
-                                        targetKeys={currentSessionTime}
-                                        selectedKeys={selectedKeys}
-                                        onChange={this.handleChange}
-                                        onSelectChange={this.handleSelectChange}
-                                        render={item => item.title}
-                                        oneWay
-                                        listStyle={{
-                                            height: 314,
-                                            width: 175
-                                        }}
-                                        disabled={!campus}
-                                    />
+                                <div className='l-scheduling__list'>
+                                    <div className="site-checkbox-all-wrapper">
+                                        <Checkbox
+                                            indeterminate={this.state.indeterminate}
+                                            onChange={this.onCheckAllChange}
+                                            checked={this.state.checkAll}
+                                        >
+                                            Check all
+                                        </Checkbox>
+                                        <br/>
+                                    </div>
+                                    
+                                    <div className="ant-checkbox-group-item" > 
+                                        <CheckboxGroup
+                                            
+                                            options={this.state.timeOptions}
+                                            value={this.state.checkedList}
+                                            onChange={this.onChange}
+                                        />
+                                     </div>
                                 </div>
                                 <div className='l-scheduling__btn'>
                                     <Popconfirm

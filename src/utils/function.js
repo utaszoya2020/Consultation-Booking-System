@@ -20,6 +20,20 @@ export const sessionCreator = (SESSION_RANGE) => {
     }
     return session;
 };
+// generate currentsessiontime
+export const transformArray = (array) => {
+    const start = 0;
+    const end = 2;
+    const length = array.length;
+    const currentsession = [];
+    for (let i = 0; i < length; i++) {
+        const x = array[i].slice(start, end);
+        currentsession.push(x);
+        
+    }
+    
+    return currentsession;
+}
 
 // adjust array from small to big
 export const  bubbleSort = (arr) => {
