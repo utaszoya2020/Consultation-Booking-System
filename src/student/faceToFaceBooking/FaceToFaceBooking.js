@@ -15,6 +15,7 @@ import TimePicker from './components/TimePicker';
 import { InboxOutlined } from '@ant-design/icons';
 import Confirm from '../../UI/confirm/Confirm';
 import { fetchUserId } from '../../utils/authentication';
+import { fetchUserDetail } from '../../utils/api/user';
 import { fetchSession } from '../../utils/api/session';
 import BASE_URL from '../../constants/env';
 import { BOOKING_TOPIC, BOOKING_TYPE } from '../../constants/option';
@@ -30,7 +31,7 @@ const tailLayout = {
 const { Option } = Select;
 
 // TODO testing data, should retrive from user data
-const campus = 'hobart'; 
+ 
 
 const FaceToFaceBooking = () => {
     const userId = fetchUserId();
@@ -43,6 +44,7 @@ const FaceToFaceBooking = () => {
     const [timeValue, setTime] = useState('');
     const [currentSession, setCurrentSession] = useState({});
     const [error, setError] = useState(null);
+    const [campus, setCampus] = useState('');
 
     // Can not select days before today and today
     function disabledDate(current) {
@@ -52,11 +54,28 @@ const FaceToFaceBooking = () => {
         );
     }
 
+    useEffect(() => {
+     
+        fetchUserDetail(userId).then(data => {
+            console.log(data);
+            setCampus(data.campus);
+          
+        }
+        
+    
+        );
+      
+    
+    },[]);
+
+
     useEffect(()=>{
         const abortController = new AbortController();
         const signal = abortController.signal;
+        console.log(signal);
 
         fetchSession(dateValue, campus, { signal: signal }).then(data => {
+            console.log(data);
             if(data) {
                 setCurrentSession(data);
             }
@@ -76,6 +95,7 @@ const FaceToFaceBooking = () => {
         setDateValue(value.toDate());
         const selectDate = moment(value).format('YYYY-MM-DD');
         fetchSession(selectDate, campus).then(data => {
+            console.log(data);
             if(data) {
                 setCurrentSession(data);
             }

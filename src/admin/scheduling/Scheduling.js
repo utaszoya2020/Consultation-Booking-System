@@ -10,13 +10,15 @@ import './Scheduling.scss';
 import 'antd/dist/antd.css';
 import {bubbleSort} from '../../utils/function';
 import {currentSessionCreator, transformArray} from '../../utils/function';
-
+import BookingCardAdmin from '../../student/myBooking/components/BookingCardAdmin';
+import { fetchAllOfflineBookings } from '../../utils/api/booking';
 
 
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
 const plainOptions = ['09:00 - 09:50', '10:00 - 10:50', '11:00 - 11:50','12:00 - 12:50','13:00 - 13:50','14:00 - 14:50','15:00 - 15:50','16:00 - 16:50'];
 const defaultCheckedList = [];
+
 
 class Scheduling extends Component {
     constructor(props) {
@@ -35,12 +37,51 @@ class Scheduling extends Component {
             indeterminate: true,
             checkAll: false,
             hasCampus: false,
+            bookings: [],
             error: null
         };
     }
 
     componentDidMount() {
         this.getAllSessions();
+        this.getAllBooking();
+    }
+
+    getAllBooking = () => {
+        fetchAllOfflineBookings().then(data => {
+            if(data) {
+                console.log(data);
+                
+                const bookings = this.transDataList(data);
+                console.log(bookings);
+                this.setState({ bookings });
+            }
+        })
+        .catch(error => {
+            this.setState({ error });
+        });
+    }
+
+    transDataList = (data) => {
+        const dataList = [];
+        data.forEach(item => {
+            const { bookingDate, bookingTime, userId, bookingNum } = item;
+            const { firstName, lastName, studentId } = userId;
+            const formatDate = moment(bookingDate).format('YYYY-MM-DD');
+            const formatTime = `${bookingTime}:00:00`;
+            const formatEndTime = `${bookingTime}:50:00`;
+            const startString = `${formatDate} ${formatTime}`;
+            const endString = `${formatDate} ${formatEndTime}`;
+            const start = new Date(startString);
+            const end = new Date(endString);
+            const object = {
+                title: `${firstName} ${lastName} (${studentId}) ${bookingNum}`,
+                start,
+                end,
+            };
+            dataList.push(object);
+        });
+        return dataList;
     }
 
     checkHasCampus = (campus) => {
@@ -354,6 +395,23 @@ class Scheduling extends Component {
                                             Update
                                         </Button>
                                     </Popconfirm>
+                                </div>
+                                <div>
+                                    {this.state.bookings.map((booking) => {
+                                        return  (
+                                           <BookingCardAdmin 
+                                            bookings = {booking}
+                                            start = {booking.start}
+                                            end = {booking.end}
+                                            title = {booking.title}
+
+                                           />
+                                        )
+                                     })
+                                    }
+                                    
+
+                                    
                                 </div>
                             </div>
                         </div>

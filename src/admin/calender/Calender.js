@@ -18,12 +18,15 @@ class Calender extends React.Component {
 
     componentDidMount() {
         this.getAllBooking();
+        console.log("hello");
     }
 
     getAllBooking = () => {
         fetchAllOfflineBookings().then(data => {
             if(data) {
+                console.log(data);
                 const bookings = this.transDataList(data);
+                console.log(bookings);
                 this.setState({ bookings });
             }
         })
