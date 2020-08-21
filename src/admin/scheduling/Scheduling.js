@@ -50,9 +50,11 @@ class Scheduling extends Component {
     getAllBooking = () => {
         fetchAllOfflineBookings().then(data => {
             if(data) {
-                console.log(data);
-                
-                const bookings = this.transDataList(data);
+                console.log(data[3].bookingDate.slice(0,10));
+                const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
+                console.log(currentDate);
+                const temdata = data.filter(item => item.bookingDate.slice(0,10) === currentDate);
+                const bookings = this.transDataList(temdata);
                 console.log(bookings);
                 this.setState({ bookings });
             }
@@ -120,7 +122,7 @@ class Scheduling extends Component {
 
     getAllSessions = () => {
         fetchAllSessions().then(data => {
-            console.log(data);
+            
             const currentDate = moment().format('YYYY-MM-DD');
             const existSession = data.filter(item => item.date === currentDate)[0];
             const dateRenderData = this.getDateRenderData(data);
@@ -189,6 +191,7 @@ class Scheduling extends Component {
     }
 
     handleDateChange = value => {
+        this.getAllBooking();
         this.setState({selectedDate:value});
         const { dateRenderData } = this.state;
         let listData =[];
@@ -223,14 +226,14 @@ class Scheduling extends Component {
                     this.setState({campus:item.campus});
                     this.setState({hasCampus : true});
                     fetchAllSessions().then(data => {
-                        console.log(data);
+                      
                         const currentDate = value.format('YYYY-MM-DD');
                         const existSession = data.filter(item => item.date === currentDate)[0];
                         //const dateRenderData = this.getDateRenderData(data);
                         this.setState({ existSession });
                         //this.setState({campus:existSession.campus});
                         fetchSession(currentDate, existSession.campus).then(data => {
-                            console.log(data);
+                            
                             if(data) {
                                 const { time } = data;
                                 this.setState({ currentSessionTime: time });
