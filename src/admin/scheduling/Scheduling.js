@@ -9,7 +9,7 @@ import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
 import 'antd/dist/antd.css';
 import {bubbleSort} from '../../utils/function';
-import {currentSessionCreator, transformArray, generatenewTimeOptions} from '../../utils/function';
+import {currentSessionCreator, transformArray, generatenewTimeOptions, compare} from '../../utils/function';
 import BookingCardAdmin from '../../student/myBooking/components/BookingCardAdmin';
 import { fetchAllOfflineBookings } from '../../utils/api/booking';
 
@@ -64,10 +64,12 @@ class Scheduling extends Component {
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
                 console.log(currentDate);
                 const temdata = data.filter(item => item.bookingDate.slice(0,10) === currentDate);
+                console.log(temdata);
+                const sortedBooking = temdata.sort(compare('bookingTime'));
                 const bookings = this.transDataList(temdata);
-                console.log(bookings);
+                console.log(sortedBooking);
                 this.setState({ bookings });
-                const newTimeOptions = generatenewTimeOptions(bookings,this.state.timeOptions);
+                const newTimeOptions = generatenewTimeOptions(bookings);
                 this.setState({timeOptions: newTimeOptions })
             }
         })

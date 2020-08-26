@@ -34,6 +34,14 @@ export const transformArray = (array) => {
     
     return currentsession;
 }
+//sort by time
+export function compare(property){
+    return function(obj1,obj2){
+        var value1 = obj1[property].toString();
+        var value2 = obj2[property].toString();
+        return value1 - value2;     // 升序
+    }
+   }
 
 // generate starttime
 export const generateStartTime = (string) => {
@@ -54,13 +62,21 @@ export const generateEndTime = (string) => {
 }
 
 // identify if disabled
-export const generatenewTimeOptions = (obj,inputoptions) => {
+export const generatenewTimeOptions = (obj) => {
     console.log(obj);
-    console.log(inputoptions);
+
     const length = obj.length;
-  
-    const options = [...inputoptions];
-    
+ 
+    const options = [
+        {label: '09:00 - 09:50', value: '09:00 - 09:50', disabled: false},
+        {label: '10:00 - 10:50', value: '10:00 - 10:50', disabled: false},
+        {label: '11:00 - 11:50', value: '11:00 - 11:50', disabled: false},
+        {label: '12:00 - 12:50', value: '12:00 - 12:50', disabled: false},
+        {label: '13:00 - 13:50', value: '13:00 - 13:50', disabled: false},
+        {label: '14:00 - 14:50', value: '14:00 - 14:50', disabled: false},
+        {label: '15:00 - 15:50', value: '15:00 - 15:50', disabled: false},
+        {label: '16:00 - 16:50', value: '16:00 - 16:50', disabled: false},
+        ];
     for (let i =0; i<length; i++) {
       const str1 = obj[i].start.toString();
       console.log(str1);
