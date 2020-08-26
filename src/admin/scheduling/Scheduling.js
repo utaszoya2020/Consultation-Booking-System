@@ -9,14 +9,23 @@ import { sessionCreator } from '../../utils/function';
 import './Scheduling.scss';
 import 'antd/dist/antd.css';
 import {bubbleSort} from '../../utils/function';
-import {currentSessionCreator, transformArray} from '../../utils/function';
+import {currentSessionCreator, transformArray, generatenewTimeOptions} from '../../utils/function';
 import BookingCardAdmin from '../../student/myBooking/components/BookingCardAdmin';
 import { fetchAllOfflineBookings } from '../../utils/api/booking';
 
 
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ['09:00 - 09:50', '10:00 - 10:50', '11:00 - 11:50','12:00 - 12:50','13:00 - 13:50','14:00 - 14:50','15:00 - 15:50','16:00 - 16:50'];
+const plainOptions = [
+    {label: '09:00 - 09:50', value: '09:00 - 09:50', disabled: false},
+    {label: '10:00 - 10:50', value: '10:00 - 10:50', disabled: false},
+    {label: '11:00 - 11:50', value: '11:00 - 11:50', disabled: false},
+    {label: '12:00 - 12:50', value: '12:00 - 12:50', disabled: false},
+    {label: '13:00 - 13:50', value: '13:00 - 13:50', disabled: false},
+    {label: '14:00 - 14:50', value: '14:00 - 14:50', disabled: false},
+    {label: '15:00 - 15:50', value: '15:00 - 15:50', disabled: false},
+    {label: '16:00 - 16:50', value: '16:00 - 16:50', disabled: false},
+    ];
 const defaultCheckedList = [];
 
 
@@ -25,6 +34,7 @@ class Scheduling extends Component {
         super(props);
 
         this.state = {
+           
             selectedDate: moment(),
             dateRenderData: [],
             selectedKeys: [],
@@ -57,6 +67,8 @@ class Scheduling extends Component {
                 const bookings = this.transDataList(temdata);
                 console.log(bookings);
                 this.setState({ bookings });
+                const newTimeOptions = generatenewTimeOptions(bookings,this.state.timeOptions);
+                this.setState({timeOptions: newTimeOptions })
             }
         })
         .catch(error => {
