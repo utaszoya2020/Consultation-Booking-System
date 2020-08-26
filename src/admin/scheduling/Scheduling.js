@@ -59,6 +59,7 @@ class Scheduling extends Component {
 
     getAllBooking = () => {
         fetchAllOfflineBookings().then(data => {
+            console.log(data);
             if(data) {
                 console.log(data[3].bookingDate.slice(0,10));
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
@@ -81,7 +82,7 @@ class Scheduling extends Component {
     transDataList = (data) => {
         const dataList = [];
         data.forEach(item => {
-            const { bookingDate, bookingTime, userId, bookingNum } = item;
+            const { bookingDate, bookingTime, userId, bookingNum, campus } = item;
             const { firstName, lastName, studentId } = userId;
             const formatDate = moment(bookingDate).format('YYYY-MM-DD');
             const formatTime = `${bookingTime}:00:00`;
@@ -94,6 +95,7 @@ class Scheduling extends Component {
                 title: `${firstName} ${lastName} (${studentId}) ${bookingNum}`,
                 start,
                 end,
+                campus
             };
             dataList.push(object);
         });
@@ -103,8 +105,12 @@ class Scheduling extends Component {
     checkHasCampus = (campus) => {
         if(campus){
             return true;
+        } else if (this.state.bookings.length > 0){
+            return true;
+        } else {
+            return false;
         }
-        return false;
+        
     }
 
     //checklist change
@@ -189,6 +195,7 @@ class Scheduling extends Component {
 
     dateCellRender = value => {
         const listData = this.getListData(value);
+
         return (
             <ul className='l-scheduling__events'>
                 {listData.map(item => (
@@ -208,8 +215,9 @@ class Scheduling extends Component {
         this.getAllBooking();
         this.setState({selectedDate:value});
         const { dateRenderData } = this.state;
+        const newCampus = this.state.campus;
         let listData =[];
-        console.log('lheeelo');
+        console.log(newCampus);
         
         dateRenderData.map(item => {
             console.log('2');
@@ -220,10 +228,21 @@ class Scheduling extends Component {
                         const existSession = data.filter(item => item.date === currentDate)[0];
                         console.log(existSession);
                         if(existSession===undefined){
+                            if(this.state.bookings.length > 0){
+                                this.setState({hasCampus : true, campus: this.state.bookings[0].campus, currentSessionTime:[],checkedList:[]});
+                            }
                             this.setState({campus:'sydney'});
                             this.setState({hasCampus : false, currentSessionTime:[],checkedList:[]});
 
+                        }else if (existSession.time.length === 0 ){
+                            console.log('jjjjj');  
+                            this.setState({hasCampus : true, campus: existSession.campus, currentSessionTime:[],checkedList:[]});    
                         }
+                        else {
+                            this.setState({hasCampus : true, campus: existSession.campus});
+
+                        }
+
         }) 
 
             if (value.format('YYYY-MM-DD')===item.date) {
@@ -236,15 +255,15 @@ class Scheduling extends Component {
                     this.setState({campus:''});
                     this.setState({hasCampus : false});
                 }else {
-
+                    console.log(item.campus);    
                     this.setState({campus:item.campus});
                     this.setState({hasCampus : true});
                     fetchAllSessions().then(data => {
                       
                         const currentDate = value.format('YYYY-MM-DD');
                         const existSession = data.filter(item => item.date === currentDate)[0];
-                        //const dateRenderData = this.getDateRenderData(data);
-                        this.setState({ existSession });
+                        console.log(existSession);
+                        this.setState({ existSession, campus: existSession.campus });
                         //this.setState({campus:existSession.campus});
                         fetchSession(currentDate, existSession.campus).then(data => {
                             
