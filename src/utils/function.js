@@ -35,6 +35,24 @@ export const transformArray = (array) => {
     return currentsession;
 }
 
+// generate starttime
+export const generateStartTime = (string) => {
+    const newString = string.toString();
+    const start = 0;
+    const end = 24;
+    const newStartTime = newString.slice(start, end);
+    return newStartTime;
+}
+
+// generate endtime
+export const generateEndTime = (string) => {
+    const newString = string.toString();
+    const start = 16;
+    const end = 24;
+    const newStartTime = newString.slice(start, end);
+    return newStartTime;
+}
+
 // adjust array from small to big
 export const  bubbleSort = (arr) => {
 
