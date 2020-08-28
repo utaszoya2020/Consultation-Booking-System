@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect  } from 'react';
 import { connect } from 'react-redux';
 import JoditEditor from 'jodit-react';
 import { Upload, message, Form, Input, Button, Select } from 'antd';
@@ -9,7 +9,7 @@ import { fetchUserId } from '../../utils/authentication';
 import BASE_URL from '../../constants/env';
 import { BOOKING_TOPIC, BOOKING_TYPE } from '../../constants/option';
 import './onlineBooking.scss';
-
+import { fetchUserDetail } from '../../utils/api/user';
 const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 16 },
@@ -20,8 +20,7 @@ const tailLayout = {
 const { Option } = Select;
 const { Dragger } = Upload;
 
-// TODO testing data, should retrive from user data
-const campus = 'hobart'; 
+
 
 const OnlineBooking = () => {
     const userId = fetchUserId();
@@ -32,10 +31,12 @@ const OnlineBooking = () => {
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
     const [attachment, setAttachment] = useState([]);
+    const [error, setError] = useState(null);
+    const [campus, setCampus] = useState('');
     const config = {
         readonly: false,
     };
-
+    
     const handleAttachmentbeforeUpload = file => {
         const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isLt10M) {
@@ -96,6 +97,20 @@ const OnlineBooking = () => {
         }
         return e && e.fileList;
     };
+
+    useEffect(() => {
+     
+        fetchUserDetail(userId).then(data => {
+            console.log(data);
+            setCampus(data.campus);
+          
+        }
+        
+    
+        );
+      
+    
+    },[]);
 
     return (
         <div className='online-booking'>

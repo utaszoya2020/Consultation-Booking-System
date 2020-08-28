@@ -11,6 +11,7 @@ import SuccessMessage from '../UI/successMessage/SuccessMessage';
 import LogoutSuccess from '../UI/successMessage/LogoutSuccess';
 import ErrorMessage from '../UI/errorMessage/ErrorMessage';
 import Admin from '../admin/admin/Admin';
+import StudentDetail from '../admin/admin/StudentDetail';
 import Scheduling from '../admin/scheduling/Scheduling';
 import Calender from '../admin/calender/Calender';
 
@@ -24,6 +25,7 @@ import {
     SUCCESS_URL,
     ERROR_URL,
     ADMIN_HOME_URL,
+    ADMIN_STUDENT_DETAIL_URL,
     ADMIN_SCHEDULING_URL,
     LOGOUT_SUCCESS_URL,
     ADMIN_CALENDER_URL
@@ -61,6 +63,7 @@ const Routes = () => {
                 <Route exact path={LOGOUT_SUCCESS_URL} component={LogoutSuccess} />
                 <Route exact path={ERROR_URL} component={ErrorMessage} />
                 <ProtectedRoute exact path={ADMIN_HOME_URL} component={Admin} />
+                <ProtectedRoute exact path={ADMIN_STUDENT_DETAIL_URL} component={StudentDetail} />
                 <ProtectedRoute exact path={ADMIN_SCHEDULING_URL} component={Scheduling} />
                 <ProtectedRoute exact path={ADMIN_CALENDER_URL} component={Calender} />
             </Switch>

@@ -30,7 +30,7 @@ const tailLayout = {
 };
 const { Option } = Select;
 
-// TODO testing data, should retrive from user data
+
  
 
 const FaceToFaceBooking = () => {

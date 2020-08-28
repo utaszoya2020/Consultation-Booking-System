@@ -12,6 +12,8 @@ import {bubbleSort} from '../../utils/function';
 import {currentSessionCreator, transformArray, generatenewTimeOptions, compare} from '../../utils/function';
 import BookingCardAdmin from '../../student/myBooking/components/BookingCardAdmin';
 import { fetchAllOfflineBookings } from '../../utils/api/booking';
+import { Link } from "react-router-dom";
+import { ADMIN_STUDENT_DETAIL_URL } from '../../routes/URLMap';
 
 
 const { Option } = Select;
@@ -439,7 +441,7 @@ class Scheduling extends Component {
                                         </Button>
                                     </Popconfirm>
                                 </div>
-                                <div>
+                                <Link to={ADMIN_STUDENT_DETAIL_URL}>
                                     {this.state.bookings.map((booking) => {
                                         return  (
                                            <BookingCardAdmin 
@@ -455,7 +457,7 @@ class Scheduling extends Component {
                                     
 
                                     
-                                </div>
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -14,5 +14,6 @@ export const ERROR_URL = '/error';
 
 // Admin url
 export const ADMIN_HOME_URL = '/admin/home';
+export const ADMIN_STUDENT_DETAIL_URL = '/admin/studentdetail';
 export const ADMIN_SCHEDULING_URL = '/admin/scheduling';
 export const ADMIN_CALENDER_URL = '/admin/calender';
