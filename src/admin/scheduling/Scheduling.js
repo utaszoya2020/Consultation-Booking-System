@@ -38,7 +38,7 @@ class Scheduling extends Component {
         super(props);
 
         this.state = {
-           
+            isAbleEdit: false,
             selectedDate: moment(),
             dateRenderData: [],
             selectedKeys: [],
@@ -218,9 +218,7 @@ class Scheduling extends Component {
         );
     }
 
-    disabledDate = current => {
-        return current < moment().endOf('day');
-    }
+    
 
     handleDateChange = value => {
         this.getAllBooking();
@@ -228,10 +226,17 @@ class Scheduling extends Component {
         const { dateRenderData } = this.state;
         const newCampus = this.state.campus;
         let listData =[];
-        console.log(newCampus);
+        console.log(value.format('YYYY-MM-DD'));
+        const currentDate = new Date();
+        const currentformatDate = moment(currentDate).format('YYYY-MM-DD');
+        if(currentformatDate>value.format('YYYY-MM-DD')){
+            this.setState({isAbleEdit:false});
+        }else{
+            this.setState({isAbleEdit:true});
+        }
         
         dateRenderData.map(item => {
-            console.log('2');
+           
                fetchAllSessions().then(data => {
             console.log(data);
                         const currentDate = value.format('YYYY-MM-DD');
@@ -246,7 +251,7 @@ class Scheduling extends Component {
                             this.setState({hasCampus : false, currentSessionTime:[],checkedList:[]});
 
                         }else if (existSession.time.length === 0 ){
-                            console.log('jjjjj');  
+                            
                             this.setState({hasCampus : true, campus: existSession.campus, currentSessionTime:[],checkedList:[]});    
                         }
                         else {
@@ -398,7 +403,7 @@ class Scheduling extends Component {
                 <h4 className='l-scheduling__title'>Schedule Dashboard</h4>
                 <div className='l-scheduling__container'>
                     <div className='l-scheduling__left'>
-                        <Calendar className='l-scheduling__calendar'  dateCellRender={this.dateCellRender} disabledDate={this.disabledDate} value={selectedDate} onSelect={this.handleDateChange} />
+                        <Calendar className='l-scheduling__calendar'  dateCellRender={this.dateCellRender} value={selectedDate} onSelect={this.handleDateChange} />
                     </div>
                     <div className='l-scheduling__right'>
                         <Alert
@@ -419,7 +424,8 @@ class Scheduling extends Component {
                                 <h5>Available Time: </h5>
                                 <div className='l-scheduling__list'>
                                     <div className="site-checkbox-all-wrapper">
-                                        <Checkbox
+                                        {this.state.isAbleEdit
+                                        ?<Checkbox
                                             indeterminate={this.state.indeterminate}
                                             onChange={this.onCheckAllChange}
                                             checked={this.state.checkAll}
@@ -427,17 +433,38 @@ class Scheduling extends Component {
                                         >
                                             Click all
                                         </Checkbox>
+                                        :<Checkbox
+                                        indeterminate={this.state.indeterminate}
+                                        onChange={this.onCheckAllChange}
+                                        checked={this.state.checkAll}
+                                        disabled
+                                    >
+                                        Click all
+                                    </Checkbox>
+                                    }
+                                        
                                         <br/>
                                     </div>
                                     
                                     <div className="ant-checkbox-group-item" > 
-                                        <CheckboxGroup
+                                        {this.state.isAbleEdit
+                                        ? <CheckboxGroup
                                             
                                             options={this.state.timeOptions}
                                             value={this.state.checkedList}
                                             onChange={this.onChange}
                                             
                                         />
+                                        :<CheckboxGroup
+                                            
+                                            options={this.state.timeOptions}
+                                            value={this.state.checkedList}
+                                            onChange={this.onChange}
+                                            disabled
+                                        />
+                                        }   
+                                        
+                                         
                                         
                                      </div>
                                 </div>
@@ -448,9 +475,15 @@ class Scheduling extends Component {
                                         okText='Yes'
                                         cancelText='No'
                                     >
-                                        <Button type='primary' size='large' onClick={this.test}>
+                                        {this.state.isAbleEdit
+                                        ?<Button type='primary' size='large' onClick={this.test} >
                                             Update
                                         </Button>
+                                        :<Button type='primary' size='large' onClick={this.test} disabled>
+                                        Update
+                                    </Button>
+                                        }
+                                        
                                     </Popconfirm>
                                 </div>
                                 <Link to={ADMIN_STUDENT_DETAIL_URL}>

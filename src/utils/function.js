@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 export const sessionCreator = (SESSION_RANGE) => {
     const startHour = SESSION_RANGE[0];
     const endHour = SESSION_RANGE[1];
@@ -63,8 +63,12 @@ export const generateEndTime = (string) => {
 
 // identify if disabled
 export const generatenewTimeOptions = (obj) => {
-    console.log(obj);
-
+    // console.log(obj);
+    // const currentDate = new Date();
+    // const formatDate = moment(currentDate).format('YYYY-MM-DD');
+    // console.log(formatDate);
+    // const clickedDate = moment(obj[0].start).format('YYYY-MM-DD');
+    // console.log(clickedDate);
     const length = obj.length;
  
     const options = [
@@ -77,6 +81,8 @@ export const generatenewTimeOptions = (obj) => {
         {label: '15:00 - 15:50', value: '15:00 - 15:50', disabled: false},
         {label: '16:00 - 16:50', value: '16:00 - 16:50', disabled: false},
         ];
+
+  
     for (let i =0; i<length; i++) {
       const str1 = obj[i].start.toString();
       console.log(str1);
@@ -108,6 +114,7 @@ export const generatenewTimeOptions = (obj) => {
       }
     }
     console.log(options);
+ 
 return options;
 
   
