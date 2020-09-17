@@ -18,12 +18,14 @@ import {
 } from 'antd';
 
 import { fetchUserId } from '../../utils/authentication';
+
 import {
-    fetchAllBookingThunkAction,
-    fetchBookingDetailThunkAction,
-    updateStatusThunkAction,
-} from '../../redux/actions/bookingAction';
-import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
+  
+    fetchBookingDetail,
+    
+   
+} from '../../utils/api/booking';
+
 import {
     addChat,
     updateChat,
@@ -36,9 +38,9 @@ import { ONLINE_BOOKING_STATUS, OFFLINE_BOOKING_STATUS } from '../../constants/o
 import AvatarLogo from '../../assets/icon/avatar.png';
 import './admin.scss';
 
-const { Search, TextArea } = Input;
+const { TextArea } = Input;
 const { confirm } = Modal;
-const { Option } = Select;
+
 
 const CommentList = ({ comments }) => (
     <List
@@ -81,10 +83,8 @@ class StudentDetail extends React.Component {
         super(props);
 
         this.state = {
-            filterTab: 'all',
-            activeTab: 'offline',
-            searchValue: '',
-            currentBookingId: '',
+            booking:{},
+            currentBookingId: '5f3baea195377becce5b81b7',
             activeBooking: false,
             submitting: false,
             value: '',
@@ -99,11 +99,25 @@ class StudentDetail extends React.Component {
     }
 
     componentDidMount() {
-        const { fetchUserDetail } = this.props;
-        this.props.getAllBookings();
-        const userId = fetchUserId();
-        this.setState({ userId }, () => {
-            fetchUserDetail(userId);
+        fetchBookingDetail('5f3baea195377becce5b81b7').then((data) => {
+            console.log(data);
+            const {firstName, lastName, studentId, email, campus, phone, gender} =data;
+        }
+
+        );
+        fetchAllChatByBookingId('5f3baea195377becce5b81b7')
+            .then((chat) => {
+                const newChat = this.transChatRecords(chat);
+                const { chatId, originalChat, chatRecords } = newChat;
+                this.setState({ chatId, originalChat, comments: chatRecords });
+            })
+            .catch((error) => {
+                this.setState({ error, isLoading: false });
+            });
+        this.setState({
+            activeBooking: true,
+            
+            value: '',
         });
     }
 
@@ -119,47 +133,14 @@ class StudentDetail extends React.Component {
         });
       };
 
-    changeTabKey = (event) => {
-        const activeTab = event.target.id;
-        this.setState({
-            activeTab,
-            activeBooking: false,
-        });
-    };
+    
 
-    handleFilter = (value) => {
-        const filterTab = value;
-        console.log(filterTab);
-        this.setState({
-            filterTab,
-            activeBooking: false,
-        });
-    };
+    
 
 
+    
 
-    searchBooking = (value) => {
-        this.setState({ searchValue: value });
-    };
-
-    handleClickBooking = (bookingId) => {
-        const { getBookingDetail } = this.props;
-        getBookingDetail(bookingId);
-        fetchAllChatByBookingId(bookingId)
-            .then((chat) => {
-                const newChat = this.transChatRecords(chat);
-                const { chatId, originalChat, chatRecords } = newChat;
-                this.setState({ chatId, originalChat, comments: chatRecords });
-            })
-            .catch((error) => {
-                this.setState({ error, isLoading: false });
-            });
-        this.setState({
-            activeBooking: true,
-            currentBookingId: bookingId,
-            value: '',
-        });
-    };
+   
 
     handleConfirm = () => {
         const { currentBookingId } = this.state;
@@ -374,8 +355,7 @@ class StudentDetail extends React.Component {
                 );
             case OFFLINE_BOOKING_STATUS.ACCEPTED:
                 return <Button onClick={this.handleCancel}>Cancel</Button>;
-            case ONLINE_BOOKING_STATUS.PROCESSING:
-                return <Button onClick={this.handleFinish}>Finish</Button>;
+           
             default:
                 return null;
         }
@@ -661,20 +641,15 @@ class StudentDetail extends React.Component {
     }
 
     render() {
-        const { bookings, bookingDetail } = this.props;
-
+        const { bookingDetail } = this.props;
+        const { bookings } = this.state.booking;
         const { activeBooking } = this.state;
         let onlineBooking = [];
         let offlineBooking = [];
         let onlineProcessingBooking = [];
         let offlinePendingBooking = [];
         if (bookings) {
-            onlineBooking = bookings.filter((booking) => {
-                return booking.type === 'online';
-            });
-            onlineProcessingBooking = bookings.filter((onlineBooking) => {
-                return onlineBooking.status === 'processing';
-            });
+            
             
             offlineBooking = bookings.filter((booking) => {
                 return booking.type === 'offline';
@@ -707,19 +682,14 @@ class StudentDetail extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    bookings: state.booking.bookings,
+ 
     bookingDetail: state.booking.bookingDetail,
     firstName: state.user.firstName,
     lastName: state.user.lastName,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    getAllBookings: () => dispatch(fetchAllBookingThunkAction()),
-    getBookingDetail: (bookingId) =>
-        dispatch(fetchBookingDetailThunkAction(bookingId)),
-    fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
-    updateStatus: (currentBookingId, status) =>
-        dispatch(updateStatusThunkAction(currentBookingId, status)),
+  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentDetail);
