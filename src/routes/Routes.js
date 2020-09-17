@@ -14,6 +14,7 @@ import Admin from '../admin/admin/Admin';
 import StudentDetail from '../admin/admin/StudentDetail';
 import Scheduling from '../admin/scheduling/Scheduling';
 import Calender from '../admin/calender/Calender';
+import BookingCardAdmin from '../student/myBooking/components/BookingCardAdmin';
 
 import {
     LOGIN_URL,
@@ -28,7 +29,8 @@ import {
     ADMIN_STUDENT_DETAIL_URL,
     ADMIN_SCHEDULING_URL,
     LOGOUT_SUCCESS_URL,
-    ADMIN_CALENDER_URL
+    ADMIN_CALENDER_URL,
+    ADMIN_BOOKING_URL
 } from './URLMap';
 
 const Routes = () => {
@@ -59,6 +61,7 @@ const Routes = () => {
                     path={FACE_TO_FACE_BOOKING_URL}
                     component={FaceToFaceBooking}
                 />
+              
                 <Route exact path={SUCCESS_URL} component={SuccessMessage} />
                 <Route exact path={LOGOUT_SUCCESS_URL} component={LogoutSuccess} />
                 <Route exact path={ERROR_URL} component={ErrorMessage} />
@@ -66,6 +69,7 @@ const Routes = () => {
                 <ProtectedRoute exact path={ADMIN_STUDENT_DETAIL_URL} component={StudentDetail} />
                 <ProtectedRoute exact path={ADMIN_SCHEDULING_URL} component={Scheduling} />
                 <ProtectedRoute exact path={ADMIN_CALENDER_URL} component={Calender} />
+                <ProtectedRoute exact path={ADMIN_BOOKING_URL} component={BookingCardAdmin} />
             </Switch>
         </React.Fragment>
     );

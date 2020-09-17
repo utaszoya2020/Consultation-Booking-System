@@ -38,7 +38,7 @@ class Calender extends React.Component {
     transDataList = (data) => {
         const dataList = [];
         data.forEach(item => {
-            const { bookingDate, bookingTime, userId, bookingNum } = item;
+            const { bookingDate, bookingTime, userId, bookingNum, _id } = item;
             const { firstName, lastName, studentId } = userId;
             const formatDate = moment(bookingDate).format('YYYY-MM-DD');
             const formatTime = `${bookingTime}:00:00`;
@@ -47,8 +47,10 @@ class Calender extends React.Component {
             const endString = `${formatDate} ${formatEndTime}`;
             const start = new Date(startString);
             const end = new Date(endString);
+            const bookingId = _id;
             const object = {
-                title: `${firstName} ${lastName} (${studentId}) ${bookingNum}`,
+                bookingId,
+                title: `${firstName} ${lastName} (${studentId}) ${bookingNum} `,
                 start,
                 end,
             };

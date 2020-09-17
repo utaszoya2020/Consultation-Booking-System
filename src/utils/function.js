@@ -63,7 +63,7 @@ export const generateEndTime = (string) => {
 
 // identify if disabled
 export const generatenewTimeOptions = (obj) => {
-    // console.log(obj);
+     console.log(obj);
     // const currentDate = new Date();
     // const formatDate = moment(currentDate).format('YYYY-MM-DD');
     // console.log(formatDate);

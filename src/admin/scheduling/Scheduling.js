@@ -86,7 +86,7 @@ class Scheduling extends Component {
     transDataList = (data) => {
         const dataList = [];
         data.forEach(item => {
-            const { bookingDate, bookingTime, userId, bookingNum, campus } = item;
+            const { bookingDate, bookingTime, userId, bookingNum, campus, _id } = item;
             const { firstName, lastName, studentId } = userId;
             const formatDate = moment(bookingDate).format('YYYY-MM-DD');
             const formatTime = `${bookingTime}:00:00`;
@@ -99,7 +99,8 @@ class Scheduling extends Component {
                 title: `${firstName} ${lastName} (${studentId}) ${bookingNum}`,
                 start,
                 end,
-                campus
+                campus,
+                _id
             };
             dataList.push(object);
         });
@@ -494,6 +495,7 @@ class Scheduling extends Component {
                                             start = {booking.start}
                                             end = {booking.end}
                                             title = {booking.title}
+                                            id = {booking.bookingId}
 
                                            />
                                         )
