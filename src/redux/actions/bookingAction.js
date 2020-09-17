@@ -34,6 +34,7 @@ export const fetchBookingThunkAction = (userId) => (dispatch) => {
     dispatch(fetchBookingAction());
     fetchAllMyBookings(userId)
         .then((data) => {
+            console.log(data);
             dispatch(fetchBookingSuccess(data));
         })
         .catch((error) => {

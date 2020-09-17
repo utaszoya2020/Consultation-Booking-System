@@ -10,6 +10,7 @@ const API_CHAT_URL = './chats';
 export const fetchAllMyBookings = (userId) => {
     const url = `${API_USER_URL}/${userId}/bookings`;
     return get(url).then((response) => response.data);
+    
 };
 
 export const fetchAllBookings = () => {

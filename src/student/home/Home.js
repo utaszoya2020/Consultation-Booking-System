@@ -23,13 +23,15 @@ class Home extends React.Component {
         this.setState({ userId }, () => {
             const { fetchMyBooking, fetchUserDetail } = this.props;
             fetchMyBooking(userId);
+           
             fetchUserDetail(userId);
         });
     };
 
     render() {
-        const { bookings, firstName, lastName } = this.props;
-        const fullName = `${firstName} ${lastName}`;
+        const { bookings, firstName, lastName} = this.props;
+       
+        const fullName = `${firstName} ${lastName} `;
         const upComingBookings = bookings.filter((booking) => {
             const { bookingDate, status } = booking;
             const now = new Date().getTime();
@@ -72,6 +74,7 @@ const mapStateToProps = (state) => ({
     bookings: state.booking.bookings,
     firstName: state.user.firstName,
     lastName: state.user.lastName,
+   
 });
 
 const mapDispatchToProps = (dispatch) => ({

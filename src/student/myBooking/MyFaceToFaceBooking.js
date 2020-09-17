@@ -289,6 +289,7 @@ class MyFaceToFaceBooking extends React.Component {
                             bookingId={booking._id}
                             firstName={booking.userId.firstName}
                             lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
                             topic={booking.topic}
                             status={booking.status}
                             handleClickBooking={this.handleClickBooking}
@@ -304,6 +305,7 @@ class MyFaceToFaceBooking extends React.Component {
                             bookingId={booking._id}
                             firstName={booking.userId.firstName}
                             lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
                             topic={booking.topic}
                             status={booking.status}
                             handleClickBooking={this.handleClickBooking}
