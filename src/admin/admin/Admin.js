@@ -468,6 +468,60 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
     }
 };
 
+//render online finished booking card
+renderOnlineFinishedBookingCard = (onlineFinishedBooking) => {
+    const { searchValue, currentBookingId } = this.state;
+    if (onlineFinishedBooking.length) {
+        //TODO improve Search Filter
+        if (searchValue) {
+            const result = onlineFinishedBooking.filter((booking) => {
+                return (
+                    booking.userId.firstName === searchValue ||
+                    booking.userId.lastName === searchValue ||
+                    booking.userId.studentId === searchValue ||
+                    booking.topic === searchValue ||
+                    booking.content === searchValue ||
+                    booking.bookingNum === searchValue ||
+                    booking.status === searchValue
+                );
+            });
+            return result.map((booking) => {
+                return (
+                    <BookingCard
+                        key={booking._id}
+                        bookingId={booking._id}
+                        firstName={booking.userId.firstName}
+                        lastName={booking.userId.lastName}
+                        studentId={booking.userId.studentId}
+                        topic={booking.topic}
+                        status={booking.status}
+                        handleClickBooking={this.handleClickBooking}
+                        currentBookingId={currentBookingId}
+                    />
+                );
+            });
+        } else {
+            return onlineFinishedBooking.map((booking) => {
+                return (
+                    <BookingCard
+                        key={booking._id}
+                        bookingId={booking._id}
+                        firstName={booking.userId.firstName}
+                        lastName={booking.userId.lastName}
+                        studentId={booking.userId.studentId}
+                        topic={booking.topic}
+                        status={booking.status}
+                        handleClickBooking={this.handleClickBooking}
+                        currentBookingId={currentBookingId}
+                    />
+                );
+            });
+        }
+    } else {
+        return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+    }
+};
+
 //render offline booking card
     renderOfflineBookingCard = (offlineBooking) => {
         const { searchValue, currentBookingId } = this.state;
@@ -574,6 +628,61 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
             return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         }
     };
+
+    //render offline finished booking card
+    renderOfflineFinishedBookingCard = (offlineFinishedBooking) => {
+        const { searchValue, currentBookingId } = this.state;
+        if (offlineFinishedBooking.length) {
+            // Search Filter
+            if (searchValue) {
+                const result = offlineFinishedBooking.filter((booking) => {
+                    return (
+                        booking.userId.firstName === searchValue ||
+                        booking.userId.lastName === searchValue ||
+                        booking.userId.studentId === searchValue ||
+                        booking.topic === searchValue ||
+                        booking.content === searchValue ||
+                        booking.bookingNum === searchValue ||
+                        booking.status === searchValue
+                    );
+                });
+                return result.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            } else {
+                return offlineFinishedBooking.map((booking) => {
+                    return (
+                        <BookingCard
+                            key={booking._id}
+                            bookingId={booking._id}
+                            firstName={booking.userId.firstName}
+                            lastName={booking.userId.lastName}
+                            studentId={booking.userId.studentId}
+                            topic={booking.topic}
+                            status={booking.status}
+                            handleClickBooking={this.handleClickBooking}
+                            currentBookingId={currentBookingId}
+                        />
+                    );
+                });
+            }
+        } else {
+            return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+        }
+    };
+
 
     renderOnlineBookingDetail = (bookingDetail) => {
         const { submitting, value, comments } = this.state;
@@ -892,7 +1001,7 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
         );
     };
 
-    renderBookingCard = (onlineBooking, offlineBooking, onlineProcessingBooking, offlinePendingBooking ) => {
+    renderBookingCard = (onlineBooking, offlineBooking, onlineProcessingBooking,onlineFinishedBooking, offlinePendingBooking, offlineFinishedBooking ) => {
 
         if (this.state.activeTab === 'online' & this.state.filterTab === 'all') {
             return  this.renderOnlineBookingCard(onlineBooking);
@@ -902,6 +1011,12 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
         }
         else if (this.state.activeTab === 'online' & this.state.filterTab === 'pending'){
             return this.renderOnlineProcessingBookingCard(onlineProcessingBooking);
+        }
+        else if (this.state.activeTab === 'online' & this.state.filterTab === 'finished'){
+            return this.renderOnlineFinishedBookingCard(onlineFinishedBooking);
+        }
+        else if (this.state.activeTab === 'offline' & this.state.filterTab === 'finished'){
+            return this.renderOnlineFinishedBookingCard(offlineFinishedBooking);
         }
         else {
             return this.renderOfflinePendingBookingCard(offlinePendingBooking);
@@ -1030,7 +1145,9 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
         let onlineBooking = [];
         let offlineBooking = [];
         let onlineProcessingBooking = [];
+        let onlineFinishedBooking = [];
         let offlinePendingBooking = [];
+        let offlineFinishedBooking = [];
         if (bookings) {
             onlineBooking = bookings.filter((booking) => {
                 return booking.type === 'online';
@@ -1038,12 +1155,18 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
             onlineProcessingBooking = bookings.filter((onlineBooking) => {
                 return onlineBooking.status === 'processing';
             });
+            onlineFinishedBooking = bookings.filter((onlineBooking) => {
+                return onlineBooking.status === 'finished';
+            });
             
             offlineBooking = bookings.filter((booking) => {
                 return booking.type === 'offline';
             });
             offlinePendingBooking = bookings.filter((offlineBooking) => {
                 return offlineBooking.status === 'pending';
+            });
+            offlineFinishedBooking = bookings.filter((offlineBooking) => {
+                return offlineBooking.status === 'finished';
             });
         }
         const { activeTab } = this.state;
@@ -1086,6 +1209,7 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
                                 <div className='c-sidemenu__search'>
                                     <Select defaultValue="all" style={{ width: 100 }} onChange={this.handleFilter}>
                                         <Option value="pending">Pending</Option>
+                                        <Option value="finished">Finished</Option>
                                         <Option value="all">ALL</Option>
                                     </Select>
                                     <Search
@@ -1100,7 +1224,10 @@ renderOnlineProcessingBookingCard = (onlineProcessingBooking) => {
                                         onlineBooking,
                                         offlineBooking,
                                         onlineProcessingBooking,
-                                        offlinePendingBooking
+                                        onlineFinishedBooking,
+                                        offlinePendingBooking,
+                                        offlineFinishedBooking,
+
                                     )}
                                 </div>
                             </div>
