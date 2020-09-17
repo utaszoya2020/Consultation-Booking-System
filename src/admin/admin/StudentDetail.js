@@ -83,7 +83,7 @@ class StudentDetail extends React.Component {
         super(props);
 
         this.state = {
-            booking:{},
+            bookingDetail:{},
             currentBookingId: '5f3baea195377becce5b81b7',
             activeBooking: false,
             submitting: false,
@@ -101,7 +101,7 @@ class StudentDetail extends React.Component {
     componentDidMount() {
         fetchBookingDetail('5f3baea195377becce5b81b7').then((data) => {
             console.log(data);
-            const {firstName, lastName, studentId, email, campus, phone, gender} =data;
+            this.setState({bookingDetail:data});
         }
 
         );
@@ -373,7 +373,7 @@ class StudentDetail extends React.Component {
             bookingDate,
             bookingTime,
             attachment,
-        } = bookingDetail;
+        } = this.state.bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY');
         const time = `${date} ${bookingTime}:00 - ${bookingTime}:50`;
 
@@ -390,7 +390,9 @@ class StudentDetail extends React.Component {
                         <div className='c-table__column flex-1'>
                             <span>ID Number</span>
                             <div className='c-table__content'>
-                                <p>453654</p>
+                                <p>{userId
+                                        ? `${userId.studentId} `
+                                        : ''}</p>
                             </div>
                         </div>
                         <div className='c-table__column flex-2'>
@@ -641,8 +643,8 @@ class StudentDetail extends React.Component {
     }
 
     render() {
-        const { bookingDetail } = this.props;
-        const { bookings } = this.state.booking;
+        const {bookingDetail} = this.state.bookingDetail;
+        const { bookings } = this.state.bookingDetail;
         const { activeBooking } = this.state;
         let onlineBooking = [];
         let offlineBooking = [];
