@@ -18,17 +18,19 @@ import { ADMIN_STUDENT_DETAIL_URL } from '../../routes/URLMap';
 
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = [
-    {label: '09:00 - 09:50', value: '09:00 - 09:50', disabled: false},
-    {label: '10:00 - 10:50', value: '10:00 - 10:50', disabled: false},
-    {label: '11:00 - 11:50', value: '11:00 - 11:50', disabled: false},
-    {label: '12:00 - 12:50', value: '12:00 - 12:50', disabled: false},
-    {label: '13:00 - 13:50', value: '13:00 - 13:50', disabled: false},
-    {label: '14:00 - 14:50', value: '14:00 - 14:50', disabled: false},
-    {label: '15:00 - 15:50', value: '15:00 - 15:50', disabled: false},
-    {label: '16:00 - 16:50', value: '16:00 - 16:50', disabled: false},
-    ];
+// const plainOptions = [
+//     {label: '09:00 - 09:50', value: '09:00 - 09:50', disabled: false},
+//     {label: '10:00 - 10:50', value: '10:00 - 10:50', disabled: false},
+//     {label: '11:00 - 11:50', value: '11:00 - 11:50', disabled: false},
+//     {label: '12:00 - 12:50', value: '12:00 - 12:50', disabled: false},
+//     {label: '13:00 - 13:50', value: '13:00 - 13:50', disabled: false},
+//     {label: '14:00 - 14:50', value: '14:00 - 14:50', disabled: false},
+//     {label: '15:00 - 15:50', value: '15:00 - 15:50', disabled: false},
+//     {label: '16:00 - 16:50', value: '16:00 - 16:50', disabled: false},
+//     ];
+const plainOptions = ['09:00 - 09:50','10:00 - 10:50','11:00 - 11:50','12:00 - 12:50','13:00 - 13:50','14:00 - 14:50','15:00 - 15:50','16:00 - 16:50']
 const defaultCheckedList = [];
+
 
 
 class Scheduling extends Component {
@@ -135,10 +137,17 @@ class Scheduling extends Component {
       };
 
       onCheckAllChange = e => {
+        setTimeout(() => {
+            const temperatesession = transformArray(this.state.checkedList);
+       
+            this.setState({currentSessionTime:temperatesession});
+       
+          }, 0);
         this.setState({
           checkedList: e.target.checked ? plainOptions : [],
           indeterminate: false,
           checkAll: e.target.checked,
+          
         });
       };
 
@@ -414,6 +423,7 @@ class Scheduling extends Component {
                                             indeterminate={this.state.indeterminate}
                                             onChange={this.onCheckAllChange}
                                             checked={this.state.checkAll}
+                                            
                                         >
                                             Click all
                                         </Checkbox>
@@ -426,7 +436,9 @@ class Scheduling extends Component {
                                             options={this.state.timeOptions}
                                             value={this.state.checkedList}
                                             onChange={this.onChange}
+                                            
                                         />
+                                        
                                      </div>
                                 </div>
                                 <div className='l-scheduling__btn'>
