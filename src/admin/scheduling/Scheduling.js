@@ -415,7 +415,7 @@ class Scheduling extends Component {
                                             onChange={this.onCheckAllChange}
                                             checked={this.state.checkAll}
                                         >
-                                            Check all
+                                            Click all
                                         </Checkbox>
                                         <br/>
                                     </div>
