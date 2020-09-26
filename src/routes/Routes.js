@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Home from '../student/home/Home';
+import StudentHome from '../student/home/StudentHome';
 import LoginForm from '../logIn/LogIn';
 import OnlineBooking from '../student/onlineBooking/OnlineBooking';
 import FaceToFaceBooking from '../student/faceToFaceBooking/FaceToFaceBooking';
@@ -40,7 +41,7 @@ const Routes = () => {
                 <ProtectedRoute exact from='/' to={LOGIN_URL} />
                 <ProtectedRoute exact from='/student' to={LOGIN_URL} />
                 <Route exact path={LOGIN_URL} component={LoginForm} />
-                <ProtectedRoute exact path={STUDENT_HOME_URL} component={Home} />
+                <ProtectedRoute exact path={STUDENT_HOME_URL} component={StudentHome} />
                 <ProtectedRoute
                     exact
                     path={MY_FACETOFACE_BOOKING_URL}
