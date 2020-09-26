@@ -60,7 +60,7 @@ class Scheduling extends Component {
         this.getAllSessions();
         this.getAllBooking();
     }
-
+  
     getAllBooking = () => {
         fetchAllOfflineBookings().then(data => {
             console.log(data);
@@ -376,6 +376,34 @@ class Scheduling extends Component {
                     })
                 );
             } else {
+                if(existSession===undefined){
+                    fetchAllSessions().then(data => {
+                        console.log(data);
+                                    const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
+                                    console.log(currentDate);
+                                    const existSession = data.filter(item => item.date === currentDate)[0];
+                                    setTimeout(() => {
+                                        this.setState({ existSession });
+                                      }, 0);
+                                    
+                                    console.log(existSession._id);
+                                    const sessionId = existSession._id;
+                    updateSession(sessionId, currentSessionTime).then(() => {
+                    this.setState({ isLoading: false }, () => {
+                        this.getAllSessions();
+                        message.success('Update success!');
+                    });
+                   })
+                   .catch((error) =>
+                    this.setState({ error, isLoading: false }, () => {
+                        message.error('Update failed!');
+                    })
+                );
+                });
+                
+                return;
+            }
+//
                 const sessionId = existSession._id;
                 updateSession(sessionId, currentSessionTime).then(() => {
                     this.setState({ isLoading: false }, () => {
@@ -388,7 +416,7 @@ class Scheduling extends Component {
                         message.error('Update failed!');
                     })
                 );
-            }
+                 }
         });
     };
 
