@@ -69,7 +69,7 @@ const Routes = () => {
                 <ProtectedRoute exact path={ADMIN_STUDENT_DETAIL_URL} component={StudentDetail} />
                 <ProtectedRoute exact path={ADMIN_SCHEDULING_URL} component={Scheduling} />
                 <ProtectedRoute exact path={ADMIN_CALENDER_URL} component={Calender} />
-                <ProtectedRoute exact path={ADMIN_BOOKING_URL} component={BookingCardAdmin} />
+                <ProtectedRoute exact path={`${ADMIN_BOOKING_URL}/:id`}  component={StudentDetail} />
             </Switch>
         </React.Fragment>
     );

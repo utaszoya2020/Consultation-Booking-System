@@ -99,13 +99,16 @@ class StudentDetail extends React.Component {
     }
 
     componentDidMount() {
-        fetchBookingDetail('5f3baea195377becce5b81b7').then((data) => {
+        const courseId = this.props.match.params.id;
+        console.log(courseId)
+
+        fetchBookingDetail(courseId).then((data) => {
             console.log(data);
             this.setState({bookingDetail:data});
         }
 
         );
-        fetchAllChatByBookingId('5f3baea195377becce5b81b7')
+        fetchAllChatByBookingId(courseId)
             .then((chat) => {
                 const newChat = this.transChatRecords(chat);
                 const { chatId, originalChat, chatRecords } = newChat;
@@ -643,6 +646,7 @@ class StudentDetail extends React.Component {
     }
 
     render() {
+
         const {bookingDetail} = this.state.bookingDetail;
         const { bookings } = this.state.bookingDetail;
         const { activeBooking } = this.state;

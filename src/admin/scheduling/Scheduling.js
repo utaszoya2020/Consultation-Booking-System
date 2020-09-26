@@ -13,7 +13,7 @@ import {currentSessionCreator, transformArray, generatenewTimeOptions, compare} 
 import BookingCardAdmin from '../../student/myBooking/components/BookingCardAdmin';
 import { fetchAllOfflineBookings } from '../../utils/api/booking';
 import { Link } from "react-router-dom";
-import { ADMIN_STUDENT_DETAIL_URL } from '../../routes/URLMap';
+import { ADMIN_BOOKING_URL } from '../../routes/URLMap';
 
 
 const { Option } = Select;
@@ -219,7 +219,10 @@ class Scheduling extends Component {
         );
     }
 
-    
+    hadleClickCard = value => {
+        console.log(value);
+        this.props.history.push(`${ADMIN_BOOKING_URL}/${value}`)
+    }
 
     handleDateChange = value => {
         this.getAllBooking();
@@ -301,6 +304,7 @@ class Scheduling extends Component {
          })
        
     };
+  
 
     handleCampusChange = value => {
         const {selectedDate} = this.state;
@@ -487,24 +491,26 @@ class Scheduling extends Component {
                                         
                                     </Popconfirm>
                                 </div>
-                                <Link to={ADMIN_STUDENT_DETAIL_URL}>
+                                <div>
                                     {this.state.bookings.map((booking) => {
                                         return  (
+                                            <button onClick={()=>this.hadleClickCard(booking._id)}>
                                            <BookingCardAdmin 
                                             bookings = {booking}
                                             start = {booking.start}
                                             end = {booking.end}
                                             title = {booking.title}
-                                            id = {booking.bookingId}
-
+                                            id = {booking._id}
+                                       
                                            />
+                                           </button>
                                         )
                                      })
                                     }
                                     
 
                                     
-                                </Link>
+                                </div>
                             </div>
                         </div>
                     </div>
