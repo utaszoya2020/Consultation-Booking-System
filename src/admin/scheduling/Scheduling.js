@@ -449,7 +449,6 @@ class Scheduling extends Component {
                                 <Select className={this.state.hasCampus ? 'l-scheduling__hidden' : ''} placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200 }} onChange={this.handleCampusChange}>
                                     <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
                                     <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
-                                    <Option value={CAMPUS.MELBOURNE}>{capitalize(CAMPUS.MELBOURNE)}</Option>
                                     <Option value={CAMPUS.HOBART}>{capitalize(CAMPUS.HOBART)}</Option>
                                 </Select>
                             </div>
