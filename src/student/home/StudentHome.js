@@ -111,6 +111,10 @@ class Admin extends React.Component {
         });
     }
 
+    componentDidUpdate() {
+       
+    }
+
     showDrawer = () => {
         this.setState({
           visible: true,
@@ -196,8 +200,7 @@ class Admin extends React.Component {
         confirm({
             title: 'Do you want to cancel these booking?',
             icon: <ExclamationCircleOutlined />,
-            content:
-                'When clicked the OK button, this booking will be canceled',
+            content:<Input placeholder="Please input reason" />,
             onOk() {
                 return new Promise((resolve, reject) => {
                     updateStatus(currentBookingId, status)
@@ -207,7 +210,7 @@ class Admin extends React.Component {
                         .catch((error) => {
                             reject(error);
                         });
-                }).catch(() => console.log('Oops errors!'));
+                }).catch(() =>  console.log('Oops errors!'));
             },
             onCancel() {},
         });

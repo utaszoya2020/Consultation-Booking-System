@@ -29,6 +29,8 @@ import {
     updateChat,
     fetchAllChatByBookingId,
     fetchAllMyBookings,
+    fetchAllBookings,
+    fetchBookingDetail,
 } from '../../utils/api/booking';
 import { orderBy, capitalize } from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -94,6 +96,7 @@ class Admin extends React.Component {
             error: null,
             visible: false,
             childrenDrawer: false,
+            action:false,
             userBookingHistory: []
         };
     }
@@ -108,7 +111,16 @@ class Admin extends React.Component {
     }
 
     componentDidUpdate() {
-        this.props.getAllBookings();
+        
+        if ((this.state.bookingDetail != this.props.bookingDetail)&&(this.state.action == true)){
+             const { getBookingDetail } = this.props;
+       getBookingDetail(this.state.currentBookingId) 
+       this.props.getAllBookings();
+        
+        }
+       
+      
+        console.log('update');
     }
 
     showDrawer = () => {
@@ -169,21 +181,25 @@ class Admin extends React.Component {
         const { currentBookingId } = this.state;
         const { updateStatus } = this.props;
         const status = OFFLINE_BOOKING_STATUS.ACCEPTED;
+        this.setState({action: true});
         confirm({
             title: 'Do you want to accept these booking?',
             icon: <ExclamationCircleOutlined />,
             content:
                 'When clicked the OK button, this booking will be accepted',
             onOk() {
+                
                 return new Promise((resolve, reject) => {
+                    
                     updateStatus(currentBookingId, status)
                         .then(() => {
+                            
                             resolve();
                         })
                         .catch((error) => {
                             reject(error);
                         });
-                }).catch(() => console.log('Oops errors!'));
+                }).catch(() =>  console.log('Oops errors!'));
             },
             onCancel() {},
         });
@@ -193,21 +209,24 @@ class Admin extends React.Component {
         const { currentBookingId } = this.state;
         const { updateStatus } = this.props;
         const status = OFFLINE_BOOKING_STATUS.CANCELED;
+        this.setState({action: true});
         confirm({
             title: 'Do you want to cancel these booking?',
             icon: <ExclamationCircleOutlined />,
-            content:
-                'When clicked the OK button, this booking will be canceled',
+            content:<Input placeholder="Please input reason" />,
             onOk() {
+                
                 return new Promise((resolve, reject) => {
+                    
                     updateStatus(currentBookingId, status)
                         .then(() => {
+                            
                             resolve();
                         })
                         .catch((error) => {
                             reject(error);
                         });
-                }).catch(() => console.log('Oops errors!'));
+                }).catch(() =>  console.log('Oops errors!'));
             },
             onCancel() {},
         });

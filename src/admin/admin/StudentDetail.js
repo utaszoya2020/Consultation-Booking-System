@@ -102,12 +102,13 @@ class StudentDetail extends React.Component {
         const courseId = this.props.match.params.id;
         console.log(courseId)
 
-        fetchBookingDetail(courseId).then((data) => {
-            console.log(data);
-            this.setState({bookingDetail:data});
-        }
+        // fetchBookingDetail(courseId).then((data) => {
+        //     console.log('333');
+        //     console.log(data);
+        //     this.setState({bookingDetail:data});
+        // }
 
-        );
+        // );
         fetchAllChatByBookingId(courseId)
             .then((chat) => {
                 const newChat = this.transChatRecords(chat);
@@ -122,6 +123,10 @@ class StudentDetail extends React.Component {
             
             value: '',
         });
+    }
+
+    componentDidUpdate() {
+        console.log('detailupdate');
     }
 
     showDrawer = () => {
