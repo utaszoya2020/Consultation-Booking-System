@@ -845,8 +845,8 @@ renderOnlineFinishedBookingCard = (onlineFinishedBooking) => {
             case OFFLINE_BOOKING_STATUS.PENDING:
                 return (
                     <div>
-                        <Button onClick={this.handleConfirm}>Accept</Button>
-                        <Button onClick={this.handleCancel}>Reject</Button>
+                      
+                        <Button onClick={this.handleCancel}>Cancel</Button>
                     </div>
                 );
             case OFFLINE_BOOKING_STATUS.ACCEPTED:

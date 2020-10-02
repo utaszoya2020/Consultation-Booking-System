@@ -41,6 +41,7 @@ export const addBooking = (
     attachment
 ) => {
     const url = API_BOOKING_URL;
+    console.log(attachment);
     const status = type === BOOKING_TYPE.ONLINE ? ONLINE_BOOKING_STATUS.PROCESSING : OFFLINE_BOOKING_STATUS.PENDING;
     const data = {
         type,

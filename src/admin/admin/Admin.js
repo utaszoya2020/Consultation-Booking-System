@@ -110,19 +110,19 @@ class Admin extends React.Component {
         });
     }
 
-    componentDidUpdate() {
+    // componentDidUpdate() {
         
-        if ((this.state.bookingDetail != this.props.bookingDetail)&&(this.state.action == true)){
-             const { getBookingDetail } = this.props;
-       getBookingDetail(this.state.currentBookingId) 
-       this.props.getAllBookings();
-      // this.setState({action:false});
+    //     if ((this.state.bookingDetail != this.props.bookingDetail)&&(this.state.action == true)){
+    //          const { getBookingDetail } = this.props;
+    //    getBookingDetail(this.state.currentBookingId) 
+    //    this.props.getAllBookings();
+    //   // this.setState({action:false});
         
-        }
+    //     }
        
       
-        console.log('update');
-    }
+    //     console.log('update');
+    // }
 
     showDrawer = () => {
         this.setState({
