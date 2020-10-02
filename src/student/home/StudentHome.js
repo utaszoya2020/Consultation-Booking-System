@@ -898,7 +898,7 @@ renderOnlineFinishedBookingCard = (onlineFinishedBooking) => {
                                         ? `${userId.firstName} ${userId.lastName}`
                                         : ''}
                                 </p>
-                                <a onClick={this.showDrawer}>View Profile</a>
+                                
                             </div>
                         </div>
                         <div className='c-table__column flex-1'>

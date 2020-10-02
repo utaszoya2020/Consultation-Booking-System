@@ -116,6 +116,7 @@ class Admin extends React.Component {
              const { getBookingDetail } = this.props;
        getBookingDetail(this.state.currentBookingId) 
        this.props.getAllBookings();
+      // this.setState({action:false});
         
         }
        
