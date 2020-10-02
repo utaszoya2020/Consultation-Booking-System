@@ -107,6 +107,10 @@ class Admin extends React.Component {
         });
     }
 
+    componentDidUpdate() {
+        this.props.getAllBookings();
+    }
+
     showDrawer = () => {
         this.setState({
           visible: true,
