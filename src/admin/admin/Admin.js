@@ -71,6 +71,8 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </div>
 );
 
+
+
 const DescriptionItem = ({ title, content }) => (
     <div className="site-description-item-profile-wrapper">
       <p className="site-description-item-profile-p-label">{title}:</p>
@@ -90,6 +92,7 @@ class Admin extends React.Component {
             activeBooking: false,
             submitting: false,
             value: '',
+            input: '',
             chatId: '',
             originalChat: [], //chatRecord in database
             comments: [],
@@ -182,7 +185,7 @@ class Admin extends React.Component {
         const { currentBookingId } = this.state;
         const { updateStatus } = this.props;
         const status = OFFLINE_BOOKING_STATUS.ACCEPTED;
-        this.setState({action: true});
+      
         confirm({
             title: 'Do you want to accept these booking?',
             icon: <ExclamationCircleOutlined />,
@@ -208,13 +211,18 @@ class Admin extends React.Component {
 
     handleCancel = () => {
         const { currentBookingId } = this.state;
-        const { updateStatus } = this.props;
+        const { input } = this.state;
+        const { 
+            
+            
+            updateStatus } = this.props;
         const status = OFFLINE_BOOKING_STATUS.CANCELED;
         this.setState({action: true});
+        
         confirm({
             title: 'Do you want to cancel these booking?',
             icon: <ExclamationCircleOutlined />,
-            content:<Input placeholder="Please input reason" />,
+            content:   <Input placeholder="Please input reason"  onChange={this.handleInputChange} />  ,
             onOk() {
                 
                 return new Promise((resolve, reject) => {
@@ -383,6 +391,14 @@ class Admin extends React.Component {
             value: e.target.value,
         });
     };
+
+    handleInputChange =(e) => {
+       
+        this.setState({
+            input: e.target.value,
+        });
+     
+    }
 
   // renderOnline booking card
     renderOnlineBookingCard = (onlineBooking) => {
@@ -897,6 +913,7 @@ renderOnlineFinishedBookingCard = (onlineFinishedBooking) => {
                     <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
                     <div className='l-admin__action'>
                         {this.renderActionBtn(status)}
+                     
                     </div>
                 </div>
                 <div className='c-table'>
@@ -1268,6 +1285,7 @@ renderOnlineFinishedBookingCard = (onlineFinishedBooking) => {
                 {bookingDetail && activeBooking
                     ? this.renderViewProfile(bookingDetail)
                     : null}
+                 
             </div>
         );
     }

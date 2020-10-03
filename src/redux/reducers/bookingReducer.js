@@ -7,6 +7,9 @@ import {
     ADD_BOOKING_FAILURE,
     FETCH_BOOKING_DETAIL_SUCCESS,
 } from '../actions/action.js';
+import {
+    fetchAllBookings,
+} from '../../utils/api/booking';
 
 const initialState = {
     bookings: [],
@@ -18,6 +21,7 @@ const initialState = {
 };
 
 const bookingReducer = (state = initialState, action) => {
+       
     switch (action.type) {
         case FETCH_BOOKING_ACTION: {
             return {
@@ -43,12 +47,19 @@ const bookingReducer = (state = initialState, action) => {
         }
 
         case FETCH_BOOKING_DETAIL_SUCCESS: {
-            return {
-                ...state,
-                isLoading: false,
-                bookingDetail: action.bookingDetail,
-            };
-        }
+             
+    
+
+        return {
+            ...state,
+            isLoading: false,
+            bookingDetail: action.bookingDetail,
+            
+           }
+             }
+           
+          
+   
 
         case ADD_BOOKING_ACTION: {
             return {
@@ -78,6 +89,8 @@ const bookingReducer = (state = initialState, action) => {
 
         default:
             return state;
+
+
     }
 };
 
