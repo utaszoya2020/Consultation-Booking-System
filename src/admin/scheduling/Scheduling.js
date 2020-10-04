@@ -52,6 +52,7 @@ class Scheduling extends Component {
             checkAll: false,
             hasCampus: false,
             bookings: [],
+            allbookings: [],
             error: null
         };
     }
@@ -66,6 +67,8 @@ class Scheduling extends Component {
            
             if(data) {
                 //console.log(data[3].bookingDate.slice(0,10));
+                const allbookings = this.transDataList(data);
+                this.setState({ allbookings });
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
                 //console.log(currentDate);
                 const temdata = data.filter(item => item.bookingDate.slice(0,10) === currentDate);
@@ -198,10 +201,19 @@ class Scheduling extends Component {
     getListData = value => {
         const { dateRenderData } = this.state;
         const { bookings } = this.state;
+        const { allbookings } = this.state;
         let listData =[];
    
         
-        bookings.map(item => {
+        // bookings.map(item => {
+        //     if (item.status === 'pending' && value.format('YYYY-MM-DD') === item.formatDate) {
+        //         listData = [{
+        //             type: 'warning', content: 'pending'
+        //         }];
+        //     }
+
+        // });
+        allbookings.map(item => {
             if (item.status === 'pending' && value.format('YYYY-MM-DD') === item.formatDate) {
                 listData = [{
                     type: 'warning', content: 'pending'
