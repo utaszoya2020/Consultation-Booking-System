@@ -27,6 +27,7 @@ import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 import {
     addChat,
     updateChat,
+    addLog,
     fetchAllChatByBookingId,
     fetchAllMyBookings,
     fetchAllBookings,
@@ -206,10 +207,12 @@ class Admin extends React.Component {
             onCancel() {},
         });
     };
-
+    handleInnput = () => {
+        
+    }
     handleCancel = () => {
-        const { currentBookingId } = this.state;
-        const { input } = this.state;
+        const { currentBookingId, userId, input } = this.state;
+       
         const { 
             
             
@@ -220,8 +223,15 @@ class Admin extends React.Component {
         confirm({
             title: 'Do you want to cancel these booking?',
             icon: <ExclamationCircleOutlined />,
-            content:   <Input placeholder="Please input reason"  onChange={this.handleInputChange} />  ,
+            content:   <Input placeholder="Please input reason" id="inputReason" onChange={this.handleInputChange} />  ,
             onOk() {
+                
+                const log = {
+                    bookingId: currentBookingId,
+                    staffId: userId,
+                    logRecords: document.getElementById("inputReason").value,
+                };
+                addLog(log);
                 
                 return new Promise((resolve, reject) => {
                     
@@ -1303,6 +1313,7 @@ const mapDispatchToProps = (dispatch) => ({
     fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
     updateStatus: (currentBookingId, status) =>
         dispatch(updateStatusThunkAction(currentBookingId, status)),
+    
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Admin);

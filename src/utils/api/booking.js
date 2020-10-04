@@ -5,6 +5,7 @@ import { BOOKING_TYPE, ONLINE_BOOKING_STATUS, OFFLINE_BOOKING_STATUS } from '../
 const API_BOOKING_URL = './bookings';
 const API_USER_URL = './users';
 const API_CHAT_URL = './chats';
+const API_LOG_URL = './logs';
 
 // TODO Fix REST API
 export const fetchAllMyBookings = (userId) => {
@@ -73,6 +74,13 @@ export const updateBookingStatus = (bookingId, status) => {
 export const addChat = (chat) => {
     const url = API_CHAT_URL;
     const data = chat;
+    return post(url, data).then((response) => response.data);
+};
+
+export const addLog = (input) => {
+    
+    const url = API_LOG_URL;
+    const data = input;
     return post(url, data).then((response) => response.data);
 };
 
