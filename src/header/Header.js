@@ -54,7 +54,7 @@ class Header extends React.Component {
                     <NavLink className='nav-left_brand' to={STUDENT_HOME_URL}>
                         <Nav.Link href={STUDENT_HOME_URL}>Home</Nav.Link>
                     </NavLink>
-                    <NavDropdown
+                    {/* <NavDropdown
                         title='My Booking'
                         id='collasible-nav-dropdown'
                     >
@@ -75,7 +75,7 @@ class Header extends React.Component {
                                 Face-To-Face
                             </NavDropdown.Item>
                         </NavLink>
-                    </NavDropdown>
+                    </NavDropdown> */}
                     <NavLink className='nav-left_brand' to={ONLINE_BOOKING_URL}>
                         <Nav.Link href={ONLINE_BOOKING_URL}>
                             Start Online Consultation
