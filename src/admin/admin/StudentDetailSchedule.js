@@ -29,9 +29,14 @@ import {
 import {
     addChat,
     updateChat,
+    addLog,
     fetchAllChatByBookingId,
     fetchAllMyBookings,
 } from '../../utils/api/booking';
+import {
+    fetchBookingDetailThunkAction,
+    updateStatusThunkAction,
+} from '../../redux/actions/bookingAction';
 import { orderBy, capitalize } from 'lodash';
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { ONLINE_BOOKING_STATUS, OFFLINE_BOOKING_STATUS } from '../../constants/option';
@@ -84,7 +89,7 @@ class StudentDetailSchedule extends React.Component {
 
         this.state = {
             bookingDetail:{},
-            currentBookingId: '5f3baea195377becce5b81b7',
+            currentBookingId: '',
             activeBooking: false,
             submitting: false,
             value: '',
@@ -94,17 +99,22 @@ class StudentDetailSchedule extends React.Component {
             error: null,
             visible: false,
             childrenDrawer: false,
-            userBookingHistory: []
+            userBookingHistory: [],
+            userId:'',
         };
     }
 
     componentDidMount() {
         const courseId = this.props.match.params.id;
-        console.log(courseId)
-
+        const userId = fetchUserId();
+        this.setState({ userId});
+        // const { getBookingDetail } = this.props;
+        // this.setState(()=>{
+        //     getBookingDetail(courseId);
+        // })
         fetchBookingDetail(courseId).then((data) => {
-            console.log('333');
-            console.log(data);
+            console.log(this.props.bookingDetail);
+       
             this.setState({bookingDetail:data, currentBookingId:data._id});
         }
 
@@ -126,7 +136,19 @@ class StudentDetailSchedule extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('detailupdate');
+        const courseId = this.props.match.params.id;
+        if((this.props.bookingDetail != this.state.bookingDetail )&& this.props.bookingDetail != {}){
+            console.log('ddd')
+            // const courseId = this.props.match.params.id;
+            // fetchBookingDetail(courseId).then((data) => {
+            //     console.log('333');
+            //     console.log(data);
+            //     this.setState({bookingDetail:data, currentBookingId:data._id});
+            // }
+    
+            // );
+        }
+      
     }
 
     showDrawer = () => {
@@ -175,24 +197,34 @@ class StudentDetailSchedule extends React.Component {
     };
 
     handleCancel = () => {
-        const { currentBookingId } = this.state;
+        const { currentBookingId, userId } = this.state;
         const { updateStatus } = this.props;
         const status = OFFLINE_BOOKING_STATUS.CANCELED;
         confirm({
             title: 'Do you want to cancel these booking?',
             icon: <ExclamationCircleOutlined />,
-            content:
-                'When clicked the OK button, this booking will be canceled',
+            content:<Input placeholder="Please input reason" id="inputReason" onChange={this.handleInputChange} />,
             onOk() {
+                
+                const log = {
+                    bookingId: currentBookingId,
+                    staffId: userId,
+                    logRecords: document.getElementById("inputReason").value,
+                };
+                addLog(log);
                 return new Promise((resolve, reject) => {
                     updateStatus(currentBookingId, status)
-                        .then(() => {
+                        .then((data) => {
+                            console.log(data);
                             resolve();
                         })
                         .catch((error) => {
                             reject(error);
                         });
-                }).catch(() => console.log('Oops errors!'));
+                }).catch(() => {
+                    fetchBookingDetail(currentBookingId)
+                });
+                this.setState({bookingDetail: fetchBookingDetail(currentBookingId)})
             },
             onCancel() {},
         });
@@ -389,9 +421,9 @@ class StudentDetailSchedule extends React.Component {
             <div>
                 <div className='l-admin__header'>
                     <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
-                    <div className='l-admin__action'>
+                    {/* <div className='l-admin__action'>
                         {this.renderActionBtn(status)}
-                    </div>
+                    </div> */}
                 </div>
                 <div className='c-table'>
                     <div className='c-table__row'>
@@ -653,8 +685,13 @@ class StudentDetailSchedule extends React.Component {
     }
 
     render() {
-
-        const {bookingDetail} = this.state.bookingDetail;
+        console.log(this.props.bookingDetail)
+        
+            var {bookingDetail} = this.props; 
+       
+           
+      
+       
         const { bookings } = this.state.bookingDetail;
         const { activeBooking } = this.state;
         let onlineBooking = [];
@@ -700,14 +737,17 @@ class StudentDetailSchedule extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
- 
+    
     bookingDetail: state.booking.bookingDetail,
     firstName: state.user.firstName,
     lastName: state.user.lastName,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  
+    getBookingDetail: (bookingId) =>
+        dispatch(fetchBookingDetailThunkAction(bookingId)),
+    updateStatus: (currentBookingId, status) =>
+    dispatch(updateStatusThunkAction(currentBookingId, status)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentDetailSchedule);

@@ -9,6 +9,7 @@ function BookingCard(props) {
         end,
         title,
         id,
+        status
         
         
     } = props;
@@ -29,6 +30,7 @@ const routeChange = (props) =>{
                     <strong>{`${startTime}--${endTime}`}</strong> 
                 </p>
                 <p className='booking-card__text'>{title}</p>
+                <p className='booking-card__text'>{status}</p>
                 
             </div>
         </a>

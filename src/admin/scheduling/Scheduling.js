@@ -86,7 +86,7 @@ class Scheduling extends Component {
     transDataList = (data) => {
         const dataList = [];
         data.forEach(item => {
-            const { bookingDate, bookingTime, userId, bookingNum, campus, _id } = item;
+            const { bookingDate, bookingTime, userId, bookingNum, campus, _id, status } = item;
             const { firstName, lastName, studentId } = userId;
             const formatDate = moment(bookingDate).format('YYYY-MM-DD');
             const formatTime = `${bookingTime}:00:00`;
@@ -97,10 +97,12 @@ class Scheduling extends Component {
             const end = new Date(endString);
             const object = {
                 title: `${firstName} ${lastName} (${studentId}) ${bookingNum}`,
+                formatDate,
                 start,
                 end,
                 campus,
-                _id
+                _id,
+                status
             };
             dataList.push(object);
         });
@@ -158,12 +160,13 @@ class Scheduling extends Component {
             const currentDate = moment().format('YYYY-MM-DD');
             const existSession = data.filter(item => item.date === currentDate)[0];
             const dateRenderData = this.getDateRenderData(data);
+            console.log(dateRenderData);
             this.setState({ dateRenderData, existSession });
             this.setState({campus:existSession.campus});
             const campusIndicator = this.checkHasCampus(existSession.campus);
             this.setState({hasCampus : campusIndicator});
             fetchSession(currentDate, existSession.campus).then(data => {
-                console.log(data);
+                
                 if(data) {
                     const { time } = data;
                     this.setState({ currentSessionTime: time });
@@ -194,14 +197,29 @@ class Scheduling extends Component {
 
     getListData = value => {
         const { dateRenderData } = this.state;
+        const { bookings } = this.state;
         let listData =[];
-        dateRenderData.map(item => {
-            if (value.format('YYYY-MM-DD')===item.date) {
+        console.log(dateRenderData);
+        console.log(bookings);
+        bookings.map(item => {
+            if (item.status === 'pending' && value.format('YYYY-MM-DD') === item.formatDate) {
                 listData = [{
-                    type: 'success', content: capitalize(item.campus)
+                    type: 'warning', content: 'pending'
                 }];
             }
+
         });
+        dateRenderData.map(item => {
+           
+            if (value.format('YYYY-MM-DD')===item.date) {
+                const obj ={
+                    type: 'success', content: capitalize(item.campus)
+                };
+                listData.push(obj);
+            }
+            
+        });
+        console.log(listData);
         return listData;
     }
 
@@ -528,6 +546,7 @@ class Scheduling extends Component {
                                             end = {booking.end}
                                             title = {booking.title}
                                             id = {booking._id}
+                                            status = {booking.status}
                                        
                                            />
                                            </button>
