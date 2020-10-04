@@ -39,7 +39,7 @@ export function compare(property){
     return function(obj1,obj2){
         var value1 = obj1[property].toString();
         var value2 = obj2[property].toString();
-        return value1 - value2;     // 升序
+        return value2 - value1;     // 升序
     }
    }
 

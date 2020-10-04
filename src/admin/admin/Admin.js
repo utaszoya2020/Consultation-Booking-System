@@ -34,6 +34,7 @@ import {
     fetchBookingDetail,
 } from '../../utils/api/booking';
 import { orderBy, capitalize } from 'lodash';
+
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { ONLINE_BOOKING_STATUS, OFFLINE_BOOKING_STATUS } from '../../constants/option';
 import AvatarLogo from '../../assets/icon/avatar.png';
@@ -1198,6 +1199,7 @@ renderOnlineFinishedBookingCard = (onlineFinishedBooking) => {
         let offlinePendingBooking = [];
         let offlineFinishedBooking = [];
         if (bookings) {
+            bookings.reverse();
             onlineBooking = bookings.filter((booking) => {
                 return booking.type === 'online';
             });
