@@ -125,7 +125,7 @@ class Scheduling extends Component {
 
         setTimeout(() => {
             const temperatesession = transformArray(this.state.checkedList);
-            console.log(temperatesession);
+           
             this.setState({currentSessionTime:temperatesession});
        
           }, 0);
@@ -160,7 +160,7 @@ class Scheduling extends Component {
             const currentDate = moment().format('YYYY-MM-DD');
             const existSession = data.filter(item => item.date === currentDate)[0];
             const dateRenderData = this.getDateRenderData(data);
-            console.log(dateRenderData);
+            
             this.setState({ dateRenderData, existSession });
             this.setState({campus:existSession.campus});
             const campusIndicator = this.checkHasCampus(existSession.campus);
@@ -199,8 +199,8 @@ class Scheduling extends Component {
         const { dateRenderData } = this.state;
         const { bookings } = this.state;
         let listData =[];
-        console.log(dateRenderData);
-        console.log(bookings);
+   
+        
         bookings.map(item => {
             if (item.status === 'pending' && value.format('YYYY-MM-DD') === item.formatDate) {
                 listData = [{
@@ -219,7 +219,8 @@ class Scheduling extends Component {
             }
             
         });
-        console.log(listData);
+       
+        
         return listData;
     }
 
@@ -238,7 +239,8 @@ class Scheduling extends Component {
     }
 
     hadleClickCard = value => {
-        console.log(value);
+        
+        
         this.props.history.push(`${ADMIN_BOOKING_URL}/${value}`)
     }
 
@@ -248,7 +250,8 @@ class Scheduling extends Component {
         const { dateRenderData } = this.state;
         const newCampus = this.state.campus;
         let listData =[];
-        console.log(value.format('YYYY-MM-DD'));
+        
+        
         const currentDate = new Date();
         const currentformatDate = moment(currentDate).format('YYYY-MM-DD');
         if(currentformatDate>value.format('YYYY-MM-DD')){
@@ -260,11 +263,11 @@ class Scheduling extends Component {
         dateRenderData.map(item => {
            
                fetchAllSessions().then(data => {
-            console.log(data);
+            
                         const currentDate = value.format('YYYY-MM-DD');
-                        console.log(currentDate);
+                        
                         const existSession = data.filter(item => item.date === currentDate)[0];
-                        console.log(existSession);
+                      
                         if(existSession===undefined){
                             if(this.state.bookings.length > 0){
                                 this.setState({hasCampus : true, campus: this.state.bookings[0].campus, currentSessionTime:[],checkedList:[]});
@@ -284,23 +287,23 @@ class Scheduling extends Component {
         }) 
 
             if (value.format('YYYY-MM-DD')===item.date) {
-                console.log(item.date);
+               
                 listData = [{
                     type: 'success', content: capitalize(item.campus)
                 }];
-                console.log(listData);
+               
                 if (listData === null) {
                     this.setState({campus:''});
                     this.setState({hasCampus : false});
                 }else {
-                    console.log(item.campus);    
+                      
                     this.setState({campus:item.campus});
                     this.setState({hasCampus : true});
                     fetchAllSessions().then(data => {
                       
                         const currentDate = value.format('YYYY-MM-DD');
                         const existSession = data.filter(item => item.date === currentDate)[0];
-                        console.log(existSession);
+                      
                         this.setState({ existSession, campus: existSession.campus });
                         //this.setState({campus:existSession.campus});
                         fetchSession(currentDate, existSession.campus).then(data => {
@@ -334,7 +337,7 @@ class Scheduling extends Component {
         }, () => {
             setTimeout(() => {
                 const temperatesession = transformArray(this.state.checkedList);
-                console.log(temperatesession);
+                
                 this.setState({currentSessionTime:temperatesession});
            
               }, 0);
@@ -396,15 +399,15 @@ class Scheduling extends Component {
             } else {
                 if(existSession===undefined){
                     fetchAllSessions().then(data => {
-                        console.log(data);
+                        
                                     const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
-                                    console.log(currentDate);
+                                    
                                     const existSession = data.filter(item => item.date === currentDate)[0];
                                     setTimeout(() => {
                                         this.setState({ existSession });
                                       }, 0);
                                     
-                                    console.log(existSession._id);
+                                   
                                     const sessionId = existSession._id;
                     updateSession(sessionId, currentSessionTime).then(() => {
                     this.setState({ isLoading: false }, () => {
