@@ -63,16 +63,16 @@ class Scheduling extends Component {
   
     getAllBooking = () => {
         fetchAllOfflineBookings().then(data => {
-            console.log(data);
+           
             if(data) {
-                console.log(data[3].bookingDate.slice(0,10));
+                //console.log(data[3].bookingDate.slice(0,10));
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
-                console.log(currentDate);
+                //console.log(currentDate);
                 const temdata = data.filter(item => item.bookingDate.slice(0,10) === currentDate);
-                console.log(temdata);
+               // console.log(temdata);
                 const sortedBooking = temdata.sort(compare('bookingTime'));
                 const bookings = this.transDataList(temdata);
-                console.log(sortedBooking);
+               // console.log(sortedBooking);
                 this.setState({ bookings });
                 const newTimeOptions = generatenewTimeOptions(bookings);
                 this.setState({timeOptions: newTimeOptions })

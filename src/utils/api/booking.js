@@ -26,7 +26,7 @@ export const fetchAllOfflineBookings = () => {
 
 export const fetchBookingDetail = (bookingId) => {
     const url = `${API_BOOKING_URL}/${bookingId}`;
-    console.log('dad')
+    
     return get(url).then((response) => response.data);
 };
 

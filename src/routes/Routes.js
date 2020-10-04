@@ -13,6 +13,7 @@ import LogoutSuccess from '../UI/successMessage/LogoutSuccess';
 import ErrorMessage from '../UI/errorMessage/ErrorMessage';
 import Admin from '../admin/admin/Admin';
 import StudentDetail from '../admin/admin/StudentDetail';
+import StudentDetailSchedule from '../admin/admin/StudentDetailSchedule';
 import Scheduling from '../admin/scheduling/Scheduling';
 import Calender from '../admin/calender/Calender';
 import BookingCardAdmin from '../student/myBooking/components/BookingCardAdmin';
@@ -70,7 +71,7 @@ const Routes = () => {
                 <ProtectedRoute exact path={ADMIN_STUDENT_DETAIL_URL} component={StudentDetail} />
                 <ProtectedRoute exact path={ADMIN_SCHEDULING_URL} component={Scheduling} />
                 <ProtectedRoute exact path={ADMIN_CALENDER_URL} component={Calender} />
-                <ProtectedRoute exact path={`${ADMIN_BOOKING_URL}/:id`}  component={StudentDetail} />
+                <ProtectedRoute exact path={`${ADMIN_BOOKING_URL}/:id`}  component={StudentDetailSchedule} />
             </Switch>
         </React.Fragment>
     );

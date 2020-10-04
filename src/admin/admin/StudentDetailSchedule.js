@@ -78,7 +78,7 @@ const DescriptionItem = ({ title, content }) => (
     </div>
   );
 
-class StudentDetail extends React.Component {
+class StudentDetailSchedule extends React.Component {
     constructor(props) {
         super(props);
 
@@ -105,7 +105,7 @@ class StudentDetail extends React.Component {
         fetchBookingDetail(courseId).then((data) => {
             console.log('333');
             console.log(data);
-            this.setState({bookingDetail:data});
+            this.setState({bookingDetail:data, currentBookingId:data._id});
         }
 
         );
@@ -568,8 +568,10 @@ class StudentDetail extends React.Component {
         if(userBookingHistory) {
             bookingArray = orderBy(userBookingHistory, ['bookingDate'], ['desc']);
         }
-        if(bookingDetail.userId) {
-            const { firstName, lastName, studentId, gender, phone, campus, email, _id: userId } = bookingDetail.userId;
+        console.log(this.state.bookingDetail);
+       
+        if(this.state.bookingDetail.userId) {
+            const { firstName, lastName, studentId, gender, phone, campus, email, _id: userId } = this.state.bookingDetail.userId;
             return (
                 <Drawer
                 title="User Profile"
@@ -684,9 +686,14 @@ class StudentDetail extends React.Component {
                         </Col>
                     </Row>
                 </div>
-                {bookingDetail && activeBooking
+                {/* {bookingDetail && activeBooking
                     ? this.renderViewProfile(bookingDetail)
-                    : null}
+                    : null} */}
+                {
+                   this.renderViewProfile(bookingDetail)
+                    }
+               
+                    
             </div>
         );
     }
@@ -703,4 +710,4 @@ const mapDispatchToProps = (dispatch) => ({
   
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(StudentDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(StudentDetailSchedule);
