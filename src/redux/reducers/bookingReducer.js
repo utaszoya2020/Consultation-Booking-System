@@ -6,6 +6,7 @@ import {
     ADD_BOOKING_SUCCESS,
     ADD_BOOKING_FAILURE,
     FETCH_BOOKING_DETAIL_SUCCESS,
+    FETCH_BOOKING_DETAIL_STATUS_SUCCESS,
 } from '../actions/action.js';
 import {
     fetchAllBookings,
@@ -47,18 +48,27 @@ const bookingReducer = (state = initialState, action) => {
         }
 
         case FETCH_BOOKING_DETAIL_SUCCESS: {
-             
-    
-
+           
         return {
             ...state,
             isLoading: false,
             bookingDetail: action.bookingDetail,
+       
             
            }
              }
            
-          
+             case FETCH_BOOKING_DETAIL_STATUS_SUCCESS: {
+                console.log(action);
+                return {
+                    ...state,
+                    isLoading: false,
+                    bookingDetail: action.bookingDetail,
+                    bookings: action.bookings,
+                    
+                   }
+                     }
+                   
    
 
         case ADD_BOOKING_ACTION: {

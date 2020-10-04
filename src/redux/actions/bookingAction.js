@@ -6,6 +6,7 @@ import {
     ADD_BOOKING_SUCCESS,
     ADD_BOOKING_FAILURE,
     FETCH_BOOKING_DETAIL_SUCCESS,
+    FETCH_BOOKING_DETAIL_STATUS_SUCCESS,
 } from './action.js';
 
 import {
@@ -57,6 +58,13 @@ export const fetchBookingDetailSuccess = (bookingDetail) => ({
     bookingDetail,
     type: FETCH_BOOKING_DETAIL_SUCCESS,
 });
+
+export const fetchBookingDetailStatusSuccess = (data) => ({
+    bookingDetail: data.newBooking,
+    bookings: data.bookings,
+    type: FETCH_BOOKING_DETAIL_STATUS_SUCCESS,
+});
+
 
 // Fetch Booking Detail
 export const fetchBookingDetailThunkAction = (bookingId) => (dispatch) => {
@@ -121,7 +129,7 @@ export const updateStatusThunkAction = (currentBookingId, status) => (
 ) => {
     updateBookingStatus(currentBookingId, status)
         .then((data) => {
-            dispatch(fetchBookingDetailSuccess(data));
+            dispatch(fetchBookingDetailStatusSuccess(data));
         })
         .catch((error) => {
             dispatch(fetchBookingFailure(error));

@@ -29,6 +29,12 @@ export const fetchBookingDetail = (bookingId) => {
     return get(url).then((response) => response.data);
 };
 
+export const fetchBookingUpdateDetail = (bookingId) => {
+    const url = `${API_BOOKING_URL}/update/${bookingId}`;
+    console.log('dad1')
+    return get(url).then((response) => response.data);
+};
+
 export const addBooking = (
     type,
     campus,
