@@ -211,9 +211,9 @@ class StudentDetailSchedule extends React.Component {
                     staffId: userId,
                     logRecords: document.getElementById("inputReason").value,
                 };
-                addLog(log);
+                //addLog(log);
                 return new Promise((resolve, reject) => {
-                    updateStatus(currentBookingId, status)
+                    updateStatus(currentBookingId, status, log)
                         .then((data) => {
                             console.log(data);
                             resolve();
@@ -385,6 +385,7 @@ class StudentDetailSchedule extends React.Component {
 
   
     renderActionBtn = (status) => {
+        console.log(status);
         switch (status) {
             case OFFLINE_BOOKING_STATUS.PENDING:
                 return (
@@ -421,9 +422,9 @@ class StudentDetailSchedule extends React.Component {
             <div>
                 <div className='l-admin__header'>
                     <p className='ant-descriptions-title'>{`Booking Detail - ${bookingNum}`}</p>
-                    {/* <div className='l-admin__action'>
+                    <div className='l-admin__action'>
                         {this.renderActionBtn(status)}
-                    </div> */}
+                    </div>
                 </div>
                 <div className='c-table'>
                     <div className='c-table__row'>
@@ -746,8 +747,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     getBookingDetail: (bookingId) =>
         dispatch(fetchBookingDetailThunkAction(bookingId)),
-    updateStatus: (currentBookingId, status) =>
-    dispatch(updateStatusThunkAction(currentBookingId, status)),
+    updateStatus: (currentBookingId, status, log) =>
+    dispatch(updateStatusThunkAction(currentBookingId, status, log)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentDetailSchedule);

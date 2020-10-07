@@ -65,9 +65,9 @@ export const addBooking = (
     return post(url, data).then((response) => response.data);
 };
 
-export const updateBookingStatus = (bookingId, status) => {
+export const updateBookingStatus = (bookingId, status, log) => {
     const url = `${API_BOOKING_URL}/${bookingId}`;
-    const data = {status};
+    const data = {status, log};
     return patch(url, data).then((response) => response.data);
 };
 

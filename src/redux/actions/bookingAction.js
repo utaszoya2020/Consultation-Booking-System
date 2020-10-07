@@ -124,10 +124,10 @@ export const addBookingThunkAction = (
         });
 };
 
-export const updateStatusThunkAction = (currentBookingId, status) => (
+export const updateStatusThunkAction = (currentBookingId, status, log) => (
     dispatch
 ) => {
-    updateBookingStatus(currentBookingId, status)
+    updateBookingStatus(currentBookingId, status, log)
         .then((data) => {
             dispatch(fetchBookingDetailStatusSuccess(data));
         })
