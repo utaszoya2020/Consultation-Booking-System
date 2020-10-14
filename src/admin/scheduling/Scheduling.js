@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Calendar, Badge, Alert, Select, Button, Checkbox, Popconfirm, message } from 'antd';
 import moment from 'moment';
 import { unionBy, capitalize } from 'lodash';
@@ -14,6 +15,12 @@ import BookingCardAdmin from '../../student/myBooking/components/BookingCardAdmi
 import { fetchAllOfflineBookings } from '../../utils/api/booking';
 import { Link } from "react-router-dom";
 import { ADMIN_BOOKING_URL } from '../../routes/URLMap';
+import {
+    fetchAllBookingThunkAction,
+    fetchBookingDetailThunkAction,
+    updateStatusThunkAction,
+} from '../../redux/actions/bookingAction';
+import { fetchUserDetailThunkAction } from '../../redux/actions/userAction';
 
 
 const { Option } = Select;
@@ -252,7 +259,8 @@ class Scheduling extends Component {
 
     hadleClickCard = value => {
         
-        
+        const { getBookingDetail } = this.props;
+        getBookingDetail(value);
         this.props.history.push(`${ADMIN_BOOKING_URL}/${value}`)
     }
 
@@ -580,5 +588,20 @@ class Scheduling extends Component {
         );
     }
 }
+const mapStateToProps = (state) => ({
+    bookings: state.booking.bookings,
+    bookingDetail: state.booking.bookingDetail,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
+});
 
-export default Scheduling;
+const mapDispatchToProps = (dispatch) => ({
+    getAllBookings: () => dispatch(fetchAllBookingThunkAction()),
+    getBookingDetail: (bookingId) =>
+        dispatch(fetchBookingDetailThunkAction(bookingId)),
+    fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
+    updateStatus: (currentBookingId, status) =>
+        dispatch(updateStatusThunkAction(currentBookingId, status)),
+    
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Scheduling);

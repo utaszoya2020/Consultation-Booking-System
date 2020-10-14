@@ -211,20 +211,22 @@ class StudentDetailSchedule extends React.Component {
                     staffId: userId,
                     logRecords: document.getElementById("inputReason").value,
                 };
-                //addLog(log);
+                // updateStatus(currentBookingId, status, log)
+                //     .then(data => {
+                //         console.log(data);
+                //     })
                 return new Promise((resolve, reject) => {
                     updateStatus(currentBookingId, status, log)
-                        .then((data) => {
-                            console.log(data);
+                        .then(() => {
                             resolve();
                         })
                         .catch((error) => {
                             reject(error);
                         });
                 }).catch(() => {
-                    fetchBookingDetail(currentBookingId)
+                    //fetchBookingDetail(currentBookingId)
                 });
-                this.setState({bookingDetail: fetchBookingDetail(currentBookingId)})
+                
             },
             onCancel() {},
         });
@@ -414,7 +416,7 @@ class StudentDetailSchedule extends React.Component {
             bookingDate,
             bookingTime,
             attachment,
-        } = this.state.bookingDetail;
+        } = bookingDetail;
         const date = moment(bookingDate).format('MMMM Do YYYY');
         const time = `${date} ${bookingTime}:00 - ${bookingTime}:50`;
 
@@ -693,7 +695,7 @@ class StudentDetailSchedule extends React.Component {
            
       
        
-        const { bookings } = this.state.bookingDetail;
+        const { bookings } = this.props.bookingDetail;
         const { activeBooking } = this.state;
         let onlineBooking = [];
         let offlineBooking = [];
@@ -716,7 +718,7 @@ class StudentDetailSchedule extends React.Component {
                 <div className='l-admin-wrapper'>
                     <Row>
                        
-                        <Col span={18}>
+                        <Col span={24}>
                             <div className='l-admin__content'>
                                 {this.renderBookingDetail(bookingDetail)}
                                 
