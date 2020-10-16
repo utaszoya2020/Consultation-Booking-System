@@ -48,6 +48,7 @@ class Scheduling extends Component {
             isAbleEdit: false,
             selectedDate: moment(),
             dateRenderData: [],
+            acceptedNumber: 0,
             selectedKeys: [],
             currentSessionTime: [],
             existSession: {},
@@ -73,7 +74,7 @@ class Scheduling extends Component {
         fetchAllOfflineBookings().then(data => {
            
             if(data) {
-                console.log(data);
+                //console.log(data);
                 const allbookings = this.transDataList(data);
                 this.setState({ allbookings });
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
@@ -83,10 +84,12 @@ class Scheduling extends Component {
                //console.log(temdata);
                // const temp = temdata.reverse();
                 //console.log(temp);
-             
+                const acceptedData = temdata.filter(item => item.status === 'accepted');
+                console.log(acceptedData.length);
+                this.setState({acceptedNumber: acceptedData.length});
                 const sortedBooking = temdata.sort(compare('bookingTime'));
                 const bookings = this.transDataList(temdata);
-                console.log(sortedBooking);
+               // console.log(sortedBooking);
                 this.setState({ bookings });
                 const newTimeOptions = generatenewTimeOptions(bookings);
                 this.setState({timeOptions: newTimeOptions })
@@ -228,11 +231,20 @@ class Scheduling extends Component {
         allbookings.map(item => {
             
             if (item.status === 'pending' && value.format('YYYY-MM-DD') === item.formatDate) {
-                console.log(value.format('YYYY-MM-DD'));
+              //  console.log(value.format('YYYY-MM-DD'));
                 listData = [{
-                    type: 'warning', content: 'pending'
+                    type: 'error', content: 'Pending'
                 }];
             }
+            if (item.status === 'accepted' && value.format('YYYY-MM-DD') === item.formatDate) {
+                //  console.log(value.format('YYYY-MM-DD'));
+                
+                  const loglistData = [{
+                      type: 'warning', content: 'Appointment'
+                  }];
+                  console.log(loglistData);
+                  listData=listData.concat(loglistData);
+              }
 
         });
         dateRenderData.map(item => {
