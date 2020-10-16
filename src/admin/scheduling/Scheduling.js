@@ -73,16 +73,20 @@ class Scheduling extends Component {
         fetchAllOfflineBookings().then(data => {
            
             if(data) {
-                //console.log(data[3].bookingDate.slice(0,10));
+                console.log(data);
                 const allbookings = this.transDataList(data);
                 this.setState({ allbookings });
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
                 //console.log(currentDate);
+                //console.log(currentDate);
                 const temdata = data.filter(item => item.bookingDate.slice(0,10) === currentDate);
-               // console.log(temdata);
+               //console.log(temdata);
+               // const temp = temdata.reverse();
+                //console.log(temp);
+             
                 const sortedBooking = temdata.sort(compare('bookingTime'));
                 const bookings = this.transDataList(temdata);
-               // console.log(sortedBooking);
+                console.log(sortedBooking);
                 this.setState({ bookings });
                 const newTimeOptions = generatenewTimeOptions(bookings);
                 this.setState({timeOptions: newTimeOptions })
@@ -94,6 +98,7 @@ class Scheduling extends Component {
     }
 
     transDataList = (data) => {
+        console.log(data);
         const dataList = [];
         data.forEach(item => {
             const { bookingDate, bookingTime, userId, bookingNum, campus, _id, status } = item;
@@ -207,11 +212,11 @@ class Scheduling extends Component {
 
     getListData = value => {
         const { dateRenderData } = this.state;
-        const { bookings } = this.state;
+  //      const { bookings } = this.state;
         const { allbookings } = this.state;
         let listData =[];
    
-        
+      //  console.log(allbookings);
         // bookings.map(item => {
         //     if (item.status === 'pending' && value.format('YYYY-MM-DD') === item.formatDate) {
         //         listData = [{
@@ -221,7 +226,9 @@ class Scheduling extends Component {
 
         // });
         allbookings.map(item => {
+            
             if (item.status === 'pending' && value.format('YYYY-MM-DD') === item.formatDate) {
+                console.log(value.format('YYYY-MM-DD'));
                 listData = [{
                     type: 'warning', content: 'pending'
                 }];
@@ -245,6 +252,7 @@ class Scheduling extends Component {
 
     dateCellRender = value => {
         const listData = this.getListData(value);
+       // console.log(listData);
 
         return (
             <ul className='l-scheduling__events'>
