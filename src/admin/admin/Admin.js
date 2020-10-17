@@ -232,11 +232,11 @@ class Admin extends React.Component {
                     staffId: userId,
                     logRecords: document.getElementById("inputReason").value,
                 };
-                addLog(log);
+                //addLog(log);
                 
                 return new Promise((resolve, reject) => {
                     
-                    updateStatus(currentBookingId, status)
+                    updateStatus(currentBookingId, status, log)
                         .then(() => {
                             
                             resolve();
@@ -1313,8 +1313,8 @@ const mapDispatchToProps = (dispatch) => ({
     getBookingDetail: (bookingId) =>
         dispatch(fetchBookingDetailThunkAction(bookingId)),
     fetchUserDetail: (userId) => dispatch(fetchUserDetailThunkAction(userId)),
-    updateStatus: (currentBookingId, status) =>
-        dispatch(updateStatusThunkAction(currentBookingId, status)),
+    updateStatus: (currentBookingId, status, log) =>
+        dispatch(updateStatusThunkAction(currentBookingId, status, log)),
     
 });
 
