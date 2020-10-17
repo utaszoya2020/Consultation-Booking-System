@@ -36,9 +36,10 @@ export const transformArray = (array) => {
 }
 //sort by time
 export function compare(property){
+   
     return function(obj1,obj2){
-        var value1 = obj1[property].toString();
-        var value2 = obj2[property].toString();
+        var value1 = obj1[property].slice(0,2);
+        var value2 = obj2[property].slice(0,2);
         return value1 - value2;     // 升序
     }
    }

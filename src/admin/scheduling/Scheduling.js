@@ -78,17 +78,18 @@ class Scheduling extends Component {
                 const allbookings = this.transDataList(data);
                 this.setState({ allbookings });
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
-                //console.log(currentDate);
-                //console.log(currentDate);
-                const temdata = data.filter(item => item.bookingDate.slice(0,10) === currentDate);
+                console.log(allbookings[7].formatDate);
+                console.log(currentDate);
+                const temdata = allbookings.filter(item => item.formatDate === currentDate);
                //console.log(temdata);
                // const temp = temdata.reverse();
                 //console.log(temp);
                 const acceptedData = temdata.filter(item => item.status === 'accepted');
                 console.log(acceptedData.length);
                 this.setState({acceptedNumber: acceptedData.length});
-                const sortedBooking = temdata.sort(compare('bookingTime'));
-                const bookings = this.transDataList(temdata);
+                const sortedBooking = temdata.sort(compare('formatTime'));
+                //const bookings = this.transDataList(temdata);
+                const bookings = temdata;
                // console.log(sortedBooking);
                 this.setState({ bookings });
                 const newTimeOptions = generatenewTimeOptions(bookings);
@@ -116,6 +117,7 @@ class Scheduling extends Component {
             const object = {
                 title: `${firstName} ${lastName} (${studentId}) ${bookingNum}`,
                 formatDate,
+                formatTime,
                 start,
                 end,
                 campus,
@@ -242,7 +244,7 @@ class Scheduling extends Component {
                   const loglistData = [{
                       type: 'warning', content: 'Appointment'
                   }];
-                  console.log(loglistData);
+                //  console.log(loglistData);
                   listData=listData.concat(loglistData);
               }
 
