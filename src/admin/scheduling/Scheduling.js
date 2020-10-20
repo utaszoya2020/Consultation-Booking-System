@@ -177,7 +177,8 @@ class Scheduling extends Component {
     getAllSessions = () => {
         fetchAllSessions().then(data => {
             
-            const currentDate = moment().format('YYYY-MM-DD');
+            //const currentDate = moment().format('YYYY-MM-DD');
+            const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
             const existSession = data.filter(item => item.date === currentDate)[0];
             const dateRenderData = this.getDateRenderData(data);
             
@@ -185,14 +186,17 @@ class Scheduling extends Component {
             this.setState({campus:existSession.campus});
             const campusIndicator = this.checkHasCampus(existSession.campus);
             this.setState({hasCampus : campusIndicator});
+            console.log(currentDate);
+            console.log(existSession.campus);
             fetchSession(currentDate, existSession.campus).then(data => {
-                
+                console.log(data);
                 if(data) {
                     const { time } = data;
                     this.setState({ currentSessionTime: time });
                         }
                         const sortedCurrentSession = bubbleSort(this.state.currentSessionTime);
                         const showedCurrentSession = currentSessionCreator(sortedCurrentSession);
+                        console.log(showedCurrentSession);
                         this.setState({checkedList: showedCurrentSession});
                                                                 })
                                                                 })
@@ -411,13 +415,13 @@ class Scheduling extends Component {
 
     handleUpdate = () => {
         const { currentSessionTime, selectedDate, campus, hasCampus, existSession } = this.state;
-        
+        console.log("here");
         const date = selectedDate.format('YYYY-MM-DD');
         this.setState({ isLoading: true }, () => {
             if(!hasCampus) {
                 addSession(date, currentSessionTime, campus).then(() => {
                     this.setState({ isLoading: false, hasCampus: true }, () => {
-                        
+                        console.log("2")
                         this.getAllSessions();
                         message.success('Update success!');
                     });
@@ -492,6 +496,7 @@ class Scheduling extends Component {
         if(this.state.checkedList.length === 0) {
             return message.warning('Please select sessions!');
         }
+        console.log("hhihihi")
         this.handleUpdate();
     }
 
