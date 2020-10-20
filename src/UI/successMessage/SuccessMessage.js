@@ -5,9 +5,10 @@ import './successMessage.scss';
 
 function SuccessMessage(props) {
     const { location } = props;
+    console.log(location.state.type);
     const msg =
-        location.state.type === 'Online'
-            ? 'Thank you for your consultation application, our counsellor will get back to you soon.'
+        location.state.type === 'online'
+            ? 'You have started an online consultation, our counsellor will get back to you soon.'
             : 'Thank you for booking face to face consultation, please wait for the counsellor’s confirmation.';
 
     return (

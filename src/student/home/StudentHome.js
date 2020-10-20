@@ -821,6 +821,7 @@ renderOnlineFinishedBookingCard = (onlineFinishedBooking) => {
                     {comments.length > 0 && <CommentList comments={comments} />}
                     <Comment
                         avatar={
+                            
                             <Avatar
                                 src={AvatarLogo}
                                 alt='Han Solo'
