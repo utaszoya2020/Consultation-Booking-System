@@ -285,6 +285,7 @@ class Scheduling extends Component {
         getBookingDetail(value);
         this.props.history.push(`${ADMIN_BOOKING_URL}/${value}`)
     }
+  
 
     handleDateChange = value => {
         this.getAllBooking();
@@ -487,6 +488,9 @@ class Scheduling extends Component {
         const { campus } = this.state;
         if(!campus) {
             return message.warning('Please select a campus!');
+        }
+        if(this.state.checkedList.length === 0) {
+            return message.warning('Please select sessions!');
         }
         this.handleUpdate();
     }
