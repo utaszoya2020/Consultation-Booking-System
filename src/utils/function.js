@@ -70,7 +70,9 @@ export const generatenewTimeOptions = (obj) => {
     // console.log(formatDate);
     // const clickedDate = moment(obj[0].start).format('YYYY-MM-DD');
     // console.log(clickedDate);
-    const length = obj.length;
+    const objnew = obj.filter(item => item.status != 'canceled');
+    console.log(objnew);
+    const length = objnew.length;
  
     const options = [
         {label: '09:00 - 09:50', value: '09:00 - 09:50', disabled: false},
@@ -85,7 +87,7 @@ export const generatenewTimeOptions = (obj) => {
 
   
     for (let i =0; i<length; i++) {
-      const str1 = obj[i].start.toString();
+      const str1 = objnew[i].start.toString();
       console.log(str1);
       const result0 = str1.indexOf("09:00");
       const result1 = str1.indexOf("10:00");
