@@ -452,6 +452,8 @@ class Scheduling extends Component {
                 deleteSession(date, campus).then(() => {
                     this.setState({ isLoading: false }, () => {
                         this.getAllSessions();
+                        this.setState({ hasCampus:false});
+                        this.setState({campus:'sydney'});
                         message.success('Update success!');
                     });
                 })
@@ -510,11 +512,14 @@ class Scheduling extends Component {
         if(!campus) {
             return message.warning('Please select a campus!');
         }
-        if(this.state.checkedList.length === 0) {
+        if(this.state.checkedList.length === 0 && !this.state.hasCampus) {
             return message.warning('Please select sessions!');
         }
         //console.log("hhihihi")
         this.handleUpdate();
+        // if(this.state.currentSessionTime === ''){
+        //     this.setState({hasCampus: false});
+        // }
     }
 
     render() {
