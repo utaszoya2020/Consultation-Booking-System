@@ -46,6 +46,7 @@ class Scheduling extends Component {
 
         this.state = {
             isAbleEdit: false,
+            selectedCity: '',
             selectedDate: moment(),
             dateRenderData: [],
             acceptedNumber: 0,
@@ -297,6 +298,15 @@ class Scheduling extends Component {
         this.setState({selectedDate:value});
         const { dateRenderData } = this.state;
         const newCampus = this.state.campus;
+        // if(!this.state.hasCampus){
+            
+        //     setTimeout(() => {
+                
+                
+        //         this.setState({campus: 'sydney'});
+        //       }, 0);
+        //       console.log(this.state.campus)
+        // }
         let listData =[];
         
         
@@ -320,7 +330,12 @@ class Scheduling extends Component {
                             if(this.state.bookings.length > 0){
                                 this.setState({hasCampus : true, campus: this.state.bookings[0].campus, currentSessionTime:[],checkedList:[]});
                             }
-                            this.setState({campus:'sydney'});
+                            console.log(this.state.campus);
+                            if(this.state.selectedCity === ""){
+                            this.setState({campus:'sydney'});}else{
+                                this.setState({campus: this.state.selectedCity});
+                            }
+                            
                             this.setState({hasCampus : false, currentSessionTime:[],checkedList:[]});
 
                         }else if (existSession.time.length === 0 ){
@@ -378,6 +393,7 @@ class Scheduling extends Component {
     handleCampusChange = value => {
         const {selectedDate} = this.state;
         this.setState({
+            selectedCity: value,
             campus: value,
             currentSessionTime: [],
             existSession: [],
@@ -519,10 +535,11 @@ class Scheduling extends Component {
                             <div className='l-scheduling__location'>
 
                                 <label className='l-scheduling__label'>Campus:{this.state.hasCampus ? capitalize(campus) : ''}</label>
-                                <Select className={this.state.hasCampus ? 'l-scheduling__hidden' : ''} placeholder='Select a campus' defaultValue={capitalize(campus)} style={{ width: 200 }} onChange={this.handleCampusChange}>
-                                    <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
+                                <Select className={this.state.hasCampus ? 'l-scheduling__hidden' : ''} placeholder='Select a campus' defaultValue={capitalize(this.state.campus)} style={{ width: 200 }} onChange={this.handleCampusChange}>
+                                    
                                     <Option value={CAMPUS.SYDNEY}>{capitalize(CAMPUS.SYDNEY)}</Option>
                                     <Option value={CAMPUS.HOBART}>{capitalize(CAMPUS.HOBART)}</Option>
+                                    <Option value={CAMPUS.BRISBANE}>{capitalize(CAMPUS.BRISBANE)}</Option>
                                 </Select>
                             </div>
                             <div className='l-scheduling__detail' >
