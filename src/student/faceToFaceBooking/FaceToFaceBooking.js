@@ -278,7 +278,7 @@ const FaceToFaceBooking = () => {
                             Click or drag file to this area to upload
                         </p>
                         <p className='ant-upload-hint'>
-                            You can upload files up to a maximum of 5 MB.
+                            You can only upload word，pdf and jpg format and size limitation 5M.
                         </p>
                     </Dragger>
                 </Form.Item>

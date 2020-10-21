@@ -11,7 +11,7 @@ import {
     List,
     Form,
     Modal,
-    
+    message,
     Drawer,
     Divider,
     
@@ -205,6 +205,10 @@ class StudentDetailSchedule extends React.Component {
             icon: <ExclamationCircleOutlined />,
             content:<Input placeholder="Please input reason" id="inputReason" onChange={this.handleInputChange} />,
             onOk() {
+                if(document.getElementById("inputReason").value === ''){
+                    return message.warning('Please input reasons!');
+                }else{
+
                 
                 const log = {
                     bookingId: currentBookingId,
@@ -226,7 +230,7 @@ class StudentDetailSchedule extends React.Component {
                 }).catch(() => {
                     //fetchBookingDetail(currentBookingId)
                 });
-                
+            }
             },
             onCancel() {},
         });

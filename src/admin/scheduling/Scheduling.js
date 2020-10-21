@@ -78,7 +78,7 @@ class Scheduling extends Component {
                 const allbookings = this.transDataList(data);
                 this.setState({ allbookings });
                 const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
-                console.log(allbookings[7].formatDate);
+                console.log(allbookings[0].formatDate);
                 console.log(currentDate);
                 const temdata = allbookings.filter(item => item.formatDate === currentDate);
                //console.log(temdata);
@@ -108,6 +108,7 @@ class Scheduling extends Component {
             const { bookingDate, bookingTime, userId, bookingNum, campus, _id, status } = item;
             const { firstName, lastName, studentId } = userId;
             const formatDate = moment(bookingDate).format('YYYY-MM-DD');
+            console.log(formatDate);
             const formatTime = `${bookingTime}:00:00`;
             const formatEndTime = `${bookingTime}:50:00`;
             const startString = `${formatDate} ${formatTime}`;
@@ -176,7 +177,7 @@ class Scheduling extends Component {
 
     getAllSessions = () => {
         fetchAllSessions().then(data => {
-            
+            console.log(data);
             //const currentDate = moment().format('YYYY-MM-DD');
             const currentDate = this.state.selectedDate.format('YYYY-MM-DD');
             const existSession = data.filter(item => item.date === currentDate)[0];
@@ -243,12 +244,12 @@ class Scheduling extends Component {
                 }];
             }
             if (item.status === 'accepted' && value.format('YYYY-MM-DD') === item.formatDate) {
-                //  console.log(value.format('YYYY-MM-DD'));
+                  console.log(value.format('YYYY-MM-DD'));
                 
                   const loglistData = [{
                       type: 'warning', content: 'Appointment'
                   }];
-                //  console.log(loglistData);
+                  console.log(loglistData);
                   listData=listData.concat(loglistData);
               }
 
@@ -496,7 +497,7 @@ class Scheduling extends Component {
         if(this.state.checkedList.length === 0) {
             return message.warning('Please select sessions!');
         }
-        console.log("hhihihi")
+        //console.log("hhihihi")
         this.handleUpdate();
     }
 
