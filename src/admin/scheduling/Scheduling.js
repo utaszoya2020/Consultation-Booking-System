@@ -251,7 +251,8 @@ class Scheduling extends Component {
                       type: 'warning', content: 'Appointment'
                   }];
                   console.log(loglistData);
-                  listData=listData.concat(loglistData);
+                  //listData=listData.concat(loglistData);
+                  listData.push(loglistData[0]);
               }
 
         });
