@@ -73,9 +73,9 @@ class LoginForm extends React.Component {
                 ) : (
                     <Fragment>
                         {authRedirect}
-                        <div className='c-bubble' onClick={openNotification}>
-                                <BulbTwoTone />
-                        </div>
+//                         <div className='c-bubble' onClick={openNotification}>
+//                                 <BulbTwoTone />
+//                         </div>
                         <h1 className='l-login__title'>AIBT Booking System</h1>
                         <div className='b-form-container'>
                             <Form
